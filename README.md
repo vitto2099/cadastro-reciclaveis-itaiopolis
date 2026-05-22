@@ -17,11 +17,11 @@ Quando você jogar este projeto no Vercel, o Vercel vai gerar um link (ex: `http
 Você vai pegar esse link e mandar apenas para os seus 4 colegas de trabalho.
 
 Sempre que qualquer um abrir esse link, vai dar de cara com uma tela verde bloqueada pedindo uma senha.
-- **A Senha Única é:** `meioambiente2024`
+- **A Senha Única é:** `meioambiente2026`
 
 Ninguém mais da cidade vai conseguir passar dessa tela se achar o link. Uma vez que o funcionário digitar a senha, o formulário de cadastro abre e ele pode fazer quantos cadastros quiser no dia.
 
-*(Para alterar a senha no futuro, basta abrir o arquivo `app.js` e alterar a palavra `meioambiente2024` na linha 16).*
+*(Para alterar a senha no futuro, basta abrir o arquivo `app.js` e alterar a palavra `meioambiente2026` na linha 16).*
 
 ### 2. Acesso à Planilha (Para a sua Equipe)
 O site faz todo o trabalho "braçal": quando o funcionário preenche o site, o site joga os dados direto para a sua Planilha do Google, usando a permissão master que configuramos no *Apps Script* (Executar como: Eu).
