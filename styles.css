@@ -1,17 +1,15 @@
-/* Variáveis de Cores (Focado em Meio Ambiente / Sustentabilidade) */
+/* Variáveis de Cores (Estilo Portal da Transparência) */
 :root {
-    --primary-color: #2e7d32; /* Verde forte */
-    --primary-hover: #1b5e20;
-    --secondary-color: #4caf50; /* Verde mais claro */
-    --accent-color: #ffb300; /* Destaque amarelo escuro */
-    --bg-color: #f1f8e9; /* Fundo verde super claro */
-    --card-bg: rgba(255, 255, 255, 0.95);
+    --primary-color: #2b3074; /* Azul profundo (Portal) */
+    --primary-hover: #1e2254;
+    --secondary-color: #f1f2f6; /* Fundo claro (Portal) */
+    --accent-color: #ffd100;
+    --bg-color: #f8f9fc;
+    --card-bg: #ffffff;
     --text-main: #333333;
     --text-muted: #666666;
-    --error-color: #d32f2f;
-    --success-color: #388e3c;
-    --border-radius: 12px;
-    --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    --border-color: #e5e7eb;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 * {
@@ -21,73 +19,113 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', Arial, sans-serif;
     background-color: var(--bg-color);
     color: var(--text-main);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    position: relative;
-    overflow-x: hidden;
 }
 
-/* Background com padrão suave (folhas/natureza) - simulado via CSS */
-.background-pattern {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    z-index: -1;
-    background-image: radial-gradient(var(--secondary-color) 1px, transparent 1px);
-    background-size: 40px 40px;
-    opacity: 0.1;
+/* TOP BAR */
+.top-bar {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 8px 5%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.top-bar span {
+    margin-right: 15px;
+    cursor: pointer;
 }
 
 /* HEADER */
 .header {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: white;
+    background: #ffffff;
     padding: 1.5rem 5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
 }
 
-.logo-placeholder h1 {
-    font-size: 1.8rem;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-}
-
-.logo-placeholder span {
-    font-size: 0.9rem;
-    font-weight: 300;
-    color: #e8f5e9;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.stats-container {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 0.8rem 1.5rem;
-    border-radius: 30px;
-    backdrop-filter: blur(5px);
+.logo-placeholder {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
 }
 
-.stats-label {
-    font-size: 0.9rem;
-    font-weight: 600;
+.city-logo {
+    height: 70px;
+    width: auto;
+    object-fit: contain;
 }
 
-.stats-number {
-    font-size: 1.2rem;
+.logo-text h1 {
+    font-size: 1.4rem;
     font-weight: 700;
-    background: white;
+    color: var(--text-main);
+    margin-bottom: 2px;
+}
+
+.logo-text span {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.sheet-link {
     color: var(--primary-color);
-    padding: 0.2rem 0.8rem;
-    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--primary-color);
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.sheet-link:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* STATS SECTION */
+.stats-section {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 2rem 5%;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+    min-width: 250px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.stat-number, .stat-icon {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 600;
 }
 
 /* MAIN CONTENT */
@@ -95,8 +133,8 @@ body {
     flex: 1;
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 3rem 1rem;
+    align-items: flex-start;
+    padding: 1rem 1rem 3rem 1rem;
 }
 
 .form-section {
@@ -232,70 +270,52 @@ body {
 
 /* FOOTER */
 .footer {
+    background: #f4f6f9;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: auto;
+}
+
+.footer-content {
+    padding: 3rem 1rem;
     text-align: center;
-    padding: 1.5rem;
-    background: #ffffff;
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.footer-logo {
+    height: 80px;
+    margin-bottom: 10px;
+}
+
+.footer-address, .footer-contact {
     color: var(--text-muted);
     font-size: 0.85rem;
-    border-top: 1px solid #e0e0e0;
+    line-height: 1.6;
+}
+
+.footer-bottom {
+    background: var(--primary-color);
+    height: 30px;
+    width: 100%;
 }
 
 /* RESPONSIVO */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     .header {
         flex-direction: column;
         gap: 15px;
         text-align: center;
     }
-    .form-section {
-        padding: 1.5rem;
+    
+    .top-bar {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
     }
-}
-
-/* LOGIN OVERLAY */
-.login-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(46, 125, 50, 0.9);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    backdrop-filter: blur(8px);
-}
-
-.login-box {
-    background: white;
-    padding: 2.5rem;
-    border-radius: var(--border-radius);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    text-align: center;
-    max-width: 400px;
-    width: 90%;
-    animation: slideUp 0.5s ease-out;
-}
-
-.login-box h2 {
-    color: var(--primary-color);
-    margin-bottom: 10px;
-}
-
-.login-box p {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    margin-bottom: 20px;
-}
-
-.login-box input {
-    width: 100%;
-    padding: 1rem;
-    margin-bottom: 15px;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 1rem;
-}
-
-.login-box input:focus {
-    outline: none;
-    border-color: var(--primary-color);
 }

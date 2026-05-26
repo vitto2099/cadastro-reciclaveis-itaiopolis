@@ -2,31 +2,7 @@
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx4qVHpKMxmbpbG7XZzt4KK6jJcundHYTQsLFMm6W2fEB3QrQ_WprQj0dIWwSG3XFZm/exec";
 
 document.addEventListener('DOMContentLoaded', () => {
-    // ---- LÓGICA DE LOGIN ----
-    const loginOverlay = document.getElementById('login-overlay');
-    const appContent = document.getElementById('app-content');
-    const senhaInput = document.getElementById('senha-acesso');
-    const btnEntrar = document.getElementById('btn-entrar');
-    const loginMessage = document.getElementById('login-message');
-
-    // Senha simples para acesso restrito
-    const SENHA_CORRETA = "meioambiente2026";
-
-    btnEntrar.addEventListener('click', () => {
-        if (senhaInput.value === SENHA_CORRETA) {
-            loginOverlay.style.display = 'none';
-            appContent.style.display = 'block';
-            fetchTotalCadastros(); // Busca os dados apenas após logar
-        } else {
-            loginMessage.textContent = "Senha incorreta. Tente novamente.";
-            loginMessage.style.display = 'block';
-        }
-    });
-
-    senhaInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') btnEntrar.click();
-    });
-    // -------------------------
+    fetchTotalCadastros();
 
     const form = document.getElementById('cadastro-form');
     const cpfInput = document.getElementById('cpf');
