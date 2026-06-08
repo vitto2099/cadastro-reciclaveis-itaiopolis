@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
             action: 'cadastrar',
             nome: document.getElementById('nome').value,
             cpf: cpfValue,
-            endereco: document.getElementById('endereco').value,
+            endereco: `${document.getElementById('rua').value.trim()}, ${document.getElementById('numero').value.trim()} - ${document.getElementById('bairro').value.trim()}`,
             moradores: document.getElementById('moradores').value
         };
 
