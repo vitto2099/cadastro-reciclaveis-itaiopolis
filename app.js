@@ -1,29 +1,125 @@
 // URL do Web App gerada no Google Apps Script.
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx4qVHpKMxmbpbG7XZzt4KK6jJcundHYTQsLFMm6W2fEB3QrQ_WprQj0dIWwSG3XFZm/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwW8Hxqs0UKrI8pUiOCZAZ0XVuIdG8WX0l-1-buf8ImgZgR9GFjLVJcK2xyX1b9VzHe/exec";
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchTotalCadastros();
 
+
     const form = document.getElementById('cadastro-form');
-    const cpfInput = document.getElementById('cpf');
+    const docInput = document.getElementById('documento');
+    const semDocCheckbox = document.getElementById('sem-documento');
+    const docLabel = document.getElementById('documento-label');
+    const docHint = document.getElementById('doc-hint');
     const messageDiv = document.getElementById('form-message');
     const submitBtn = document.getElementById('submit-btn');
     const btnText = document.querySelector('.btn-text');
     const btnLoader = document.getElementById('btn-loader');
     const countDisplay = document.getElementById('cadastro-count');
+    const sacolasDisplay = document.getElementById('sacolas-count');
 
-    // Máscara de CPF simplificada
-    cpfInput.addEventListener('input', function (e) {
-        let value = e.target.value.replace(/\D/g, ''); // Remove tudo que não é dígito
-        if (value.length > 11) value = value.slice(0, 11);
+    const btnCpf = document.getElementById('btn-cpf');
+    const btnCnpj = document.getElementById('btn-cnpj');
 
-        if (value.length > 9) {
-            value = value.replace(/^(\d{3})(\d{3})(\d{3})(\d{2}).*/, '$1.$2.$3-$4');
-        } else if (value.length > 6) {
-            value = value.replace(/^(\d{3})(\d{3})(\d{3}).*/, '$1.$2.$3');
-        } else if (value.length > 3) {
-            value = value.replace(/^(\d{3})(\d{3}).*/, '$1.$2');
+    let docType = 'cpf'; // 'cpf' ou 'cnpj'
+    const bairroInput = document.getElementById('bairro');
+    const bairroButtons = document.querySelectorAll('.bairro-btn');
+
+    // === Botões rápidos de bairro ===
+    bairroButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            bairroButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            bairroInput.value = btn.getAttribute('data-bairro');
+        });
+    });
+
+    // Se digitar no campo, desseleciona os botões
+    bairroInput.addEventListener('input', () => {
+        const val = bairroInput.value.trim().toLowerCase();
+        let matched = false;
+        bairroButtons.forEach(b => {
+            if (b.getAttribute('data-bairro').toLowerCase() === val) {
+                b.classList.add('active');
+                matched = true;
+            } else {
+                b.classList.remove('active');
+            }
+        });
+    });
+
+
+    // === Seletor de tipo de documento ===
+    btnCpf.addEventListener('click', () => {
+        docType = 'cpf';
+        btnCpf.classList.add('active');
+        btnCnpj.classList.remove('active');
+        docLabel.textContent = 'CPF';
+        docInput.placeholder = '000.000.000-00';
+        docInput.maxLength = 14;
+        docInput.value = '';
+        if (semDocCheckbox.checked) {
+            docInput.value = '000.000.000-00';
         }
+    });
+
+    btnCnpj.addEventListener('click', () => {
+        docType = 'cnpj';
+        btnCnpj.classList.add('active');
+        btnCpf.classList.remove('active');
+        docLabel.textContent = 'CNPJ';
+        docInput.placeholder = '00.000.000/0000-00';
+        docInput.maxLength = 18;
+        docInput.value = '';
+        if (semDocCheckbox.checked) {
+            docInput.value = '00.000.000/0000-00';
+        }
+    });
+
+    // === Checkbox "Sem documento" ===
+    semDocCheckbox.addEventListener('change', () => {
+        if (semDocCheckbox.checked) {
+            docInput.disabled = true;
+            if (docType === 'cpf') {
+                docInput.value = '000.000.000-00';
+            } else {
+                docInput.value = '00.000.000/0000-00';
+            }
+        } else {
+            docInput.disabled = false;
+            docInput.value = '';
+            docInput.focus();
+        }
+    });
+
+    // === Máscara de CPF / CNPJ ===
+    docInput.addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\D/g, '');
+
+        if (docType === 'cpf') {
+            if (value.length > 11) value = value.slice(0, 11);
+
+            if (value.length > 9) {
+                value = value.replace(/^(\d{3})(\d{3})(\d{3})(\d{2}).*/, '$1.$2.$3-$4');
+            } else if (value.length > 6) {
+                value = value.replace(/^(\d{3})(\d{3})(\d{3}).*/, '$1.$2.$3');
+            } else if (value.length > 3) {
+                value = value.replace(/^(\d{3})(\d{3}).*/, '$1.$2');
+            }
+        } else {
+            // CNPJ: 00.000.000/0000-00
+            if (value.length > 14) value = value.slice(0, 14);
+
+            if (value.length > 12) {
+                value = value.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2}).*/, '$1.$2.$3/$4-$5');
+            } else if (value.length > 8) {
+                value = value.replace(/^(\d{2})(\d{3})(\d{3})(\d{4}).*/, '$1.$2.$3/$4');
+            } else if (value.length > 5) {
+                value = value.replace(/^(\d{2})(\d{3})(\d{3}).*/, '$1.$2.$3');
+            } else if (value.length > 2) {
+                value = value.replace(/^(\d{2})(\d{3}).*/, '$1.$2');
+            }
+        }
+
         e.target.value = value;
     });
 
@@ -59,12 +155,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             if (data.status === 'success') {
                 countDisplay.textContent = data.total;
+                // Se o backend retornar total de sacolas, mostra; senão mostra "--"
+                if (data.totalSacolas !== undefined) {
+                    sacolasDisplay.textContent = data.totalSacolas;
+                } else {
+                    sacolasDisplay.textContent = data.total; // Fallback: usa total de cadastros
+                }
             } else {
                 countDisplay.textContent = "Erro";
+                sacolasDisplay.textContent = "Erro";
             }
         } catch (error) {
             console.error("Erro ao buscar total:", error);
             countDisplay.textContent = "---";
+            sacolasDisplay.textContent = "---";
         }
     }
 
@@ -77,28 +181,36 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const cpfValue = cpfInput.value;
-        if (cpfValue.length < 14) {
-            showMessage("Por favor, digite um CPF válido com 11 dígitos.", "error");
-            return;
+        // Validação do documento (se não marcou "sem documento")
+        const docValue = docInput.value;
+        if (!semDocCheckbox.checked) {
+            if (docType === 'cpf' && docValue.length < 14) {
+                showMessage("Por favor, digite um CPF válido com 11 dígitos.", "error");
+                return;
+            }
+            if (docType === 'cnpj' && docValue.length < 18) {
+                showMessage("Por favor, digite um CNPJ válido com 14 dígitos.", "error");
+                return;
+            }
         }
+
+        const sacolas = parseInt(document.getElementById('sacolas').value) || 1;
 
         const formData = {
             action: 'cadastrar',
             nome: document.getElementById('nome').value,
-            cpf: cpfValue,
-            endereco: `${document.getElementById('rua').value.trim()}, ${document.getElementById('numero').value.trim()} - ${document.getElementById('bairro').value.trim()}`,
-            moradores: document.getElementById('moradores').value
+            tipoDocumento: docType.toUpperCase(),
+            cpf: docValue,
+            endereco: `${document.getElementById('rua').value.trim()}, ${document.getElementById('numero').value.trim()}`,
+            bairro: bairroInput.value.trim(),
+            moradores: document.getElementById('moradores').value,
+            sacolas: sacolas
         };
 
         setLoading(true);
         messageDiv.style.display = 'none';
 
         try {
-            // O Google Apps Script exige POST sem CORS complexo, ou enviamos como texto simples usando mode 'no-cors' 
-            // ou enviamos via fetch normal (que exige que o app script esteja configurado certinho). 
-            // Para Web Apps modernos do Google, usar URLSearchParams e Content-Type: application/x-www-form-urlencoded é mais estável.
-
             const params = new URLSearchParams();
             for (const key in formData) {
                 params.append(key, formData[key]);
@@ -115,8 +227,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const result = await response.json();
 
             if (result.status === 'success') {
-                showMessage("Cadastro realizado com sucesso! Sua cota está garantida.", "success");
+                showMessage(`Cadastro realizado com sucesso! ${sacolas} sacola(s) registrada(s).`, "success");
                 form.reset();
+                // Resetar estado dos botões de tipo de documento
+                docType = 'cpf';
+                btnCpf.classList.add('active');
+                btnCnpj.classList.remove('active');
+                docLabel.textContent = 'CPF';
+                docInput.placeholder = '000.000.000-00';
+                docInput.maxLength = 14;
+                docInput.disabled = false;
+                // Resetar botões de bairro
+                bairroButtons.forEach(b => b.classList.remove('active'));
                 fetchTotalCadastros(); // Atualiza contador
             } else {
                 showMessage(result.message || "Erro desconhecido ao cadastrar.", "error");

@@ -206,6 +206,132 @@ body {
     box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.1);
 }
 
+.form-group input:disabled {
+    background: #e9ecef;
+    color: #999;
+    cursor: not-allowed;
+}
+
+/* SELETOR DE TIPO DE DOCUMENTO (CPF / CNPJ) */
+.doc-type-selector {
+    display: flex;
+    gap: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #e0e0e0;
+}
+
+.doc-type-btn {
+    flex: 1;
+    padding: 0.7rem 1.2rem;
+    border: none;
+    background: #fafafa;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.doc-type-btn:first-child {
+    border-right: 1px solid #e0e0e0;
+}
+
+.doc-type-btn.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.doc-type-btn:hover:not(.active) {
+    background: #eef0f5;
+}
+
+/* WRAPPER DO INPUT DE DOCUMENTO + CHECKBOX */
+.doc-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.doc-input-wrapper input[type="text"] {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    background: #fafafa;
+}
+
+.doc-input-wrapper input[type="text"]:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.1);
+}
+
+.sem-doc-check {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sem-doc-check input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+}
+
+.sem-doc-check label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 0;
+}
+
+.doc-hint {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+/* BOTÕES RÁPIDOS DE BAIRRO */
+.bairro-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.bairro-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 20px;
+    background: #fafafa;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.bairro-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: #f0f1f8;
+}
+
+.bairro-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
 .submit-btn {
     width: 100%;
     background: var(--primary-color);
