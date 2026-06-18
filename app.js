@@ -1,5 +1,5 @@
 // URL do Web App gerada no Google Apps Script.
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwW8Hxqs0UKrI8pUiOCZAZ0XVuIdG8WX0l-1-buf8ImgZgR9GFjLVJcK2xyX1b9VzHe/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyO5ely0D9yiSlOSupZ-oDEnT-dBKWIr_Pvlz-sB3kk0Nl_X-PG1KM4t2UGXcsUz3Ac/exec";
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchTotalCadastros();
@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnLoader = document.getElementById('btn-loader');
     const countDisplay = document.getElementById('cadastro-count');
     const sacolasDisplay = document.getElementById('sacolas-count');
+    const pessoasDisplay = document.getElementById('pessoas-count');
 
     const btnCpf = document.getElementById('btn-cpf');
     const btnCnpj = document.getElementById('btn-cnpj');
@@ -160,6 +161,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     sacolasDisplay.textContent = data.totalSacolas;
                 } else {
                     sacolasDisplay.textContent = data.total; // Fallback: usa total de cadastros
+                }
+                
+                if (pessoasDisplay) {
+                    if (data.totalPessoas !== undefined) {
+                        pessoasDisplay.textContent = data.totalPessoas;
+                    } else {
+                        pessoasDisplay.textContent = "--";
+                    }
                 }
             } else {
                 countDisplay.textContent = "Erro";

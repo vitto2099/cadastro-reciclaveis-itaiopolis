@@ -19,21 +19,25 @@ function doGet(e) {
   const lastRow = sheet.getLastRow();
   const total = Math.max(0, lastRow - 1);
   
-  // Calcular total de sacolas distribuídas
+  // Calcular total de sacolas distribuídas e pessoas atendidas
   let totalSacolas = 0;
+  let totalPessoas = 0;
   if (lastRow > 1) {
-    // Coluna G (7) = Sacolas
-    const sacolasRange = sheet.getRange(2, 7, lastRow - 1, 1).getValues();
-    for (let i = 0; i < sacolasRange.length; i++) {
-      const val = parseInt(sacolasRange[i][0]);
-      totalSacolas += isNaN(val) ? 1 : val;
+    // Coluna F (6) = Moradores, Coluna G (7) = Sacolas
+    const dataRange = sheet.getRange(2, 6, lastRow - 1, 2).getValues();
+    for (let i = 0; i < dataRange.length; i++) {
+      const moradores = parseInt(dataRange[i][0]);
+      const sacolas = parseInt(dataRange[i][1]);
+      totalPessoas += isNaN(moradores) ? 0 : moradores;
+      totalSacolas += isNaN(sacolas) ? 1 : sacolas;
     }
   }
   
   return ContentService.createTextOutput(JSON.stringify({
     status: 'success',
     total: total,
-    totalSacolas: totalSacolas
+    totalSacolas: totalSacolas,
+    totalPessoas: totalPessoas
   })).setMimeType(ContentService.MimeType.JSON);
 }
 
