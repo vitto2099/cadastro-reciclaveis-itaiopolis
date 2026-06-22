@@ -1,39 +1,31 @@
-# Sistema de Cadastro de Sacos de Lixo Recicláveis - Itaiópolis
+# Sistema de Gestão de Cadastros - Distribuição de Sacos Recicláveis ♻️
 
-Este projeto é um sistema web desenvolvido para a Secretaria de Meio Ambiente de Itaiópolis, focado no controle e distribuição de sacos de lixo recicláveis para os munícipes.
+Esta é uma aplicação web moderna e responsiva desenvolvida para o Município de Itaiópolis/SC, com o objetivo de registrar e gerenciar a distribuição contínua de sacos recicláveis para munícipes e estabelecimentos comerciais.
 
-## 🛠️ Como Funciona a Estrutura
+## 🚀 Funcionalidades
 
-O sistema é dividido em duas partes:
-1. **Frontend (Site):** Interface visual (HTML, CSS, JS) onde os dados são digitados. Pode ser hospedada no Vercel.
-2. **Backend (Banco de Dados):** Uma planilha do Google Sheets que recebe, checa e guarda os dados através do Google Apps Script.
+- **Cadastro Rápido e Intuitivo:** Formulário otimizado para o rápido registro de entregas.
+- **Validação de Documentos:** Alternância inteligente entre CPF e CNPJ com máscaras e validação em tempo real.
+- **Auto-seleção de Campos:** Campos numéricos selecionam automaticamente o valor padrão ao clique, agilizando a edição.
+- **Dashboard em Tempo Real:** Indicadores que exibem a quantidade de pessoas atendidas e o volume total de unidades (sacolas) distribuídas (o backend contabiliza automaticamente a regra de negócio onde cada entrega equivale a 4 sacolas).
+- **Integração Serverless:** O sistema se conecta diretamente ao **Google Apps Script**, utilizando uma planilha do Google Sheets como banco de dados de forma segura, rápida e sem custos de hospedagem de backend.
+- **Design Premium (UI/UX):** Interface com estética *Glassmorphism*, gradientes suaves, responsividade total para dispositivos móveis (mobile-first) e micro-interações ao passar o mouse.
 
-## 🔒 Como Funciona o Acesso (Segurança)
+## 🛠️ Tecnologias Utilizadas
 
-Como o sistema vai ser hospedado na internet, mas **só 5 funcionários da secretaria** devem fazer os cadastros, nós implementamos um sistema de acesso duplo para não dar dor de cabeça:
+*   **Front-end:** HTML5 semântico, CSS3 (variáveis, flexbox, grid, animações) e Vanilla JavaScript (DOM manipulation, Fetch API).
+*   **Back-end / Banco de Dados:** Google Apps Script e Google Sheets.
+*   **Controle de Versão:** Git & GitHub.
 
-### 1. Acesso ao Site (Para a sua Equipe)
-Quando você jogar este projeto no Vercel, o Vercel vai gerar um link (ex: `https://seu-site.vercel.app`). 
-Você vai pegar esse link e mandar apenas para os seus 4 colegas de trabalho.
+## 📱 Responsividade
 
-Sempre que qualquer um abrir esse link, vai dar de cara com uma tela verde bloqueada pedindo uma senha.
-- **A Senha Única é:** `meioambiente2026`
+A interface foi cuidadosamente projetada para funcionar perfeitamente tanto em computadores desktop (telas grandes) quanto em celulares e tablets, reorganizando os "cards" de status e o formulário para garantir a melhor experiência do usuário independente do dispositivo.
 
-Ninguém mais da cidade vai conseguir passar dessa tela se achar o link. Uma vez que o funcionário digitar a senha, o formulário de cadastro abre e ele pode fazer quantos cadastros quiser no dia.
+## 💡 Como Usar (Para Desenvolvedores)
 
-*(Para alterar a senha no futuro, basta abrir o arquivo `app.js` e alterar a palavra `meioambiente2026` na linha 16).*
+1. Clone o repositório.
+2. Abra o arquivo `index.html` em qualquer navegador moderno.
+3. Para configurar o backend, certifique-se de que a variável `SCRIPT_URL` no arquivo `app.js` aponta para o Web App gerado no seu Google Apps Script.
 
-### 2. Acesso à Planilha (Para a sua Equipe)
-O site faz todo o trabalho "braçal": quando o funcionário preenche o site, o site joga os dados direto para a sua Planilha do Google, usando a permissão master que configuramos no *Apps Script* (Executar como: Eu).
-
-Se você ou seus colegas precisarem ver a tabela de moradores, tirar relatórios ou ver quantas pessoas cadastraram:
-1. Basta acessar o Google Sheets normalmente.
-2. Você (o dono da planilha) deve clicar no botão verde **"Compartilhar"** lá em cima na direita e colocar o email do Google dos seus 4 colegas.
-3. Pronto! Eles acessam o site pelo Vercel (com a senha) para cadastrar, e acessam o Google Sheets com o próprio email para olhar e exportar a tabela pronta.
-
-## 🚀 Próximos Passos (Integração)
-
-Para que tudo isso funcione na prática, ainda falta um último passo que depende da planilha original:
-1. Concluir a implantação do Apps Script na planilha com a opção "Executar como: Eu" e "Acesso: Qualquer Pessoa".
-2. Pegar a URL que o Google gerar e colar no arquivo `app.js` na variável `SCRIPT_URL` (logo na linha 2 do arquivo).
-3. Após isso, basta subir a pasta toda para o Vercel e o sistema estará online e protegido!
+---
+*Projeto desenvolvido para facilitar e otimizar processos manuais em planilhas, garantindo a integridade dos dados e uma melhor experiência visual.*

@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Sacos Recicláveis - Meio Ambiente Itaiópolis</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='80' font-size='80'>♻️</text></svg>">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='80' font-size='80'>♻️</text></svg>">
     <!-- Fontes do Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,6 +14,7 @@
     <!-- Folha de Estilos -->
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <!-- Conteúdo principal -->
     <div id="app-content">
@@ -25,27 +28,30 @@
                     </div>
                 </div>
             </div>
-            <div class="header-links">
-                <a href="https://docs.google.com/spreadsheets/d/1uSyYlt-wivncL1ugcP-86eon92iv3lElK4wDvFQa2og/edit?usp=sharing" target="_blank" class="sheet-link">📊 Ver Planilha</a>
+            <div class="header-links"
+                style="display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap;">
+                <a href="https://itaiopolis.atende.net/" target="_blank" class="nav-link">🏛️ Portal da Prefeitura</a>
+                <a href="https://docs.google.com/spreadsheets/d/1uSyYlt-wivncL1ugcP-86eon92iv3lElK4wDvFQa2og/edit?usp=sharing"
+                    target="_blank" class="nav-link">📊 Ver Planilha</a>
             </div>
         </header>
 
         <section class="stats-section">
             <div class="stat-card">
                 <span class="stat-number" id="pessoas-count">--</span>
-                <span class="stat-label">Pessoas Atendidas</span>
+                <span class="stat-label">Cidadões Atendidos</span>
             </div>
             <div class="stat-card">
                 <span class="stat-number" id="cadastro-count">--</span>
-                <span class="stat-label">Cadastros Realizados</span>
+                <span class="stat-label">Registros Efetuados</span>
             </div>
             <div class="stat-card">
                 <span class="stat-number" id="sacolas-count">--</span>
-                <span class="stat-label">Sacolas Distribuídas</span>
+                <span class="stat-label">Nº de Sacolas Distribuídas</span>
             </div>
             <div class="stat-card">
                 <span class="stat-icon">♻️</span>
-                <span class="stat-label">Meio Ambiente</span>
+                <span class="stat-label">Sustentabilidade</span>
             </div>
             <div class="stat-card">
                 <span class="stat-icon">📅</span>
@@ -54,109 +60,116 @@
         </section>
 
 
-    <main class="main-content">
+        <main class="main-content">
 
-        <section class="form-section" id="content-cadastro">
-            <div class="form-header">
-                <h2>Distribuição de Sacos Recicláveis</h2>
-                <p>Preencha os dados abaixo para registrar a retirada de sacolas. Pessoas e comércios podem retirar sacolas mais de uma vez.</p>
-            </div>
-
-            <form id="cadastro-form" class="cadastro-form">
-                <div class="form-group">
-                    <label for="nome">Nome Completo / Razão Social</label>
-                    <input type="text" id="nome" name="nome" placeholder="Digite o nome ou razão social" required>
+            <section class="form-section" id="content-cadastro">
+                <div class="form-header">
+                    <h2>Gestão de Distribuição de Materiais</h2>
+                    <p>Preencha o formulário abaixo para registrar a concessão de sacos recicláveis. O fornecimento é
+                        contínuo para munícipes e estabelecimentos.</p>
                 </div>
 
-                <!-- Seletor de tipo de documento -->
-                <div class="form-group">
-                    <label>Tipo de Documento</label>
-                    <div class="doc-type-selector">
-                        <button type="button" class="doc-type-btn active" data-type="cpf" id="btn-cpf">CPF</button>
-                        <button type="button" class="doc-type-btn" data-type="cnpj" id="btn-cnpj">CNPJ</button>
+                <form id="cadastro-form" class="cadastro-form">
+                    <div class="form-group">
+                        <label for="nome">Nome Completo / Razão Social</label>
+                        <input type="text" id="nome" name="nome" placeholder="Digite o nome ou razão social" required>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="documento" id="documento-label">CPF</label>
-                    <div class="doc-input-wrapper">
-                        <input type="text" id="documento" name="documento" placeholder="000.000.000-00" maxlength="14" inputmode="numeric">
-                        <div class="sem-doc-check">
-                            <input type="checkbox" id="sem-documento" name="sem-documento">
-                            <label for="sem-documento">Sem documento</label>
+                    <!-- Seletor de tipo de documento -->
+                    <div class="form-group">
+                        <label>Tipo de Documento</label>
+                        <div class="doc-type-selector">
+                            <button type="button" class="doc-type-btn active" data-type="cpf" id="btn-cpf">CPF</button>
+                            <button type="button" class="doc-type-btn" data-type="cnpj" id="btn-cnpj">CNPJ</button>
                         </div>
                     </div>
-                    <small class="doc-hint" id="doc-hint">Se não possuir documento, marque "Sem documento".</small>
-                </div>
 
-                <div class="form-row">
-                    <div class="form-group flex-3">
-                        <label for="rua">Rua / Logradouro</label>
-                        <input type="text" id="rua" name="rua" placeholder="Ex: Rua Getúlio Vargas" required>
-                    </div>
-                    <div class="form-group flex-1">
-                        <label for="numero">Número</label>
+                    <div class="form-group">
+                        <label for="documento" id="documento-label">CPF</label>
                         <div class="doc-input-wrapper">
-                            <input type="text" id="numero" name="numero" placeholder="Ex: 123" required inputmode="numeric">
+                            <input type="text" id="documento" name="documento" placeholder="000.000.000-00"
+                                maxlength="14" inputmode="numeric">
                             <div class="sem-doc-check">
-                                <input type="checkbox" id="sem-numero" name="sem-numero">
-                                <label for="sem-numero">S/N</label>
+                                <input type="checkbox" id="sem-documento" name="sem-documento">
+                                <label for="sem-documento">Sem documento</label>
+                            </div>
+                        </div>
+                        <small class="doc-hint" id="doc-hint">Caso o beneficiário não possua documentação no momento,
+                            selecione "Sem documento".</small>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group flex-3">
+                            <label for="rua">Rua / Logradouro</label>
+                            <input type="text" id="rua" name="rua" placeholder="Ex: Rua Getúlio Vargas" required>
+                        </div>
+                        <div class="form-group flex-1">
+                            <label for="numero">Número</label>
+                            <div class="doc-input-wrapper">
+                                <input type="text" id="numero" name="numero" placeholder="Ex: 123" required
+                                    inputmode="numeric">
+                                <div class="sem-doc-check">
+                                    <input type="checkbox" id="sem-numero" name="sem-numero">
+                                    <label for="sem-numero">S/N</label>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="bairro">Bairro</label>
-                    <div class="bairro-buttons" id="bairro-buttons">
-                        <button type="button" class="bairro-btn" data-bairro="Centro">Centro</button>
-                        <button type="button" class="bairro-btn" data-bairro="Vila Nova">Vila Nova</button>
-                        <button type="button" class="bairro-btn" data-bairro="Vila Gaúcha">Vila Gaúcha</button>
-                        <button type="button" class="bairro-btn" data-bairro="Bom Jesus">Bom Jesus</button>
-                        <button type="button" class="bairro-btn" data-bairro="Lucena">Lucena</button>
-                        <button type="button" class="bairro-btn" data-bairro="Paraguaçu">Paraguaçu</button>
-                        <button type="button" class="bairro-btn" data-bairro="Interior">Interior</button>
+                    <div class="form-group">
+                        <label for="bairro">Bairro</label>
+                        <div class="bairro-buttons" id="bairro-buttons">
+                            <button type="button" class="bairro-btn" data-bairro="Centro">Centro</button>
+                            <button type="button" class="bairro-btn" data-bairro="Vila Nova">Vila Nova</button>
+                            <button type="button" class="bairro-btn" data-bairro="Vila Gaúcha">Vila Gaúcha</button>
+                            <button type="button" class="bairro-btn" data-bairro="Bom Jesus">Bom Jesus</button>
+                            <button type="button" class="bairro-btn" data-bairro="Lucena">Lucena</button>
+                            <button type="button" class="bairro-btn" data-bairro="Paraguaçu">Paraguaçu</button>
+                            <button type="button" class="bairro-btn" data-bairro="Interior">Interior</button>
+                        </div>
+                        <input type="text" id="bairro" name="bairro" placeholder="Ou digite o bairro aqui..." required>
                     </div>
-                    <input type="text" id="bairro" name="bairro" placeholder="Ou digite o bairro aqui..." required>
-                </div>
 
-                <div class="form-row">
-                    <div class="form-group flex-1">
-                        <label for="moradores">Nº de Pessoas</label>
-                        <input type="number" id="moradores" name="moradores" min="1" max="999" placeholder="Ex: 4" required inputmode="numeric">
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label for="moradores">Nº de Pessoas</label>
+                            <input type="number" id="moradores" name="moradores" min="1" max="999" value="1" placeholder="Ex: 1"
+                                required inputmode="numeric" onfocus="this.select()">
+                        </div>
+                        <div class="form-group flex-1">
+                            <label for="sacolas">Qtd. de Sacolas</label>
+                            <input type="number" id="sacolas" name="sacolas" min="1" max="999" value="1"
+                                placeholder="Ex: 1" required inputmode="numeric" onfocus="this.select()">
+                        </div>
                     </div>
-                    <div class="form-group flex-1">
-                        <label for="sacolas">Qtd. de Sacolas</label>
-                        <input type="number" id="sacolas" name="sacolas" min="1" max="999" value="1" placeholder="Ex: 1" required inputmode="numeric">
-                    </div>
-                </div>
 
-                <button type="submit" id="submit-btn" class="submit-btn">
-                    <span class="btn-text">Finalizar Cadastro</span>
-                    <span class="loader" id="btn-loader" style="display: none;"></span>
-                </button>
-                
-                <div id="form-message" class="form-message" style="display: none;"></div>
-            </form>
-        </section>
+                    <button type="submit" id="submit-btn" class="submit-btn">
+                        <span class="btn-text">Registrar Entrega</span>
+                        <span class="loader" id="btn-loader" style="display: none;"></span>
+                    </button>
 
-    </main>
+                    <div id="form-message" class="form-message" style="display: none;"></div>
+                </form>
+            </section>
 
-    <footer class="footer">
-        <div class="footer-content">
-            <img src="Brasao_itaiopolis.jpg" alt="Brasão de Itaiópolis" class="footer-logo">
-            <p><strong>MUNICÍPIO DE ITAIÓPOLIS</strong></p>
-            <p class="footer-address">Avenida Getúlio Vargas, Nº 308, Centro<br>Itaiópolis/SC - CEP: 89.340-000</p>
-            <p class="footer-contact">(47) 3652-2211<br>PREFEITURA@ITAIOPOLIS.SC.GOV.BR</p>
-        </div>
-        <div class="footer-bottom"></div>
-    </footer>
+        </main>
 
-    <!-- Toast Container -->
-    <div id="toast-container" class="toast-container"></div>
+        <footer class="footer">
+            <div class="footer-content">
+                <img src="Brasao_itaiopolis.jpg" alt="Brasão de Itaiópolis" class="footer-logo">
+                <p><strong>MUNICÍPIO DE ITAIÓPOLIS</strong></p>
+                <p class="footer-address">Avenida Getúlio Vargas, Nº 308, Centro<br>Itaiópolis/SC - CEP: 89.340-000</p>
+                <p class="footer-contact">(47) 3652-2211<br>PREFEITURA@ITAIOPOLIS.SC.GOV.BR</p>
+            </div>
+            <div class="footer-bottom"></div>
+        </footer>
 
-    <!-- Script da Aplicação -->
-    <script src="app.js"></script>
+        <!-- Toast Container -->
+        <div id="toast-container" class="toast-container"></div>
+
+        <!-- Script da Aplicação -->
+        <script src="app.js"></script>
     </div>
 </body>
+
 </html>
