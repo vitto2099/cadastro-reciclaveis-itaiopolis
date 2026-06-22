@@ -221,11 +221,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.status === 'success') {
                 countDisplay.textContent = data.total;
                 // Se o backend retornar total de sacolas, mostra; senão mostra "--"
-                // Multiplica por 4 conforme regra de negócio (1 kit = 4 sacolas)
+                // Multiplica por 10 conforme regra de negócio (1 kit = 10 sacolas)
                 if (data.totalSacolas !== undefined) {
-                    sacolasDisplay.textContent = data.totalSacolas * 4;
+                    sacolasDisplay.textContent = data.totalSacolas * 10;
                 } else {
-                    sacolasDisplay.textContent = data.total * 4; // Fallback: usa total de cadastros
+                    sacolasDisplay.textContent = data.total * 10; // Fallback: usa total de cadastros
                 }
                 
                 if (pessoasDisplay) {
@@ -301,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const result = await response.json();
 
             if (result.status === 'success') {
-                showToast(`Entrega registrada com sucesso! ${sacolas * 4} sacolas contabilizadas.`, "success");
+                showToast(`Entrega registrada com sucesso! ${sacolas * 10} sacolas contabilizadas.`, "success");
                 resetFormState();
                 fetchTotalCadastros(); // Atualiza contador
             } else {

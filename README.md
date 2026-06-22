@@ -7,7 +7,7 @@ Esta é uma aplicação web moderna e responsiva desenvolvida para o Município 
 - **Cadastro Rápido e Intuitivo:** Formulário otimizado para o rápido registro de entregas.
 - **Validação de Documentos:** Alternância inteligente entre CPF e CNPJ com máscaras e validação em tempo real.
 - **Auto-seleção de Campos:** Campos numéricos selecionam automaticamente o valor padrão ao clique, agilizando a edição.
-- **Dashboard em Tempo Real:** Indicadores que exibem a quantidade de pessoas atendidas e o volume total de unidades (sacolas) distribuídas (o backend contabiliza automaticamente a regra de negócio onde cada entrega equivale a 4 sacolas).
+- **Dashboard em Tempo Real:** Indicadores que exibem a quantidade de pessoas atendidas e o volume total de unidades (sacolas) distribuídas (o backend contabiliza automaticamente a regra de negócio onde cada entrega equivale a 10 sacolas).
 - **Integração Serverless:** O sistema se conecta diretamente ao **Google Apps Script**, utilizando uma planilha do Google Sheets como banco de dados de forma segura, rápida e sem custos de hospedagem de backend.
 - **Design Premium (UI/UX):** Interface com estética *Glassmorphism*, gradientes suaves, responsividade total para dispositivos móveis (mobile-first) e micro-interações ao passar o mouse.
 
