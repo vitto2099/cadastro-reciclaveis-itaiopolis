@@ -42,41 +42,61 @@ function doGet(e) {
 }
 
 function doPost(e) {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(NOME_ABA);
-  
-  // Garantir cabeçalho
-  if (sheet.getLastRow() === 0) {
-    sheet.appendRow(["Data/Hora", "Nome", "CPF/CNPJ", "Endereço", "Bairro", "Moradores", "Sacolas"]);
+  const lock = LockService.getScriptLock();
+  // Aguarda até 10 segundos para outro processo terminar
+  try {
+    lock.waitLock(10000);
+  } catch (err) {
+    return respondJSON('error', 'O sistema está muito ocupado. Tente novamente em instantes.');
   }
 
-  // Se não houver parâmetros (pode ocorrer em acessos indevidos)
-  if (!e || !e.parameter) {
-    return respondJSON('error', 'Nenhum dado recebido.');
-  }
+  try {
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(NOME_ABA);
+    
+    // Garantir cabeçalho
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(["Data/Hora", "Nome", "CPF/CNPJ", "Endereço", "Bairro", "Moradores", "Sacolas"]);
+    }
 
-  const action = e.parameter.action;
-  
-  if (action === 'cadastrar') {
-    const nome = e.parameter.nome;
-    const tipoDocumento = e.parameter.tipoDocumento || 'CPF';
-    const cpf = e.parameter.cpf;
-    const endereco = e.parameter.endereco;
-    const bairro = e.parameter.bairro || '';
-    const moradores = e.parameter.moradores;
-    const sacolas = e.parameter.sacolas || '1';
+    // Se não houver parâmetros (pode ocorrer em acessos indevidos)
+    if (!e || !e.parameter) {
+      return respondJSON('error', 'Nenhum dado recebido.');
+    }
+
+    const action = e.parameter.action;
     
-    // SEM validação de duplicidade — a mesma pessoa/comércio pode retirar mais de uma vez
+    if (action === 'cadastrar') {
+      const nome = e.parameter.nome;
+      const tipoDocumento = e.parameter.tipoDocumento || 'CPF';
+      const cpf = e.parameter.cpf;
+      const endereco = e.parameter.endereco;
+      const bairro = e.parameter.bairro || '';
+      const moradores = e.parameter.moradores;
+      const sacolas = e.parameter.sacolas || '1';
+      
+      // Validação básica de segurança
+      if (!nome || !endereco || !moradores) {
+        return respondJSON('error', 'Dados obrigatórios ausentes. Verifique o preenchimento.');
+      }
+      
+      // SEM validação de duplicidade — a mesma pessoa/comércio pode retirar mais de uma vez
+      
+      // Salva os dados
+      const dataAtual = new Date();
+      const dataFormatada = Utilities.formatDate(dataAtual, Session.getScriptTimeZone(), "dd/MM/yyyy HH:mm:ss");
+      
+      sheet.appendRow([dataFormatada, nome, cpf, endereco, bairro, moradores, sacolas]);
+      
+      return respondJSON('success', 'Cadastro realizado com sucesso!');
+    }
     
-    // Salva os dados
-    const dataAtual = new Date();
-    const dataFormatada = Utilities.formatDate(dataAtual, Session.getScriptTimeZone(), "dd/MM/yyyy HH:mm:ss");
-    
-    sheet.appendRow([dataFormatada, nome, cpf, endereco, bairro, moradores, sacolas]);
-    
-    return respondJSON('success', 'Cadastro realizado com sucesso!');
+    return respondJSON('error', 'Ação não reconhecida.');
+  } catch(error) {
+    return respondJSON('error', 'Erro interno no servidor: ' + error.toString());
+  } finally {
+    // Libera o lock para o próximo usuário
+    lock.releaseLock();
   }
-  
-  return respondJSON('error', 'Ação não reconhecida.');
 }
 
 function respondJSON(status, message) {
