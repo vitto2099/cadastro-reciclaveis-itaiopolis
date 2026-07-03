@@ -53,105 +53,124 @@
                 <span class="stat-icon">♻️</span>
                 <span class="stat-label">Sustentabilidade</span>
             </div>
-            <div class="stat-card">
-                <span class="stat-icon">📅</span>
-                <span class="stat-label">2026</span>
-            </div>
         </section>
 
 
         <main class="main-content">
-
-            <section class="form-section" id="content-cadastro">
-                <div class="form-header">
-                    <h2>Gestão de Distribuição de Materiais</h2>
-                    <p>Preencha o formulário abaixo para registrar a concessão de sacos recicláveis. O fornecimento é
-                        contínuo para munícipes e estabelecimentos.</p>
-                </div>
-
-                <form id="cadastro-form" class="cadastro-form">
-                    <div class="form-group">
-                        <label for="nome">Nome Completo / Razão Social</label>
-                        <input type="text" id="nome" name="nome" placeholder="Digite o nome ou razão social" required>
+            <div class="content-wrapper">
+                <section class="form-section" id="content-cadastro">
+                    <div class="form-header">
+                        <h2>Gestão de Distribuição de Materiais</h2>
+                        <p>Preencha o formulário abaixo para registrar a concessão de sacos recicláveis. O fornecimento é
+                            contínuo para munícipes e estabelecimentos.</p>
                     </div>
 
-                    <!-- Seletor de tipo de documento -->
-                    <div class="form-group">
-                        <label>Tipo de Documento</label>
-                        <div class="doc-type-selector">
-                            <button type="button" class="doc-type-btn active" data-type="cpf" id="btn-cpf">CPF</button>
-                            <button type="button" class="doc-type-btn" data-type="cnpj" id="btn-cnpj">CNPJ</button>
+                    <form id="cadastro-form" class="cadastro-form">
+                        <div class="form-group">
+                            <label for="nome">Nome Completo / Razão Social</label>
+                            <input type="text" id="nome" name="nome" placeholder="Digite o nome ou razão social" required>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="documento" id="documento-label">CPF</label>
-                        <div class="doc-input-wrapper">
-                            <input type="text" id="documento" name="documento" placeholder="000.000.000-00"
-                                maxlength="14" inputmode="numeric">
-                            <div class="sem-doc-check">
-                                <input type="checkbox" id="sem-documento" name="sem-documento">
-                                <label for="sem-documento">Sem documento</label>
+                        <!-- Seletor de tipo de documento -->
+                        <div class="form-group">
+                            <label>Tipo de Documento</label>
+                            <div class="doc-type-selector">
+                                <button type="button" class="doc-type-btn active" data-type="cpf" id="btn-cpf">CPF</button>
+                                <button type="button" class="doc-type-btn" data-type="cnpj" id="btn-cnpj">CNPJ</button>
                             </div>
                         </div>
-                        <small class="doc-hint" id="doc-hint">Caso o beneficiário não possua documentação no momento,
-                            selecione "Sem documento".</small>
-                    </div>
 
-                    <div class="form-row">
-                        <div class="form-group flex-3">
-                            <label for="rua">Rua / Logradouro</label>
-                            <input type="text" id="rua" name="rua" placeholder="Ex: Rua Getúlio Vargas" required>
-                        </div>
-                        <div class="form-group flex-1">
-                            <label for="numero">Número</label>
+                        <div class="form-group">
+                            <label for="documento" id="documento-label">CPF</label>
                             <div class="doc-input-wrapper">
-                                <input type="text" id="numero" name="numero" placeholder="Ex: 123" required
-                                    inputmode="numeric">
+                                <input type="text" id="documento" name="documento" placeholder="000.000.000-00"
+                                    maxlength="14" inputmode="numeric">
                                 <div class="sem-doc-check">
-                                    <input type="checkbox" id="sem-numero" name="sem-numero">
-                                    <label for="sem-numero">S/N</label>
+                                    <input type="checkbox" id="sem-documento" name="sem-documento">
+                                    <label for="sem-documento">Sem documento</label>
+                                </div>
+                            </div>
+                            <small class="doc-hint" id="doc-hint">Caso o beneficiário não possua documentação no momento,
+                                selecione "Sem documento".</small>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group flex-3">
+                                <label for="rua">Rua / Logradouro</label>
+                                <input type="text" id="rua" name="rua" placeholder="Ex: Rua Getúlio Vargas" required>
+                            </div>
+                            <div class="form-group flex-1">
+                                <label for="numero">Número</label>
+                                <div class="doc-input-wrapper">
+                                    <input type="text" id="numero" name="numero" placeholder="Ex: 123" required
+                                        inputmode="numeric">
+                                    <div class="sem-doc-check">
+                                        <input type="checkbox" id="sem-numero" name="sem-numero">
+                                        <label for="sem-numero">S/N</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="bairro">Bairro</label>
-                        <div class="bairro-buttons" id="bairro-buttons">
-                            <button type="button" class="bairro-btn" data-bairro="Centro">Centro</button>
-                            <button type="button" class="bairro-btn" data-bairro="Vila Nova">Vila Nova</button>
-                            <button type="button" class="bairro-btn" data-bairro="Vila Gaúcha">Vila Gaúcha</button>
-                            <button type="button" class="bairro-btn" data-bairro="Bom Jesus">Bom Jesus</button>
-                            <button type="button" class="bairro-btn" data-bairro="Lucena">Lucena</button>
-                            <button type="button" class="bairro-btn" data-bairro="Paraguaçu">Paraguaçu</button>
-                            <button type="button" class="bairro-btn" data-bairro="Interior">Interior</button>
+                        <div class="form-group">
+                            <label for="bairro">Bairro</label>
+                            <div class="bairro-buttons" id="bairro-buttons">
+                                <button type="button" class="bairro-btn" data-bairro="Centro">Centro</button>
+                                <button type="button" class="bairro-btn" data-bairro="Vila Nova">Vila Nova</button>
+                                <button type="button" class="bairro-btn" data-bairro="Vila Gaúcha">Vila Gaúcha</button>
+                                <button type="button" class="bairro-btn" data-bairro="Bom Jesus">Bom Jesus</button>
+                                <button type="button" class="bairro-btn" data-bairro="Lucena">Lucena</button>
+                                <button type="button" class="bairro-btn" data-bairro="Paraguaçu">Paraguaçu</button>
+                                <button type="button" class="bairro-btn" data-bairro="Interior">Interior</button>
+                            </div>
+                            <input type="text" id="bairro" name="bairro" placeholder="Ou digite o bairro aqui..." required>
                         </div>
-                        <input type="text" id="bairro" name="bairro" placeholder="Ou digite o bairro aqui..." required>
-                    </div>
 
-                    <div class="form-row">
-                        <div class="form-group flex-1">
-                            <label for="moradores">Nº de Pessoas</label>
-                            <input type="number" id="moradores" name="moradores" min="1" max="999" value="1" placeholder="Ex: 1"
-                                required inputmode="numeric" onfocus="this.select()">
+                        <div class="form-row">
+                            <div class="form-group flex-1">
+                                <label for="moradores">Nº de Pessoas</label>
+                                <input type="number" id="moradores" name="moradores" min="1" max="999" value="1" placeholder="Ex: 1"
+                                    required inputmode="numeric" onfocus="this.select()">
+                            </div>
+                            <div class="form-group flex-1">
+                                <label for="sacolas">Qtd. de Sacolas</label>
+                                <input type="number" id="sacolas" name="sacolas" min="1" max="999" value="1"
+                                    placeholder="Ex: 1" required inputmode="numeric" onfocus="this.select()">
+                            </div>
                         </div>
-                        <div class="form-group flex-1">
-                            <label for="sacolas">Qtd. de Sacolas</label>
-                            <input type="number" id="sacolas" name="sacolas" min="1" max="999" value="1"
-                                placeholder="Ex: 1" required inputmode="numeric" onfocus="this.select()">
+
+                        <button type="submit" id="submit-btn" class="submit-btn">
+                            <span class="btn-text">Registrar Entrega</span>
+                            <span class="loader" id="btn-loader" style="display: none;"></span>
+                        </button>
+
+                        <div id="form-message" class="form-message" style="display: none;"></div>
+                    </form>
+                </section>
+
+                <aside class="calendar-section">
+                    <div class="calendar-header">
+                        <h2>Coleta Seletiva</h2>
+                        <div class="calendar-controls">
+                            <button id="prev-month">&lt;</button>
+                            <span id="current-month-display">Mês 2026</span>
+                            <button id="next-month">&gt;</button>
                         </div>
                     </div>
-
-                    <button type="submit" id="submit-btn" class="submit-btn">
-                        <span class="btn-text">Registrar Entrega</span>
-                        <span class="loader" id="btn-loader" style="display: none;"></span>
-                    </button>
-
-                    <div id="form-message" class="form-message" style="display: none;"></div>
-                </form>
-            </section>
-
+                    <div class="calendar-grid">
+                        <div class="calendar-days-header">
+                            <div>DOM</div><div>SEG</div><div>TER</div><div>QUA</div><div>QUI</div><div>SEX</div><div>SÁB</div>
+                        </div>
+                        <div id="calendar-days" class="calendar-days">
+                            <!-- JS vai preencher aqui -->
+                        </div>
+                    </div>
+                    <div class="calendar-details" id="calendar-details">
+                        <h3 id="selected-date-display">Selecione um dia</h3>
+                        <p id="collection-info">Clique em um dia com coleta para ver os bairros atendidos.</p>
+                    </div>
+                </aside>
+            </div>
         </main>
 
         <footer class="footer">

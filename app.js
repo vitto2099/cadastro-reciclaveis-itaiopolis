@@ -315,4 +315,150 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // === Lógica do Calendário ===
+    const calendarDays = document.getElementById('calendar-days');
+    const currentMonthDisplay = document.getElementById('current-month-display');
+    const prevMonthBtn = document.getElementById('prev-month');
+    const nextMonthBtn = document.getElementById('next-month');
+    const selectedDateDisplay = document.getElementById('selected-date-display');
+    const collectionInfo = document.getElementById('collection-info');
+
+    let currentDate = new Date();
+    let currentMonth = currentDate.getMonth();
+    let currentYear = currentDate.getFullYear();
+
+    const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+
+    function getCollectionForDate(year, month, day) {
+        const date = new Date(year, month, day);
+        const dayOfWeek = date.getDay(); // 0 = Dom, 1 = Seg...
+        
+        // Calcula qual semana do mês é aquele dia da semana
+        let count = 0;
+        for (let i = 1; i <= day; i++) {
+            if (new Date(year, month, i).getDay() === dayOfWeek) {
+                count++;
+            }
+        }
+        const nthWeek = count;
+        
+        // Regras de coleta baseadas no calendário do município
+        if (dayOfWeek === 4) { // Quinta
+            return "CENTRO, BAIRRO VILA GAÚCHA (JOSÉ DRESSENO)";
+        }
+        if (dayOfWeek === 5) { // Sexta
+            return "CENTRO, BAIRRO LUCENA, BAIRRO VILA NOVA, BAIRRO NOVA BRASÍLIA, PARAGUAÇU";
+        }
+        if (dayOfWeek === 6) { // Sábado
+            return "BAIRRO BOM JESUS";
+        }
+        if (dayOfWeek === 1) { // Segunda
+            if (nthWeek === 1) return "CONTAGEM WORELL, BR 116, AV. PRES. TANCREDO NEVES, AV. GETÚLIO VARGAS, RUA CARLOS GLOTOB LINK, RUA PAULO HEYSE FILHO";
+            if (nthWeek === 2) return "POÇO CLARO, RIO VERMELHO I E II, AV. PRES. TANCREDO NEVES, RUA SERAFIM FURTADO DE MELO, RUA PAULO HEYSE FILHO";
+        }
+        if (dayOfWeek === 2) { // Terça
+            // 1ª Terça-feira dos meses ímpares (que têm índice par no JS: Jan=0, Mar=2, Mai=4, Jul=6, Set=8, Nov=10)
+            if (nthWeek === 1 && (month % 2 === 0)) {
+                return "RUA PRES. COSTA E SILVA, AV. ALEXANDRE RICARDO WORELL, SC 477 ITAIÓ, VOLTA TRISTE, VONTROBA, SERRINHA DO ITAJAÍ";
+            }
+        }
+        if (dayOfWeek === 3) { // Quarta
+            if (nthWeek === 1) return "RUA PRES. COSTA E SILVA, AV. ALEXANDRE RICARDO WORELL, SC 477 ITAIÓ, SC 477 MOEMA";
+            if (nthWeek === 3) return "RUA PRES. COSTA E SILVA, SÃO PEDRO, SANTO ANTÔNIO, SÃO JOÃO, SC 477 IRACEMA ATÉ SÍTIO COLORADO";
+        }
+        
+        return null;
+    }
+
+    function renderCalendar(year, month) {
+        calendarDays.innerHTML = '';
+        currentMonthDisplay.textContent = `${monthNames[month]} ${year}`;
+        
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        
+        for (let i = 0; i < firstDay; i++) {
+            const emptyDiv = document.createElement('div');
+            emptyDiv.classList.add('calendar-day', 'empty');
+            calendarDays.appendChild(emptyDiv);
+        }
+        
+        const today = new Date();
+        let selectedDayDiv = null;
+        
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayDiv = document.createElement('div');
+            dayDiv.classList.add('calendar-day');
+            dayDiv.textContent = day;
+            
+            const collection = getCollectionForDate(year, month, day);
+            if (collection) {
+                dayDiv.classList.add('has-collection');
+            }
+            
+            if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+                dayDiv.classList.add('today');
+                selectedDayDiv = dayDiv;
+                showCollectionDetails(year, month, day, collection, dayDiv);
+            }
+            
+            dayDiv.addEventListener('click', () => {
+                showCollectionDetails(year, month, day, collection, dayDiv);
+            });
+            
+            calendarDays.appendChild(dayDiv);
+        }
+
+        // Se não selecionou o dia atual (pq é outro mês), seleciona o dia 1
+        if (!selectedDayDiv) {
+            const firstValidDay = calendarDays.querySelector('.calendar-day:not(.empty)');
+            if (firstValidDay) {
+                const day = 1;
+                const collection = getCollectionForDate(year, month, day);
+                showCollectionDetails(year, month, day, collection, firstValidDay);
+            }
+        }
+    }
+
+    function showCollectionDetails(year, month, day, collection, dayElement) {
+        if (dayElement) {
+            document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
+            dayElement.classList.add('selected');
+        }
+        selectedDateDisplay.textContent = `${day} de ${monthNames[month]} de ${year}`;
+        
+        if (collection) {
+            const bairros = collection.split(',').map(b => b.trim());
+            let htmlList = '<ul style="padding-left: 20px; margin-top: 8px;">';
+            bairros.forEach(b => {
+                htmlList += `<li style="margin-bottom: 4px;">${b}</li>`;
+            });
+            htmlList += '</ul>';
+            collectionInfo.innerHTML = `<strong>Coleta nos locais:</strong>${htmlList}`;
+        } else {
+            collectionInfo.innerHTML = "Não há coleta seletiva programada para este dia.";
+        }
+    }
+
+    if (prevMonthBtn && nextMonthBtn) {
+        prevMonthBtn.addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar(currentYear, currentMonth);
+        });
+
+        nextMonthBtn.addEventListener('click', () => {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar(currentYear, currentMonth);
+        });
+
+        renderCalendar(currentYear, currentMonth);
+    }
 });
