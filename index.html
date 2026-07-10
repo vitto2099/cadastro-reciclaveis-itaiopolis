@@ -7,7 +7,8 @@
     <title>Cadastro de Sacos Recicláveis - Meio Ambiente Itaiópolis</title>
     <link rel="icon" type="image/svg+xml"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='80' font-size='80'>♻️</text></svg>">
-    <!-- Fontes do Google -->
+    <!-- Fontes do Google e ChartJS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -49,9 +50,10 @@
                 <span class="stat-number" id="sacolas-count">--</span>
                 <span class="stat-label">Nº de Sacolas Distribuídas</span>
             </div>
-            <div class="stat-card">
-                <span class="stat-icon">♻️</span>
-                <span class="stat-label">Sustentabilidade</span>
+            
+            <div class="stat-card action-card" id="btn-show-chart" style="cursor: pointer; background: var(--primary-light); border-color: var(--primary-color);">
+                <span class="stat-icon">📊</span>
+                <span class="stat-label" style="color: var(--primary-color);">Ver Distribuição</span>
             </div>
         </section>
 
@@ -114,16 +116,29 @@
 
                         <div class="form-group">
                             <label for="bairro">Bairro</label>
-                            <div class="bairro-buttons" id="bairro-buttons">
-                                <button type="button" class="bairro-btn" data-bairro="Centro">Centro</button>
-                                <button type="button" class="bairro-btn" data-bairro="Vila Nova">Vila Nova</button>
-                                <button type="button" class="bairro-btn" data-bairro="Vila Gaúcha">Vila Gaúcha</button>
-                                <button type="button" class="bairro-btn" data-bairro="Bom Jesus">Bom Jesus</button>
-                                <button type="button" class="bairro-btn" data-bairro="Lucena">Lucena</button>
-                                <button type="button" class="bairro-btn" data-bairro="Paraguaçu">Paraguaçu</button>
-                                <button type="button" class="bairro-btn" data-bairro="Interior">Interior</button>
-                            </div>
-                            <input type="text" id="bairro" name="bairro" placeholder="Ou digite o bairro aqui..." required>
+                            <select id="bairro" name="bairro" class="custom-select" required>
+                                <option value="" disabled selected>Selecione o bairro...</option>
+                                <option value="Bom Jesus">Bom Jesus</option>
+                                <option value="Centro">Centro</option>
+                                <option value="Contagem Worell">Contagem Worell</option>
+                                <option value="José Dresseno">José Dresseno</option>
+                                <option value="Lucena">Lucena</option>
+                                <option value="Nova Brasília">Nova Brasília</option>
+                                <option value="Paraguaçu">Paraguaçu</option>
+                                <option value="Poço Claro">Poço Claro</option>
+                                <option value="Rio Vermelho">Rio Vermelho</option>
+                                <option value="Santo Antônio">Santo Antônio</option>
+                                <option value="São João">São João</option>
+                                <option value="São Pedro">São Pedro</option>
+                                <option value="Serrinha do Itajaí">Serrinha do Itajaí</option>
+                                <option value="Vila Gaúcha">Vila Gaúcha</option>
+                                <option value="Vila Nova">Vila Nova</option>
+                                <option value="Volta Triste">Volta Triste</option>
+                                <option value="Vontroba">Vontroba</option>
+                                <option value="Interior">Interior / Zona Rural</option>
+                                <option value="Outro">Outro...</option>
+                            </select>
+                            <input type="text" id="bairro-outro" name="bairro-outro" placeholder="Digite o nome do bairro" style="display: none; margin-top: 10px;">
                         </div>
 
                         <div class="form-row">
@@ -182,6 +197,17 @@
             </div>
             <div class="footer-bottom"></div>
         </footer>
+
+        <!-- Modal Gráfico -->
+        <div id="chart-modal" class="modal-overlay" style="display: none;">
+            <div class="modal-content">
+                <span class="close-modal" id="close-chart-modal">&times;</span>
+                <h2>Distribuição por Bairro</h2>
+                <div class="chart-container" style="position: relative; height: 350px; width: 100%;">
+                    <canvas id="bairrosChart"></canvas>
+                </div>
+            </div>
+        </div>
 
         <!-- Toast Container -->
         <div id="toast-container" class="toast-container"></div>

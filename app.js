@@ -1,5 +1,5 @@
 // URL do Web App gerada no Google Apps Script.
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzr0AMBlExnwvOkBT4C26WKkLKbzGElFoOFVLMa_xMARu_o7wMbf8WkLfnIw8S_DWNP/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVet-1KMR-ORHwrTHIrXs3IWU8ALQW5gNgstcc7gYmE-D_QaBrRU1E8Xtb3j8fC_fF/exec";
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchTotalCadastros();
@@ -26,34 +26,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const sacolasDisplay = document.getElementById('sacolas-count');
     const pessoasDisplay = document.getElementById('pessoas-count');
 
+    let bairrosData = null; // Guardar dados do grafico
+    let bairrosChartInstance = null; // Instancia do grafico
+
     const btnCpf = document.getElementById('btn-cpf');
     const btnCnpj = document.getElementById('btn-cnpj');
 
     let docType = 'cpf'; // 'cpf' ou 'cnpj'
-    const bairroInput = document.getElementById('bairro');
-    const bairroButtons = document.querySelectorAll('.bairro-btn');
+    const bairroSelect = document.getElementById('bairro');
+    const bairroOutroInput = document.getElementById('bairro-outro');
 
-    // === Botões rápidos de bairro ===
-    bairroButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            bairroButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            bairroInput.value = btn.getAttribute('data-bairro');
-        });
+    // === Lógica do campo Bairro ===
+    bairroSelect.addEventListener('change', () => {
+        if (bairroSelect.value === 'Outro') {
+            bairroOutroInput.style.display = 'block';
+            bairroOutroInput.required = true;
+            bairroOutroInput.focus();
+        } else {
+            bairroOutroInput.style.display = 'none';
+            bairroOutroInput.required = false;
+            bairroOutroInput.value = '';
+        }
     });
 
-    // Se digitar no campo, desseleciona os botões
-    bairroInput.addEventListener('input', () => {
-        const val = bairroInput.value.trim().toLowerCase();
-        let matched = false;
-        bairroButtons.forEach(b => {
-            if (b.getAttribute('data-bairro').toLowerCase() === val) {
-                b.classList.add('active');
-                matched = true;
-            } else {
-                b.classList.remove('active');
-            }
-        });
+    // === Header minimizado ao rolar ===
+    const header = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 20) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
     });
 
 
@@ -192,7 +195,9 @@ document.addEventListener('DOMContentLoaded', () => {
         numeroInput.disabled = false;
         
         // Reset Bairros
-        bairroButtons.forEach(b => b.classList.remove('active'));
+        bairroOutroInput.style.display = 'none';
+        bairroOutroInput.required = false;
+        bairroOutroInput.value = '';
     }
 
     // Função para alterar estado de carregamento do botão
@@ -219,6 +224,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(`${SCRIPT_URL}?action=getTotal`);
             const data = await response.json();
             if (data.status === 'success') {
+                bairrosData = data.bairrosDist; // Armazena dados dos bairros
+                
                 countDisplay.textContent = data.total;
                 // Se o backend retornar total de sacolas, mostra; senão mostra "--"
                 // Multiplica por 10 conforme regra de negócio (1 kit = 10 sacolas)
@@ -276,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tipoDocumento: docType.toUpperCase(),
             cpf: docValue,
             endereco: `${ruaInput.value.trim()}, ${numeroInput.value.trim()}`,
-            bairro: bairroInput.value.trim(),
+            bairro: bairroSelect.value === 'Outro' ? bairroOutroInput.value.trim() : bairroSelect.value,
             moradores: moradoresInput.value,
             sacolas: sacolas
         };
@@ -460,5 +467,107 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         renderCalendar(currentYear, currentMonth);
+    }
+
+    // === Lógica do Gráfico de Pizza ===
+    const btnShowChart = document.getElementById('btn-show-chart');
+    const chartModal = document.getElementById('chart-modal');
+    const closeChartModal = document.getElementById('close-chart-modal');
+
+    if (btnShowChart) {
+        btnShowChart.addEventListener('click', () => {
+            if (!bairrosData) {
+                showToast("Os dados dos bairros ainda não foram carregados ou não existem cadastros.", "error");
+                return;
+            }
+            chartModal.style.display = 'flex';
+            renderChart(bairrosData);
+        });
+    }
+
+    if (closeChartModal) {
+        closeChartModal.addEventListener('click', () => {
+            chartModal.style.display = 'none';
+        });
+    }
+
+    // Fechar ao clicar fora
+    window.addEventListener('click', (e) => {
+        if (e.target === chartModal) {
+            chartModal.style.display = 'none';
+        }
+    });
+
+    function renderChart(data) {
+        const ctx = document.getElementById('bairrosChart').getContext('2d');
+        
+        // Prepara os dados (ordenando por valor decrescente de pessoas)
+        // data agora é { "Centro": {registros: 1, pessoas: 2, sacolas: 1}, ... }
+        // Se for o formato antigo { "Centro": 1 }, precisamos tratar para não quebrar (caso não tenham atualizado o script ainda)
+        const sortedEntries = Object.entries(data).sort((a, b) => {
+            const valA = typeof a[1] === 'number' ? a[1] : a[1].pessoas;
+            const valB = typeof b[1] === 'number' ? b[1] : b[1].pessoas;
+            return valB - valA;
+        });
+        
+        const labels = sortedEntries.map(e => e[0]);
+        const values = sortedEntries.map(e => typeof e[1] === 'number' ? e[1] : e[1].pessoas);
+
+        if (bairrosChartInstance) {
+            bairrosChartInstance.destroy();
+        }
+
+        bairrosChartInstance = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Pessoas Atendidas',
+                    data: values,
+                    backgroundColor: [
+                        '#FF3366', '#00C49F', '#FFBB28', '#0088FE', '#8A2BE2',
+                        '#FF7F50', '#32CD32', '#FF1493', '#00CED1', '#FF4500',
+                        '#9400D3', '#ADFF2F', '#DC143C', '#1E90FF', '#FFD700',
+                        '#00FA9A', '#FF69B4', '#4169E1', '#FF8C00', '#2E8B57'
+                    ],
+                    borderWidth: 1,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            font: { family: 'Inter' }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                let value = context.raw || 0;
+                                let rawData = data[label];
+                                
+                                // Se for o formato antigo
+                                if (typeof rawData === 'number') {
+                                    return `${label}: ${value} registros`;
+                                }
+                                
+                                // Se for o formato novo
+                                return [
+                                    `${label}`,
+                                    `Pessoas atendidas: ${rawData.pessoas}`,
+                                    `Registros feitos: ${rawData.registros}`,
+                                    `Sacolas distrib.: ${rawData.sacolas * 10}`
+                                ];
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 });
