@@ -477,21 +477,22 @@ document.addEventListener('DOMContentLoaded', () => {
         "Lucena": [-26.3650, -49.9050],    // Mais ao sul
         "Paraguaçu": [-26.3872, -49.9152], // Sul / Histórico
 
-        // --- INTERIOR / ZONA RURAL (Espalhados em um grande raio ao redor da cidade) ---
-        "São João": [-26.1500, -49.9060],         // Extremo Norte
-        "Rio Vermelho": [-26.2000, -49.7500],     // Nordeste
-        "São Pedro": [-26.2500, -49.7000],        // Leste/Nordeste
-        "Poço Claro": [-26.3385, -49.7000],       // Leste
-        "Vontroba": [-26.4000, -49.7500],         // Sudeste
-        "Volta Triste": [-26.5000, -49.8000],     // Extremo Sudeste
-        "Serrinha do Itajaí": [-26.5500, -49.9060], // Extremo Sul
-        "Nova Brasília": [-26.4500, -50.0000],    // Sudoeste
-        "José Dresseno": [-26.4000, -50.0500],    // Oeste/Sudoeste
-        "Vila Gaúcha": [-26.3385, -50.1000],      // Oeste
-        "Contagem Worell": [-26.2500, -50.1000],  // Noroeste/Oeste
-        "Santo Antônio": [-26.1500, -50.0500],    // Noroeste
-        "Interior": [-26.3385, -50.2000],         // Extremo Oeste Genérico
-        "Interior / Zona Rural": [-26.3385, -50.2000] 
+        // --- INTERIOR / ZONA RURAL (Espalhados em um raio mais curto, ~15km do centro) ---
+        "Mafra": [-26.2000, -49.8500],            // Norte/Nordeste (Outra cidade)
+        "São João": [-26.2500, -49.9060],         // Norte
+        "Rio Vermelho": [-26.2800, -49.8000],     // Nordeste
+        "São Pedro": [-26.3100, -49.8400],        // Leste/Nordeste (Mais próximo)
+        "Poço Claro": [-26.3385, -49.7800],       // Leste
+        "Vontroba": [-26.3800, -49.8000],         // Sudeste
+        "Volta Triste": [-26.4200, -49.8200],     // Sudeste distante
+        "Serrinha do Itajaí": [-26.4500, -49.9060], // Sul
+        "Nova Brasília": [-26.4200, -49.9600],    // Sudoeste
+        "José Dresseno": [-26.3800, -50.0000],    // Oeste/Sudoeste
+        "Vila Gaúcha": [-26.3385, -50.0200],      // Oeste
+        "Contagem Worell": [-26.2800, -50.0200],  // Noroeste/Oeste
+        "Santo Antônio": [-26.2500, -49.9800],    // Noroeste
+        "Interior": [-26.3385, -50.0500],         // Oeste Genérico
+        "Interior / Zona Rural": [-26.3385, -50.0500] 
     };
 
     // === Lógica do Dashboard (Gráfico e Mapa) ===
@@ -706,8 +707,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderMap(data, metric) {
         if (!leafletMap) {
-            // Inicializa no centro de Itaiópolis com zoom ajustado para uma visão de ~60km (zoom 11)
-            leafletMap = L.map('bairrosMap').setView([-26.3385, -49.9060], 11);
+            // Inicializa no centro de Itaiópolis com zoom ajustado para uma visão de ~30km (zoom 12)
+            leafletMap = L.map('bairrosMap').setView([-26.3385, -49.9060], 12);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(leafletMap);
@@ -754,16 +755,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Caso haja apenas 1 ponto, Voronoi não funciona. Adiciona pontos falsos invisíveis mais próximos.
         if (features.length < 3) {
-            features.push(turf.point([-50.5, -26.0], { dummy: true }));
-            features.push(turf.point([-49.5, -26.5], { dummy: true }));
-            features.push(turf.point([-49.0, -26.0], { dummy: true }));
+            features.push(turf.point([-50.1, -26.3], { dummy: true }));
+            features.push(turf.point([-49.7, -26.5], { dummy: true }));
+            features.push(turf.point([-49.5, -26.2], { dummy: true }));
         }
 
         const pointCollection = turf.featureCollection(features);
         
-        // Caixa de contorno reduzida (aproximadamente 60km ao redor de Itaiópolis)
+        // Caixa de contorno ampla para o cálculo inicial
         const options = {
-            bbox: [-50.3, -26.7, -49.5, -26.0]
+            bbox: [-50.5, -26.8, -49.3, -25.8]
         };
         
         let voronoiPolygons;
@@ -774,13 +775,30 @@ document.addEventListener('DOMContentLoaded', () => {
             return; // Fallback ou ignora se der erro matemático
         }
 
-        // Turf Voronoi devolve na mesma ordem, copiando as properties de volta
+        // Criar uma máscara circular de 20km ao redor de Itaiópolis para cortar o quadrado
+        const centerPoint = turf.point([-49.9060, -26.3385]);
+        const maskCircle = turf.circle(centerPoint, 20, { units: 'kilometers', steps: 64 });
+
+        // Turf Voronoi devolve na mesma ordem. Aplicamos o corte (intersect) para arredondar as bordas
         if (voronoiPolygons && voronoiPolygons.features) {
+            const finalFeatures = [];
             for (let i = 0; i < voronoiPolygons.features.length; i++) {
-                if (voronoiPolygons.features[i]) {
-                    voronoiPolygons.features[i].properties = pointCollection.features[i].properties;
+                let feature = voronoiPolygons.features[i];
+                if (feature) {
+                    try {
+                        const clipped = turf.intersect(feature, maskCircle);
+                        if (clipped) {
+                            clipped.properties = pointCollection.features[i].properties;
+                            finalFeatures.push(clipped);
+                        }
+                    } catch (e) {
+                        // Se falhar o recorte matemático, mantém a original
+                        feature.properties = pointCollection.features[i].properties;
+                        finalFeatures.push(feature);
+                    }
                 }
             }
+            voronoiPolygons.features = finalFeatures;
         }
 
         // Renderização L.geoJSON
