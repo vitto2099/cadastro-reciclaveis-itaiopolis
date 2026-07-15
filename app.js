@@ -706,8 +706,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderMap(data, metric) {
         if (!leafletMap) {
-            // Inicializa no centro de Itaiópolis com zoom menor para ver a região toda (zoom 10)
-            leafletMap = L.map('bairrosMap').setView([-26.3385, -49.9060], 10);
+            // Inicializa no centro de Itaiópolis com zoom ajustado para uma visão de ~60km (zoom 11)
+            leafletMap = L.map('bairrosMap').setView([-26.3385, -49.9060], 11);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(leafletMap);
@@ -752,18 +752,18 @@ document.addEventListener('DOMContentLoaded', () => {
             colorIndex++;
         });
 
-        // Caso haja apenas 1 ponto, Voronoi não funciona. Adiciona pontos falsos invisíveis longe.
+        // Caso haja apenas 1 ponto, Voronoi não funciona. Adiciona pontos falsos invisíveis mais próximos.
         if (features.length < 3) {
-            features.push(turf.point([-52.0, -25.0], { dummy: true }));
-            features.push(turf.point([-48.0, -27.0], { dummy: true }));
-            features.push(turf.point([-49.0, -28.0], { dummy: true }));
+            features.push(turf.point([-50.5, -26.0], { dummy: true }));
+            features.push(turf.point([-49.5, -26.5], { dummy: true }));
+            features.push(turf.point([-49.0, -26.0], { dummy: true }));
         }
 
         const pointCollection = turf.featureCollection(features);
         
-        // Caixa de contorno muito ampla (cerca de 200km de diâmetro)
+        // Caixa de contorno reduzida (aproximadamente 60km ao redor de Itaiópolis)
         const options = {
-            bbox: [-51.5, -27.5, -48.0, -25.0]
+            bbox: [-50.3, -26.7, -49.5, -26.0]
         };
         
         let voronoiPolygons;
