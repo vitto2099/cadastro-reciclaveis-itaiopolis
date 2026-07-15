@@ -4,7 +4,6 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVet-1KMR-ORHwrTHIr
 document.addEventListener('DOMContentLoaded', () => {
     fetchTotalCadastros();
 
-
     const form = document.getElementById('cadastro-form');
     const docInput = document.getElementById('documento');
     const semDocCheckbox = document.getElementById('sem-documento');
@@ -469,19 +468,57 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCalendar(currentYear, currentMonth);
     }
 
-    // === Lógica do Gráfico de Pizza ===
+    // === Coordenadas Aproximadas (Itaiópolis) ===
+    const coordenadasBairros = {
+        // --- NÚCLEO URBANO (Centro e arredores próximos) ---
+        "Centro": [-26.3385, -49.9060],
+        "Bom Jesus": [-26.3280, -49.9060], // Norte do centro
+        "Vila Nova": [-26.3500, -49.9050], // Sul do centro
+        "Lucena": [-26.3650, -49.9050],    // Mais ao sul
+        "Paraguaçu": [-26.3872, -49.9152], // Sul / Histórico
+
+        // --- INTERIOR / ZONA RURAL (Espalhados em um grande raio ao redor da cidade) ---
+        "São João": [-26.1500, -49.9060],         // Extremo Norte
+        "Rio Vermelho": [-26.2000, -49.7500],     // Nordeste
+        "São Pedro": [-26.2500, -49.7000],        // Leste/Nordeste
+        "Poço Claro": [-26.3385, -49.7000],       // Leste
+        "Vontroba": [-26.4000, -49.7500],         // Sudeste
+        "Volta Triste": [-26.5000, -49.8000],     // Extremo Sudeste
+        "Serrinha do Itajaí": [-26.5500, -49.9060], // Extremo Sul
+        "Nova Brasília": [-26.4500, -50.0000],    // Sudoeste
+        "José Dresseno": [-26.4000, -50.0500],    // Oeste/Sudoeste
+        "Vila Gaúcha": [-26.3385, -50.1000],      // Oeste
+        "Contagem Worell": [-26.2500, -50.1000],  // Noroeste/Oeste
+        "Santo Antônio": [-26.1500, -50.0500],    // Noroeste
+        "Interior": [-26.3385, -50.2000],         // Extremo Oeste Genérico
+        "Interior / Zona Rural": [-26.3385, -50.2000] 
+    };
+
+    // === Lógica do Dashboard (Gráfico e Mapa) ===
     const btnShowChart = document.getElementById('btn-show-chart');
     const chartModal = document.getElementById('chart-modal');
     const closeChartModal = document.getElementById('close-chart-modal');
+    
+    // Controles
+    const dashMetric = document.getElementById('dash-metric');
+    const btnViewResumo = document.getElementById('btn-view-resumo');
+    const btnViewChart = document.getElementById('btn-view-chart');
+    const btnViewMap = document.getElementById('btn-view-map');
+    const resumoView = document.getElementById('resumo-view');
+    const chartView = document.getElementById('chart-view');
+    const mapView = document.getElementById('map-view');
+    
+    let leafletMap = null;
+    let currentMapLayer = null;
 
     if (btnShowChart) {
         btnShowChart.addEventListener('click', () => {
-            if (!bairrosData) {
+            if (!bairrosData || Object.keys(bairrosData).length === 0) {
                 showToast("Os dados dos bairros ainda não foram carregados ou não existem cadastros.", "error");
                 return;
             }
             chartModal.style.display = 'flex';
-            renderChart(bairrosData);
+            updateDashboard();
         });
     }
 
@@ -491,74 +528,124 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Fechar ao clicar fora
     window.addEventListener('click', (e) => {
         if (e.target === chartModal) {
             chartModal.style.display = 'none';
         }
     });
 
-    function renderChart(data) {
+    // Eventos dos Controles
+    dashMetric.addEventListener('change', updateDashboard);
+
+    btnViewResumo.addEventListener('click', () => {
+        btnViewResumo.classList.add('active');
+        btnViewChart.classList.remove('active');
+        btnViewMap.classList.remove('active');
+        resumoView.style.display = 'grid';
+        chartView.style.display = 'none';
+        mapView.style.display = 'none';
+        updateDashboard();
+    });
+
+    btnViewChart.addEventListener('click', () => {
+        btnViewChart.classList.add('active');
+        btnViewResumo.classList.remove('active');
+        btnViewMap.classList.remove('active');
+        chartView.style.display = 'block';
+        resumoView.style.display = 'none';
+        mapView.style.display = 'none';
+        updateDashboard();
+    });
+
+    btnViewMap.addEventListener('click', () => {
+        btnViewMap.classList.add('active');
+        btnViewChart.classList.remove('active');
+        btnViewResumo.classList.remove('active');
+        mapView.style.display = 'block';
+        chartView.style.display = 'none';
+        resumoView.style.display = 'none';
+        updateDashboard();
+    });
+
+    function updateDashboard() {
+        if (!bairrosData) return;
+        
+        const metric = dashMetric.value; // 'pessoas', 'sacolas', 'registros'
+        const isMapMode = btnViewMap.classList.contains('active');
+        const isResumoMode = btnViewResumo.classList.contains('active');
+
+        if (isMapMode) {
+            renderMap(bairrosData, metric);
+        } else if (isResumoMode) {
+            renderResumo(bairrosData);
+        } else {
+            renderChart(bairrosData, metric, 'doughnut');
+        }
+    }
+
+    function renderChart(data, metric, type) {
         const ctx = document.getElementById('bairrosChart').getContext('2d');
         
-        // Prepara os dados (ordenando por valor decrescente de pessoas)
-        // data agora é { "Centro": {registros: 1, pessoas: 2, sacolas: 1}, ... }
-        // Se for o formato antigo { "Centro": 1 }, precisamos tratar para não quebrar (caso não tenham atualizado o script ainda)
-        const sortedEntries = Object.entries(data).sort((a, b) => {
-            const valA = typeof a[1] === 'number' ? a[1] : a[1].pessoas;
-            const valB = typeof b[1] === 'number' ? b[1] : b[1].pessoas;
-            return valB - valA;
-        });
-        
+        // Determinar o valor baseado na métrica escolhida
+        const getMetricValue = (item) => {
+            if (typeof item === 'number') return item; // fallback antigo
+            return metric === 'sacolas' ? item.sacolas * 10 : item[metric];
+        };
+
+        const sortedEntries = Object.entries(data).sort((a, b) => getMetricValue(b[1]) - getMetricValue(a[1]));
         const labels = sortedEntries.map(e => e[0]);
-        const values = sortedEntries.map(e => typeof e[1] === 'number' ? e[1] : e[1].pessoas);
+        const values = sortedEntries.map(e => getMetricValue(e[1]));
 
         if (bairrosChartInstance) {
             bairrosChartInstance.destroy();
         }
 
+        const colors = [
+            '#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', 
+            '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', 
+            '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', 
+            '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080'
+        ];
+
         bairrosChartInstance = new Chart(ctx, {
-            type: 'pie',
+            type: type,
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Pessoas Atendidas',
+                    label: dashMetric.options[dashMetric.selectedIndex].text,
                     data: values,
-                    backgroundColor: [
-                        '#FF3366', '#00C49F', '#FFBB28', '#0088FE', '#8A2BE2',
-                        '#FF7F50', '#32CD32', '#FF1493', '#00CED1', '#FF4500',
-                        '#9400D3', '#ADFF2F', '#DC143C', '#1E90FF', '#FFD700',
-                        '#00FA9A', '#FF69B4', '#4169E1', '#FF8C00', '#2E8B57'
-                    ],
-                    borderWidth: 1,
-                    borderColor: '#ffffff'
+                    backgroundColor: colors,
+                    borderWidth: 2,
+                    borderColor: '#ffffff',
+                    hoverOffset: 8
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                cutout: '60%',
                 plugins: {
                     legend: {
+                        display: true,
                         position: 'right',
                         labels: {
-                            font: { family: 'Inter' }
+                            font: { family: 'Inter', size: 12 },
+                            padding: 15,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
                         }
                     },
                     tooltip: {
                         callbacks: {
                             label: function(context) {
                                 let label = context.label || '';
-                                let value = context.raw || 0;
                                 let rawData = data[label];
                                 
-                                // Se for o formato antigo
                                 if (typeof rawData === 'number') {
-                                    return `${label}: ${value} registros`;
+                                    return `${label}: ${context.raw} registros`;
                                 }
                                 
-                                // Se for o formato novo
                                 return [
-                                    `${label}`,
                                     `Pessoas atendidas: ${rawData.pessoas}`,
                                     `Registros feitos: ${rawData.registros}`,
                                     `Sacolas distrib.: ${rawData.sacolas * 10}`
@@ -569,5 +656,184 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
+    }
+
+    function renderResumo(data) {
+        if (!resumoView) return;
+        
+        let totalPessoas = 0;
+        let totalSacolas = 0;
+        let totalRegistros = 0;
+        let bairroMaisAtivo = { nome: '-', max: -1 };
+        
+        Object.entries(data).forEach(([bairro, info]) => {
+            const pessoas = info.pessoas || (typeof info === 'number' ? info : 0);
+            const sacolas = info.sacolas ? info.sacolas * 10 : 0;
+            const registros = info.registros || (typeof info === 'number' ? info : 0);
+            
+            totalPessoas += pessoas;
+            totalSacolas += sacolas;
+            totalRegistros += registros;
+            
+            if (registros > bairroMaisAtivo.max) {
+                bairroMaisAtivo = { nome: bairro, max: registros };
+            }
+        });
+
+        resumoView.innerHTML = `
+            <div class="resumo-card-info">
+                <h3>Total de Bairros Atendidos</h3>
+                <span class="res-value">${Object.keys(data).length}</span>
+                <span class="res-sub">Locais com entregas</span>
+            </div>
+            <div class="resumo-card-info">
+                <h3>Bairro Mais Ativo</h3>
+                <span class="res-value" style="font-size: 1.4rem;">${bairroMaisAtivo.nome}</span>
+                <span class="res-sub">${bairroMaisAtivo.max} registros</span>
+            </div>
+            <div class="resumo-card-info">
+                <h3>Média de Sacolas</h3>
+                <span class="res-value">${totalRegistros > 0 ? Math.round(totalSacolas / totalRegistros) : 0}</span>
+                <span class="res-sub">Sacolas por registro</span>
+            </div>
+            <div class="resumo-card-info">
+                <h3>Média de Pessoas</h3>
+                <span class="res-value">${totalRegistros > 0 ? (totalPessoas / totalRegistros).toFixed(1) : 0}</span>
+                <span class="res-sub">Pessoas por registro</span>
+            </div>
+        `;
+    }
+
+    function renderMap(data, metric) {
+        if (!leafletMap) {
+            // Inicializa no centro de Itaiópolis com zoom menor para ver a região toda (zoom 10)
+            leafletMap = L.map('bairrosMap').setView([-26.3385, -49.9060], 10);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(leafletMap);
+        }
+
+        // Limpa camada anterior (Voronoi)
+        if (currentMapLayer) {
+            leafletMap.removeLayer(currentMapLayer);
+        }
+
+        const features = [];
+        const colors = [
+            '#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', 
+            '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', 
+            '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', 
+            '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080'
+        ];
+        let colorIndex = 0;
+
+        Object.entries(data).forEach(([bairro, info]) => {
+            let coords = coordenadasBairros[bairro];
+            
+            if (!coords) {
+                const mappedKey = Object.keys(coordenadasBairros).find(k => k.toLowerCase() === bairro.toLowerCase());
+                if (mappedKey) {
+                    coords = coordenadasBairros[mappedKey];
+                } else {
+                    const latOffset = (Math.random() - 0.5) * 0.1;
+                    const lngOffset = (Math.random() - 0.5) * 0.1;
+                    coords = [-26.3385 + latOffset, -49.9060 + lngOffset];
+                }
+            }
+
+            // Turf Point. Turf requires coordinates in [longitude, latitude]
+            features.push(turf.point([coords[1], coords[0]], {
+                bairro: bairro,
+                pessoas: info.pessoas || (typeof info === 'number' ? info : 0),
+                sacolas: info.sacolas ? info.sacolas * 10 : (typeof info === 'number' ? '?' : 0),
+                registros: info.registros || (typeof info === 'number' ? info : 0),
+                color: colors[colorIndex % colors.length]
+            }));
+            colorIndex++;
+        });
+
+        // Caso haja apenas 1 ponto, Voronoi não funciona. Adiciona pontos falsos invisíveis longe.
+        if (features.length < 3) {
+            features.push(turf.point([-52.0, -25.0], { dummy: true }));
+            features.push(turf.point([-48.0, -27.0], { dummy: true }));
+            features.push(turf.point([-49.0, -28.0], { dummy: true }));
+        }
+
+        const pointCollection = turf.featureCollection(features);
+        
+        // Caixa de contorno muito ampla (cerca de 200km de diâmetro)
+        const options = {
+            bbox: [-51.5, -27.5, -48.0, -25.0]
+        };
+        
+        let voronoiPolygons;
+        try {
+            voronoiPolygons = turf.voronoi(pointCollection, options);
+        } catch (e) {
+            console.error("Erro ao gerar Voronoi", e);
+            return; // Fallback ou ignora se der erro matemático
+        }
+
+        // Turf Voronoi devolve na mesma ordem, copiando as properties de volta
+        if (voronoiPolygons && voronoiPolygons.features) {
+            for (let i = 0; i < voronoiPolygons.features.length; i++) {
+                if (voronoiPolygons.features[i]) {
+                    voronoiPolygons.features[i].properties = pointCollection.features[i].properties;
+                }
+            }
+        }
+
+        // Renderização L.geoJSON
+        currentMapLayer = L.geoJSON(voronoiPolygons, {
+            style: function(feature) {
+                if (feature.properties.dummy) return { opacity: 0, fillOpacity: 0 };
+                
+                return {
+                    color: '#ffffff', // borda branca
+                    weight: 2,
+                    fillColor: feature.properties.color, // Usa a cor da paleta sempre
+                    fillOpacity: 0.35 // Bem franquinho para ver o mapa por baixo
+                };
+            },
+            onEachFeature: function(feature, layer) {
+                if (feature.properties.dummy) return;
+                const props = feature.properties;
+                
+                const tooltipContent = `
+                    <div style="font-family: Inter, sans-serif; min-width: 140px;">
+                        <h3 style="margin: 0 0 5px 0; color: ${props.color};">${props.bairro}</h3>
+                        <p style="margin: 0; font-size: 0.95rem;">Pessoas: <strong>${props.pessoas}</strong></p>
+                        <p style="margin: 0; font-size: 0.95rem;">Sacolas: <strong>${props.sacolas}</strong></p>
+                        <p style="margin: 0; font-size: 0.95rem;">Registros: <strong>${props.registros}</strong></p>
+                    </div>
+                `;
+                
+                layer.bindTooltip(tooltipContent, {
+                    sticky: true,
+                    className: 'custom-voronoi-tooltip'
+                });
+
+                // Efeito Hover
+                layer.on({
+                    mouseover: function(e) {
+                        const l = e.target;
+                        l.setStyle({
+                            weight: 3,
+                            color: '#ffffff',
+                            fillOpacity: 0.75 // Fica mais forte no hover
+                        });
+                        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                            l.bringToFront();
+                        }
+                    },
+                    mouseout: function(e) {
+                        currentMapLayer.resetStyle(e.target);
+                    }
+                });
+            }
+        }).addTo(leafletMap);
+        
+        // Força resize para evitar glitch no mapa dentro de modal escondido
+        setTimeout(() => leafletMap.invalidateSize(), 100);
     }
 });
