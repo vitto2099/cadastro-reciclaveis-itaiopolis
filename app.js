@@ -2,24 +2,6 @@
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVet-1KMR-ORHwrTHIrXs3IWU8ALQW5gNgstcc7gYmE-D_QaBrRU1E8Xtb3j8fC_fF/exec";
 
 document.addEventListener('DOMContentLoaded', () => {
-    // === Dark Mode ===
-    const themeToggle = document.getElementById('theme-toggle');
-    const savedTheme = localStorage.getItem('theme');
-    const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    const activeTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', activeTheme);
-    if (themeToggle) themeToggle.textContent = activeTheme === 'dark' ? '☀️' : '🌙';
-    
-    if (themeToggle) {
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
-        });
-    }
 
     const form = document.getElementById('cadastro-form');
     const docInput = document.getElementById('documento');
