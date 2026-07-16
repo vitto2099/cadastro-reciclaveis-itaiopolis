@@ -5,10 +5,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // === Dark Mode ===
     const themeToggle = document.getElementById('theme-toggle');
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        if (themeToggle) themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
-    }
+    const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    const activeTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', activeTheme);
+    if (themeToggle) themeToggle.textContent = activeTheme === 'dark' ? '☀️' : '🌙';
+    
     if (themeToggle) {
         themeToggle.addEventListener('click', () => {
             const currentTheme = document.documentElement.getAttribute('data-theme');

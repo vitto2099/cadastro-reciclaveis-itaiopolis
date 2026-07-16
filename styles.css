@@ -32,6 +32,28 @@
     --input-bg: #2d3748;
 }
 
+/* Ajustes Específicos para o Modo Escuro */
+[data-theme="dark"] .header {
+    background: rgba(26, 32, 44, 0.9);
+}
+
+[data-theme="dark"] .header.scrolled {
+    background: rgba(26, 32, 44, 0.98);
+}
+
+[data-theme="dark"] .nav-link {
+    background: var(--card-bg);
+    color: var(--primary-color);
+}
+
+[data-theme="dark"] .nav-link:hover {
+    background: var(--primary-light);
+}
+
+[data-theme="dark"] .footer {
+    background: var(--card-bg);
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
