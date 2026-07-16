@@ -681,26 +681,64 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        let tableRows = '';
+        Object.entries(data).sort((a, b) => {
+            const regA = a[1].registros || (typeof a[1] === 'number' ? a[1] : 0);
+            const regB = b[1].registros || (typeof b[1] === 'number' ? b[1] : 0);
+            return regB - regA;
+        }).forEach(([bairro, info]) => {
+            const pessoas = info.pessoas || (typeof info === 'number' ? info : 0);
+            const sacolas = info.sacolas ? info.sacolas * 10 : 0;
+            const registros = info.registros || (typeof info === 'number' ? info : 0);
+            
+            tableRows += `
+                <tr>
+                    <td><strong>${bairro}</strong></td>
+                    <td>${registros}</td>
+                    <td>${pessoas}</td>
+                    <td>${sacolas}</td>
+                </tr>
+            `;
+        });
+
         resumoView.innerHTML = `
-            <div class="resumo-card-info">
-                <h3>Total de Bairros Atendidos</h3>
-                <span class="res-value">${Object.keys(data).length}</span>
-                <span class="res-sub">Locais com entregas</span>
+            <div class="resumo-cards-wrapper">
+                <div class="resumo-card-info">
+                    <h3>Total de Bairros Atendidos</h3>
+                    <span class="res-value">${Object.keys(data).length}</span>
+                    <span class="res-sub">Locais com entregas</span>
+                </div>
+                <div class="resumo-card-info">
+                    <h3>Bairro Mais Ativo</h3>
+                    <span class="res-value" style="font-size: 1.4rem;">${bairroMaisAtivo.nome}</span>
+                    <span class="res-sub">${bairroMaisAtivo.max} registros</span>
+                </div>
+                <div class="resumo-card-info">
+                    <h3>Média de Sacolas</h3>
+                    <span class="res-value">${totalRegistros > 0 ? Math.round(totalSacolas / totalRegistros) : 0}</span>
+                    <span class="res-sub">Sacolas por registro</span>
+                </div>
+                <div class="resumo-card-info">
+                    <h3>Média de Pessoas</h3>
+                    <span class="res-value">${totalRegistros > 0 ? (totalPessoas / totalRegistros).toFixed(1) : 0}</span>
+                    <span class="res-sub">Pessoas por registro</span>
+                </div>
             </div>
-            <div class="resumo-card-info">
-                <h3>Bairro Mais Ativo</h3>
-                <span class="res-value" style="font-size: 1.4rem;">${bairroMaisAtivo.nome}</span>
-                <span class="res-sub">${bairroMaisAtivo.max} registros</span>
-            </div>
-            <div class="resumo-card-info">
-                <h3>Média de Sacolas</h3>
-                <span class="res-value">${totalRegistros > 0 ? Math.round(totalSacolas / totalRegistros) : 0}</span>
-                <span class="res-sub">Sacolas por registro</span>
-            </div>
-            <div class="resumo-card-info">
-                <h3>Média de Pessoas</h3>
-                <span class="res-value">${totalRegistros > 0 ? (totalPessoas / totalRegistros).toFixed(1) : 0}</span>
-                <span class="res-sub">Pessoas por registro</span>
+            
+            <div class="resumo-table-container">
+                <table class="resumo-table">
+                    <thead>
+                        <tr>
+                            <th>Bairro</th>
+                            <th>Registros</th>
+                            <th>Pessoas Atendidas</th>
+                            <th>Sacolas Distribuídas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${tableRows}
+                    </tbody>
+                </table>
             </div>
         `;
     }
