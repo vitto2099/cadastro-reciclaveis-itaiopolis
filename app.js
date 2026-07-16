@@ -19,14 +19,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    fetchTotalCadastros();
-
     const form = document.getElementById('cadastro-form');
     const docInput = document.getElementById('documento');
     const semDocCheckbox = document.getElementById('sem-documento');
     const docLabel = document.getElementById('documento-label');
     const docHint = document.getElementById('doc-hint');
-    
+
     const nomeInput = document.getElementById('nome');
     const ruaInput = document.getElementById('rua');
     const numeroInput = document.getElementById('numero');
@@ -41,6 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const countDisplay = document.getElementById('cadastro-count');
     const sacolasDisplay = document.getElementById('sacolas-count');
     const pessoasDisplay = document.getElementById('pessoas-count');
+
+    // Chamar a busca APÓS as variáveis terem sido declaradas
+    fetchTotalCadastros();
 
     let bairrosData = null; // Guardar dados do grafico
     let bairrosChartInstance = null; // Instancia do grafico
@@ -59,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             bairroBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             bairroInput.value = btn.dataset.value;
-            
+
             if (btn.dataset.value === 'Outro') {
                 bairroOutroInput.style.display = 'block';
                 bairroOutroInput.required = true;
@@ -75,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // === Header minimizado ao rolar (com correção de vibração) ===
     const header = document.querySelector('.header');
     let isScrolled = false;
-    
+
     window.addEventListener('scroll', () => {
         // Usa histerese: ativa ao passar de 50px, mas só desativa se voltar pra menos de 10px.
         // Isso impede a vibração quando a altura da página encolhe e força o scroll de volta.
@@ -173,14 +174,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
-        
+
         let icon = type === 'success' ? '✅' : '⚠️';
-        
+
         toast.innerHTML = `
             <span style="font-size: 1.2rem;">${icon}</span>
             <span class="toast-message">${text}</span>
         `;
-        
+
         toastContainer.appendChild(toast);
 
         // Remove após 4 segundos
@@ -194,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function resetFormState() {
         form.reset();
-        
+
         // Reset CPF/CNPJ
         docType = 'cpf';
         btnCpf.classList.add('active');
@@ -203,10 +204,10 @@ document.addEventListener('DOMContentLoaded', () => {
         docInput.placeholder = '000.000.000-00';
         docInput.maxLength = 14;
         docInput.disabled = false;
-        
+
         // Reset Número S/N
         numeroInput.disabled = false;
-        
+
         // Reset Bairros
         if (typeof bairroBtns !== 'undefined') {
             bairroBtns.forEach(b => b.classList.remove('active'));
@@ -234,14 +235,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateDashboardCounters(data) {
         bairrosData = data.bairrosDist; // Armazena dados dos bairros
-        
+
         countDisplay.textContent = data.total;
         if (data.totalSacolas !== undefined) {
             sacolasDisplay.textContent = data.totalSacolas * 10;
         } else {
             sacolasDisplay.textContent = data.total * 10;
         }
-        
+
         if (pessoasDisplay) {
             if (data.totalPessoas !== undefined) {
                 pessoasDisplay.textContent = data.totalPessoas;
@@ -264,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const data = JSON.parse(cached);
                 updateDashboardCounters(data);
-            } catch (e) {}
+            } catch (e) { }
         } else {
             // Skeletons
             countDisplay.innerHTML = '<span class="skeleton"></span>';
@@ -379,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function getCollectionForDate(year, month, day) {
         const date = new Date(year, month, day);
         const dayOfWeek = date.getDay(); // 0 = Dom, 1 = Seg...
-        
+
         // Calcula qual semana do mês é aquele dia da semana
         let count = 0;
         for (let i = 1; i <= day; i++) {
@@ -388,7 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         const nthWeek = count;
-        
+
         // Regras de coleta baseadas no calendário do município
         if (dayOfWeek === 4) { // Quinta
             return "CENTRO, BAIRRO VILA GAÚCHA (JOSÉ DRESSENO)";
@@ -413,46 +414,46 @@ document.addEventListener('DOMContentLoaded', () => {
             if (nthWeek === 1) return "RUA PRES. COSTA E SILVA, AV. ALEXANDRE RICARDO WORELL, SC 477 ITAIÓ, SC 477 MOEMA";
             if (nthWeek === 3) return "RUA PRES. COSTA E SILVA, SÃO PEDRO, SANTO ANTÔNIO, SÃO JOÃO, SC 477 IRACEMA ATÉ SÍTIO COLORADO";
         }
-        
+
         return null;
     }
 
     function renderCalendar(year, month) {
         calendarDays.innerHTML = '';
         currentMonthDisplay.textContent = `${monthNames[month]} ${year}`;
-        
+
         const firstDay = new Date(year, month, 1).getDay();
         const daysInMonth = new Date(year, month + 1, 0).getDate();
-        
+
         for (let i = 0; i < firstDay; i++) {
             const emptyDiv = document.createElement('div');
             emptyDiv.classList.add('calendar-day', 'empty');
             calendarDays.appendChild(emptyDiv);
         }
-        
+
         const today = new Date();
         let selectedDayDiv = null;
-        
+
         for (let day = 1; day <= daysInMonth; day++) {
             const dayDiv = document.createElement('div');
             dayDiv.classList.add('calendar-day');
             dayDiv.textContent = day;
-            
+
             const collection = getCollectionForDate(year, month, day);
             if (collection) {
                 dayDiv.classList.add('has-collection');
             }
-            
+
             if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
                 dayDiv.classList.add('today');
                 selectedDayDiv = dayDiv;
                 showCollectionDetails(year, month, day, collection, dayDiv);
             }
-            
+
             dayDiv.addEventListener('click', () => {
                 showCollectionDetails(year, month, day, collection, dayDiv);
             });
-            
+
             calendarDays.appendChild(dayDiv);
         }
 
@@ -473,7 +474,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dayElement.classList.add('selected');
         }
         selectedDateDisplay.textContent = `${day} de ${monthNames[month]} de ${year}`;
-        
+
         if (collection) {
             const bairros = collection.split(',').map(b => b.trim());
             let htmlList = '<ul style="padding-left: 20px; margin-top: 8px;">';
@@ -533,14 +534,14 @@ document.addEventListener('DOMContentLoaded', () => {
         "Contagem Worell": [-26.2800, -50.0200],  // Noroeste/Oeste
         "Santo Antônio": [-26.2500, -49.9800],    // Noroeste
         "Interior": [-26.3385, -50.0500],         // Oeste Genérico
-        "Interior / Zona Rural": [-26.3385, -50.0500] 
+        "Interior / Zona Rural": [-26.3385, -50.0500]
     };
 
     // === Lógica do Dashboard (Gráfico e Mapa) ===
     const btnShowChart = document.getElementById('btn-show-chart');
     const chartModal = document.getElementById('chart-modal');
     const closeChartModal = document.getElementById('close-chart-modal');
-    
+
     // Controles
     const dashMetric = document.getElementById('dash-metric');
     const btnViewResumo = document.getElementById('btn-view-resumo');
@@ -549,7 +550,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resumoView = document.getElementById('resumo-view');
     const chartView = document.getElementById('chart-view');
     const mapView = document.getElementById('map-view');
-    
+
     let leafletMap = null;
     let currentMapLayer = null;
 
@@ -636,7 +637,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateDashboard() {
         if (!bairrosData) return;
-        
+
         const metric = dashMetric.value; // 'pessoas', 'sacolas', 'registros'
         const isMapMode = btnViewMap.classList.contains('active');
         const isResumoMode = btnViewResumo.classList.contains('active');
@@ -652,7 +653,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderChart(data, metric, type) {
         const ctx = document.getElementById('bairrosChart').getContext('2d');
-        
+
         // Determinar o valor baseado na métrica escolhida
         const getMetricValue = (item) => {
             if (typeof item === 'number') return item; // fallback antigo
@@ -668,9 +669,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const colors = [
-            '#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', 
-            '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', 
-            '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', 
+            '#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231',
+            '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe',
+            '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000',
             '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080'
         ];
 
@@ -704,14 +705,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     tooltip: {
                         callbacks: {
-                            label: function(context) {
+                            label: function (context) {
                                 let label = context.label || '';
                                 let rawData = data[label];
-                                
+
                                 if (typeof rawData === 'number') {
                                     return `${label}: ${context.raw} registros`;
                                 }
-                                
+
                                 return [
                                     `Pessoas atendidas: ${rawData.pessoas}`,
                                     `Registros feitos: ${rawData.registros}`,
@@ -727,21 +728,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderResumo(data) {
         if (!resumoView) return;
-        
+
         let totalPessoas = 0;
         let totalSacolas = 0;
         let totalRegistros = 0;
         let bairroMaisAtivo = { nome: '-', max: -1 };
-        
+
         Object.entries(data).forEach(([bairro, info]) => {
             const pessoas = info.pessoas || (typeof info === 'number' ? info : 0);
             const sacolas = info.sacolas ? info.sacolas * 10 : 0;
             const registros = info.registros || (typeof info === 'number' ? info : 0);
-            
+
             totalPessoas += pessoas;
             totalSacolas += sacolas;
             totalRegistros += registros;
-            
+
             if (registros > bairroMaisAtivo.max) {
                 bairroMaisAtivo = { nome: bairro, max: registros };
             }
@@ -756,7 +757,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const pessoas = info.pessoas || (typeof info === 'number' ? info : 0);
             const sacolas = info.sacolas ? info.sacolas * 10 : 0;
             const registros = info.registros || (typeof info === 'number' ? info : 0);
-            
+
             tableRows += `
                 <tr>
                     <td><strong>${bairro}</strong></td>
@@ -825,16 +826,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const features = [];
         const colors = [
-            '#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', 
-            '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', 
-            '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', 
+            '#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231',
+            '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe',
+            '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000',
             '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080'
         ];
         let colorIndex = 0;
 
         Object.entries(data).forEach(([bairro, info]) => {
             let coords = coordenadasBairros[bairro];
-            
+
             if (!coords) {
                 const mappedKey = Object.keys(coordenadasBairros).find(k => k.toLowerCase() === bairro.toLowerCase());
                 if (mappedKey) {
@@ -865,12 +866,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const pointCollection = turf.featureCollection(features);
-        
+
         // Caixa de contorno ampla para o cálculo inicial
         const options = {
             bbox: [-50.5, -26.8, -49.3, -25.8]
         };
-        
+
         let voronoiPolygons;
         try {
             voronoiPolygons = turf.voronoi(pointCollection, options);
@@ -907,9 +908,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Renderização L.geoJSON
         currentMapLayer = L.geoJSON(voronoiPolygons, {
-            style: function(feature) {
+            style: function (feature) {
                 if (feature.properties.dummy) return { opacity: 0, fillOpacity: 0 };
-                
+
                 return {
                     color: '#ffffff', // borda branca
                     weight: 2,
@@ -917,10 +918,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     fillOpacity: 0.35 // Bem franquinho para ver o mapa por baixo
                 };
             },
-            onEachFeature: function(feature, layer) {
+            onEachFeature: function (feature, layer) {
                 if (feature.properties.dummy) return;
                 const props = feature.properties;
-                
+
                 const tooltipContent = `
                     <div style="font-family: Inter, sans-serif; min-width: 140px;">
                         <h3 style="margin: 0 0 5px 0; color: ${props.color};">${props.bairro}</h3>
@@ -929,7 +930,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <p style="margin: 0; font-size: 0.95rem;">Registros: <strong>${props.registros}</strong></p>
                     </div>
                 `;
-                
+
                 layer.bindTooltip(tooltipContent, {
                     sticky: true,
                     className: 'custom-voronoi-tooltip'
@@ -937,7 +938,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Efeito Hover
                 layer.on({
-                    mouseover: function(e) {
+                    mouseover: function (e) {
                         const l = e.target;
                         l.setStyle({
                             weight: 3,
@@ -948,13 +949,13 @@ document.addEventListener('DOMContentLoaded', () => {
                             l.bringToFront();
                         }
                     },
-                    mouseout: function(e) {
+                    mouseout: function (e) {
                         currentMapLayer.resetStyle(e.target);
                     }
                 });
             }
         }).addTo(leafletMap);
-        
+
         // Força resize para evitar glitch no mapa dentro de modal escondido
         setTimeout(() => leafletMap.invalidateSize(), 100);
     }
