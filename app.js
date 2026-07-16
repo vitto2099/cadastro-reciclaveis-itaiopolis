@@ -308,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tipoDocumento: docType.toUpperCase(),
             cpf: docValue,
             endereco: `${ruaInput.value.trim()}, ${numeroInput.value.trim()}`,
-            bairro: bairroSelect.value === 'Outro' ? bairroOutroInput.value.trim() : bairroSelect.value,
+            bairro: bairroInput.value === 'Outro' ? bairroOutroInput.value.trim() : bairroInput.value,
             moradores: moradoresInput.value,
             sacolas: sacolas
         };
