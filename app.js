@@ -2,6 +2,23 @@
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVet-1KMR-ORHwrTHIrXs3IWU8ALQW5gNgstcc7gYmE-D_QaBrRU1E8Xtb3j8fC_fF/exec";
 
 document.addEventListener('DOMContentLoaded', () => {
+    // === Dark Mode ===
+    const themeToggle = document.getElementById('theme-toggle');
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        if (themeToggle) themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    }
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        });
+    }
+
     fetchTotalCadastros();
 
     const form = document.getElementById('cadastro-form');
@@ -32,32 +49,53 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnCnpj = document.getElementById('btn-cnpj');
 
     let docType = 'cpf'; // 'cpf' ou 'cnpj'
-    const bairroSelect = document.getElementById('bairro');
+    const bairroInput = document.getElementById('bairro');
+    const bairroBtns = document.querySelectorAll('.bairro-btn');
     const bairroOutroInput = document.getElementById('bairro-outro');
 
-    // === Lógica do campo Bairro ===
-    bairroSelect.addEventListener('change', () => {
-        if (bairroSelect.value === 'Outro') {
-            bairroOutroInput.style.display = 'block';
-            bairroOutroInput.required = true;
-            bairroOutroInput.focus();
-        } else {
-            bairroOutroInput.style.display = 'none';
-            bairroOutroInput.required = false;
-            bairroOutroInput.value = '';
-        }
+    // === Lógica dos Botões de Bairro ===
+    bairroBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            bairroBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            bairroInput.value = btn.dataset.value;
+            
+            if (btn.dataset.value === 'Outro') {
+                bairroOutroInput.style.display = 'block';
+                bairroOutroInput.required = true;
+                bairroOutroInput.focus();
+            } else {
+                bairroOutroInput.style.display = 'none';
+                bairroOutroInput.required = false;
+                bairroOutroInput.value = '';
+            }
+        });
     });
 
-    // === Header minimizado ao rolar ===
+    // === Header minimizado ao rolar (com correção de vibração) ===
     const header = document.querySelector('.header');
+    let isScrolled = false;
+    
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 20) {
+        // Usa histerese: ativa ao passar de 50px, mas só desativa se voltar pra menos de 10px.
+        // Isso impede a vibração quando a altura da página encolhe e força o scroll de volta.
+        if (window.scrollY > 50 && !isScrolled) {
             header.classList.add('scrolled');
-        } else {
+            isScrolled = true;
+        } else if (window.scrollY < 10 && isScrolled) {
             header.classList.remove('scrolled');
+            isScrolled = false;
         }
     });
 
+
+    // === IMask para CPF/CNPJ ===
+    let docMask = null;
+    if (typeof IMask !== 'undefined') {
+        docMask = IMask(docInput, {
+            mask: '000.000.000-00'
+        });
+    }
 
     // === Seletor de tipo de documento ===
     btnCpf.addEventListener('click', () => {
@@ -66,10 +104,13 @@ document.addEventListener('DOMContentLoaded', () => {
         btnCnpj.classList.remove('active');
         docLabel.textContent = 'CPF';
         docInput.placeholder = '000.000.000-00';
-        docInput.maxLength = 14;
-        docInput.value = '';
+        if (docMask) {
+            docMask.updateOptions({ mask: '000.000.000-00' });
+            docMask.value = '';
+        }
         if (semDocCheckbox.checked) {
-            docInput.value = '000.000.000-00';
+            if (docMask) docMask.value = '000.000.000-00';
+            else docInput.value = '000.000.000-00';
         }
     });
 
@@ -79,10 +120,13 @@ document.addEventListener('DOMContentLoaded', () => {
         btnCpf.classList.remove('active');
         docLabel.textContent = 'CNPJ';
         docInput.placeholder = '00.000.000/0000-00';
-        docInput.maxLength = 18;
-        docInput.value = '';
+        if (docMask) {
+            docMask.updateOptions({ mask: '00.000.000/0000-00' });
+            docMask.value = '';
+        }
         if (semDocCheckbox.checked) {
-            docInput.value = '00.000.000/0000-00';
+            if (docMask) docMask.value = '00.000.000/0000-00';
+            else docInput.value = '00.000.000/0000-00';
         }
     });
 
@@ -114,37 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // === Máscara de CPF / CNPJ ===
-    docInput.addEventListener('input', function (e) {
-        let value = e.target.value.replace(/\D/g, '');
-
-        if (docType === 'cpf') {
-            if (value.length > 11) value = value.slice(0, 11);
-
-            if (value.length > 9) {
-                value = value.replace(/^(\d{3})(\d{3})(\d{3})(\d{2}).*/, '$1.$2.$3-$4');
-            } else if (value.length > 6) {
-                value = value.replace(/^(\d{3})(\d{3})(\d{3}).*/, '$1.$2.$3');
-            } else if (value.length > 3) {
-                value = value.replace(/^(\d{3})(\d{3}).*/, '$1.$2');
-            }
-        } else {
-            // CNPJ: 00.000.000/0000-00
-            if (value.length > 14) value = value.slice(0, 14);
-
-            if (value.length > 12) {
-                value = value.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2}).*/, '$1.$2.$3/$4-$5');
-            } else if (value.length > 8) {
-                value = value.replace(/^(\d{2})(\d{3})(\d{3})(\d{4}).*/, '$1.$2.$3/$4');
-            } else if (value.length > 5) {
-                value = value.replace(/^(\d{2})(\d{3})(\d{3}).*/, '$1.$2.$3');
-            } else if (value.length > 2) {
-                value = value.replace(/^(\d{2})(\d{3}).*/, '$1.$2');
-            }
-        }
-
-        e.target.value = value;
-    });
+    // Máscara manual foi substituída pelo IMask. Se IMask falhar, o fallback será o campo livre.
 
     // Função para mostrar mensagens (Toasts)
     function showToast(text, type) {
@@ -194,6 +208,12 @@ document.addEventListener('DOMContentLoaded', () => {
         numeroInput.disabled = false;
         
         // Reset Bairros
+        if (typeof bairroBtns !== 'undefined') {
+            bairroBtns.forEach(b => b.classList.remove('active'));
+        }
+        if (typeof bairroInput !== 'undefined') {
+            bairroInput.value = '';
+        }
         bairroOutroInput.style.display = 'none';
         bairroOutroInput.required = false;
         bairroOutroInput.value = '';
@@ -212,6 +232,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function updateDashboardCounters(data) {
+        bairrosData = data.bairrosDist; // Armazena dados dos bairros
+        
+        countDisplay.textContent = data.total;
+        if (data.totalSacolas !== undefined) {
+            sacolasDisplay.textContent = data.totalSacolas * 10;
+        } else {
+            sacolasDisplay.textContent = data.total * 10;
+        }
+        
+        if (pessoasDisplay) {
+            if (data.totalPessoas !== undefined) {
+                pessoasDisplay.textContent = data.totalPessoas;
+            } else {
+                pessoasDisplay.textContent = "--";
+            }
+        }
+    }
+
     // Buscar total de cadastros ao carregar a página
     async function fetchTotalCadastros() {
         if (SCRIPT_URL === "COLOQUE_A_URL_DO_SEU_WEB_APP_AQUI") {
@@ -219,36 +258,38 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Tentar carregar do cache
+        const cached = localStorage.getItem('dashboardCache');
+        if (cached) {
+            try {
+                const data = JSON.parse(cached);
+                updateDashboardCounters(data);
+            } catch (e) {}
+        } else {
+            // Skeletons
+            countDisplay.innerHTML = '<span class="skeleton"></span>';
+            sacolasDisplay.innerHTML = '<span class="skeleton"></span>';
+            if (pessoasDisplay) pessoasDisplay.innerHTML = '<span class="skeleton"></span>';
+        }
+
         try {
             const response = await fetch(`${SCRIPT_URL}?action=getTotal`);
             const data = await response.json();
             if (data.status === 'success') {
-                bairrosData = data.bairrosDist; // Armazena dados dos bairros
-                
-                countDisplay.textContent = data.total;
-                // Se o backend retornar total de sacolas, mostra; senão mostra "--"
-                // Multiplica por 10 conforme regra de negócio (1 kit = 10 sacolas)
-                if (data.totalSacolas !== undefined) {
-                    sacolasDisplay.textContent = data.totalSacolas * 10;
-                } else {
-                    sacolasDisplay.textContent = data.total * 10; // Fallback: usa total de cadastros
-                }
-                
-                if (pessoasDisplay) {
-                    if (data.totalPessoas !== undefined) {
-                        pessoasDisplay.textContent = data.totalPessoas;
-                    } else {
-                        pessoasDisplay.textContent = "--";
-                    }
-                }
+                localStorage.setItem('dashboardCache', JSON.stringify(data));
+                updateDashboardCounters(data);
             } else {
-                countDisplay.textContent = "Erro";
-                sacolasDisplay.textContent = "Erro";
+                if (!cached) {
+                    countDisplay.textContent = "Erro";
+                    sacolasDisplay.textContent = "Erro";
+                }
             }
         } catch (error) {
             console.error("Erro ao buscar total:", error);
-            countDisplay.textContent = "---";
-            sacolasDisplay.textContent = "---";
+            if (!cached) {
+                countDisplay.textContent = "---";
+                sacolasDisplay.textContent = "---";
+            }
         }
     }
 
@@ -542,7 +583,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnViewResumo.classList.add('active');
         btnViewChart.classList.remove('active');
         btnViewMap.classList.remove('active');
-        resumoView.style.display = 'grid';
+        resumoView.style.display = 'flex';
         chartView.style.display = 'none';
         mapView.style.display = 'none';
         updateDashboard();
@@ -567,6 +608,31 @@ document.addEventListener('DOMContentLoaded', () => {
         resumoView.style.display = 'none';
         updateDashboard();
     });
+
+    const btnExportCsv = document.getElementById('btn-export-csv');
+    if (btnExportCsv) {
+        btnExportCsv.addEventListener('click', () => {
+            if (!bairrosData || Object.keys(bairrosData).length === 0) {
+                showToast("Sem dados para exportar.", "error");
+                return;
+            }
+            let csvContent = "\uFEFFBairro,Registros,Pessoas Atendidas,Sacolas Distribuidas\n";
+            Object.entries(bairrosData).forEach(([bairro, info]) => {
+                const pessoas = info.pessoas || (typeof info === 'number' ? info : 0);
+                const sacolas = info.sacolas ? info.sacolas * 10 : 0;
+                const registros = info.registros || (typeof info === 'number' ? info : 0);
+                csvContent += `"${bairro}",${registros},${pessoas},${sacolas}\n`;
+            });
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "relatorio_bairros.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    }
 
     function updateDashboard() {
         if (!bairrosData) return;

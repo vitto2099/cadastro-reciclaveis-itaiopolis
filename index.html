@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+    <script src="https://unpkg.com/imask"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -34,6 +35,7 @@
             </div>
             <div class="header-links"
                 style="display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap;">
+                <button id="theme-toggle" class="theme-toggle" title="Alternar Modo Escuro">🌙</button>
                 <a href="https://itaiopolis.atende.net/" target="_blank" class="nav-link">🏛️ Portal da Prefeitura</a>
                 <a href="https://docs.google.com/spreadsheets/d/1uSyYlt-wivncL1ugcP-86eon92iv3lElK4wDvFQa2og/edit?usp=sharing"
                     target="_blank" class="nav-link">📊 Ver Planilha</a>
@@ -118,30 +120,30 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="bairro">Bairro</label>
-                            <select id="bairro" name="bairro" class="custom-select" required>
-                                <option value="" disabled selected>Selecione o bairro...</option>
-                                <option value="Bom Jesus">Bom Jesus</option>
-                                <option value="Centro">Centro</option>
-                                <option value="Contagem Worell">Contagem Worell</option>
-                                <option value="José Dresseno">José Dresseno</option>
-                                <option value="Lucena">Lucena</option>
-                                <option value="Mafra">Mafra (Outra Cidade)</option>
-                                <option value="Nova Brasília">Nova Brasília</option>
-                                <option value="Paraguaçu">Paraguaçu</option>
-                                <option value="Poço Claro">Poço Claro</option>
-                                <option value="Rio Vermelho">Rio Vermelho</option>
-                                <option value="Santo Antônio">Santo Antônio</option>
-                                <option value="São João">São João</option>
-                                <option value="São Pedro">São Pedro</option>
-                                <option value="Serrinha do Itajaí">Serrinha do Itajaí</option>
-                                <option value="Vila Gaúcha">Vila Gaúcha</option>
-                                <option value="Vila Nova">Vila Nova</option>
-                                <option value="Volta Triste">Volta Triste</option>
-                                <option value="Vontroba">Vontroba</option>
-                                <option value="Interior">Interior / Zona Rural</option>
-                                <option value="Outro">Outro...</option>
-                            </select>
+                            <label>Bairro</label>
+                            <input type="hidden" id="bairro" name="bairro" required>
+                            <div class="bairro-grid" id="bairro-grid">
+                                <button type="button" class="bairro-btn" data-value="Bom Jesus">Bom Jesus</button>
+                                <button type="button" class="bairro-btn" data-value="Centro">Centro</button>
+                                <button type="button" class="bairro-btn" data-value="Contagem Worell">Contagem Worell</button>
+                                <button type="button" class="bairro-btn" data-value="José Dresseno">José Dresseno</button>
+                                <button type="button" class="bairro-btn" data-value="Lucena">Lucena</button>
+                                <button type="button" class="bairro-btn" data-value="Mafra">Mafra (Outra)</button>
+                                <button type="button" class="bairro-btn" data-value="Nova Brasília">Nova Brasília</button>
+                                <button type="button" class="bairro-btn" data-value="Paraguaçu">Paraguaçu</button>
+                                <button type="button" class="bairro-btn" data-value="Poço Claro">Poço Claro</button>
+                                <button type="button" class="bairro-btn" data-value="Rio Vermelho">Rio Vermelho</button>
+                                <button type="button" class="bairro-btn" data-value="Santo Antônio">Santo Antônio</button>
+                                <button type="button" class="bairro-btn" data-value="São João">São João</button>
+                                <button type="button" class="bairro-btn" data-value="São Pedro">São Pedro</button>
+                                <button type="button" class="bairro-btn" data-value="Serrinha do Itajaí">Serrinha</button>
+                                <button type="button" class="bairro-btn" data-value="Vila Gaúcha">Vila Gaúcha</button>
+                                <button type="button" class="bairro-btn" data-value="Vila Nova">Vila Nova</button>
+                                <button type="button" class="bairro-btn" data-value="Volta Triste">Volta Triste</button>
+                                <button type="button" class="bairro-btn" data-value="Vontroba">Vontroba</button>
+                                <button type="button" class="bairro-btn" data-value="Interior">Interior / Rural</button>
+                                <button type="button" class="bairro-btn" data-value="Outro">Outro...</button>
+                            </div>
                             <input type="text" id="bairro-outro" name="bairro-outro" placeholder="Digite o nome do bairro" style="display: none; margin-top: 10px;">
                         </div>
 
@@ -223,6 +225,8 @@
                         <button id="btn-view-chart" class="toggle-btn active">📊 Gráfico</button>
                         <button id="btn-view-map" class="toggle-btn">🗺️ Mapa</button>
                     </div>
+                    
+                    <button id="btn-export-csv" class="export-btn" style="margin-left: auto;">⬇️ Exportar CSV</button>
                 </div>
 
                 <div class="dashboard-view-container">
