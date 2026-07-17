@@ -601,12 +601,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 showToast("Sem dados para exportar.", "error");
                 return;
             }
-            let csvContent = "\uFEFFBairro,Registros,Pessoas Atendidas,Sacolas Distribuidas\n";
+            let csvContent = "\uFEFFBairro,Registros,Pessoas Atendidas,Pacotes Distribuidos,Sacolas Distribuidas\n";
             Object.entries(bairrosData).forEach(([bairro, info]) => {
                 const pessoas = info.pessoas || (typeof info === 'number' ? info : 0);
+                const pacotes = info.sacolas || 0;
                 const sacolas = info.sacolas ? info.sacolas * 10 : 0;
                 const registros = info.registros || (typeof info === 'number' ? info : 0);
-                csvContent += `"${bairro}",${registros},${pessoas},${sacolas}\n`;
+                csvContent += `"${bairro}",${registros},${pessoas},${pacotes},${sacolas}\n`;
             });
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
@@ -715,16 +716,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let totalPessoas = 0;
         let totalSacolas = 0;
+        let totalPacotes = 0;
         let totalRegistros = 0;
         let bairroMaisAtivo = { nome: '-', max: -1 };
 
         Object.entries(data).forEach(([bairro, info]) => {
             const pessoas = info.pessoas || (typeof info === 'number' ? info : 0);
+            const pacotes = info.sacolas || 0;
             const sacolas = info.sacolas ? info.sacolas * 10 : 0;
             const registros = info.registros || (typeof info === 'number' ? info : 0);
 
             totalPessoas += pessoas;
             totalSacolas += sacolas;
+            totalPacotes += pacotes;
             totalRegistros += registros;
 
             if (registros > bairroMaisAtivo.max) {
@@ -739,6 +743,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return regB - regA;
         }).forEach(([bairro, info]) => {
             const pessoas = info.pessoas || (typeof info === 'number' ? info : 0);
+            const pacotes = info.sacolas || 0;
             const sacolas = info.sacolas ? info.sacolas * 10 : 0;
             const registros = info.registros || (typeof info === 'number' ? info : 0);
 
@@ -747,6 +752,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td><strong>${bairro}</strong></td>
                     <td>${registros}</td>
                     <td>${pessoas}</td>
+                    <td>${pacotes}</td>
                     <td>${sacolas}</td>
                 </tr>
             `;
@@ -765,9 +771,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span class="res-sub">${bairroMaisAtivo.max} registros</span>
                 </div>
                 <div class="resumo-card-info">
-                    <h3>Média de Sacolas</h3>
-                    <span class="res-value">${totalRegistros > 0 ? Math.round(totalSacolas / totalRegistros) : 0}</span>
-                    <span class="res-sub">Sacolas por registro</span>
+                    <h3>Média de Pacotes</h3>
+                    <span class="res-value">${totalRegistros > 0 ? Math.round(totalPacotes / totalRegistros) : 0}</span>
+                    <span class="res-sub">Pacotes por registro</span>
                 </div>
                 <div class="resumo-card-info">
                     <h3>Média de Pessoas</h3>
@@ -783,6 +789,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <th>Bairro</th>
                             <th>Registros</th>
                             <th>Pessoas Atendidas</th>
+                            <th>Pacotes Distribuídos</th>
                             <th>Sacolas Distribuídas</th>
                         </tr>
                     </thead>
