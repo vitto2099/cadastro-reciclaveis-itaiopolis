@@ -825,17 +825,26 @@ document.addEventListener('DOMContentLoaded', () => {
         let colorIndex = 0;
 
         Object.entries(data).forEach(([bairro, info]) => {
-            let coords = coordenadasBairros[bairro];
+            let baseCoords = coordenadasBairros[bairro];
+            let coords;
 
-            if (!coords) {
+            if (!baseCoords) {
                 const mappedKey = Object.keys(coordenadasBairros).find(k => k.toLowerCase() === bairro.toLowerCase());
                 if (mappedKey) {
-                    coords = coordenadasBairros[mappedKey];
-                } else {
-                    const latOffset = (Math.random() - 0.5) * 0.1;
-                    const lngOffset = (Math.random() - 0.5) * 0.1;
-                    coords = [-26.3385 + latOffset, -49.9060 + lngOffset];
+                    baseCoords = coordenadasBairros[mappedKey];
                 }
+            }
+
+            if (baseCoords) {
+                // Adiciona um micro-offset aleatório para evitar pontos exatamente sobrepostos
+                // que fazem o algoritmo de Voronoi quebrar (ex: 'Interior' e 'Interior / Zona Rural')
+                const latOffset = (Math.random() - 0.5) * 0.0005;
+                const lngOffset = (Math.random() - 0.5) * 0.0005;
+                coords = [baseCoords[0] + latOffset, baseCoords[1] + lngOffset];
+            } else {
+                const latOffset = (Math.random() - 0.5) * 0.1;
+                const lngOffset = (Math.random() - 0.5) * 0.1;
+                coords = [-26.3385 + latOffset, -49.9060 + lngOffset];
             }
 
             // Turf Point. Turf requires coordinates in [longitude, latitude]
