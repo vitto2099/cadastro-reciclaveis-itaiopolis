@@ -1427,6 +1427,43 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // -------------------------------------------------------------
+    // 3.1. BOTÕES PRÉ-DEFINIDOS DE DESTINO (Camarita, IMA, APAE, Outro)
+    // -------------------------------------------------------------
+    const destinoBtns = document.querySelectorAll(".destino-btn");
+    destinoBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            destinoBtns.forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            const val = btn.dataset.destino;
+            if (val === "Outro") {
+                if (destinoInput) {
+                    destinoInput.style.display = "block";
+                    destinoInput.value = "";
+                    destinoInput.focus();
+                }
+            } else {
+                if (destinoInput) {
+                    destinoInput.style.display = "none";
+                    destinoInput.value = val;
+                }
+            }
+        });
+    });
+
+    function resetDestino() {
+        destinoBtns.forEach(b => b.classList.remove("active"));
+        const defaultBtn = document.querySelector('.destino-btn[data-destino="Camarita"]');
+        if (defaultBtn) defaultBtn.classList.add("active");
+        if (destinoInput) {
+            destinoInput.value = "Camarita";
+            destinoInput.style.display = "none";
+        }
+    }
+
+    // Inicializa destino com Camarita
+    resetDestino();
+
+    // -------------------------------------------------------------
     // 4. PERSISTÊNCIA LOCAL (LocalStorage)
     // -------------------------------------------------------------
     function loadColetas() {
@@ -1547,9 +1584,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Detalhes opcionais
             const detalhes = [];
-            if (item.destino) detalhes.push(`Destino: <strong>${escapeHtml(item.destino)}</strong>`);
-            if (item.obs) detalhes.push(`${escapeHtml(item.obs)}`);
-            const subtext = detalhes.length > 0 ? detalhes.join(" • ") : "Sem observações adicionais";
+            if (item.destino && item.destino !== "Não especificado") detalhes.push(`Destino: <strong>${escapeHtml(item.destino)}</strong>`);
+            if (item.obs && !item.obs.toLowerCase().startsWith("mês:")) detalhes.push(`${escapeHtml(item.obs)}`);
+            const subtext = detalhes.join(" • ");
 
             card.innerHTML = `
                 <div class="coleta-main-col">
@@ -1561,13 +1598,12 @@ document.addEventListener("DOMContentLoaded", () => {
                             <span class="coleta-type-title">${escapeHtml(item.tipoResiduo)}</span>
                             <span class="coleta-date-badge" style="display: inline-flex; align-items: center; gap: 4px;">${ICONS_SVG.calendar} ${dataFormatada}</span>
                         </div>
-                        <div class="coleta-subtext" title="${escapeHtml(subtext.replace(/<[^>]*>?/gm, ''))}">${subtext}</div>
+                        ${subtext ? `<div class="coleta-subtext" title="${escapeHtml(subtext.replace(/<[^>]*>?/gm, ''))}">${subtext}</div>` : ''}
                     </div>
                 </div>
                 <div class="coleta-weight-col">
                     <div class="coleta-weight-value">
-                        <div class="coleta-weight-num">${Number(item.peso).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}</div>
-                        <div class="coleta-weight-unit">kg aproximados</div>
+                        <div class="coleta-weight-num">${Number(item.peso).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} kg</div>
                     </div>
                     <button type="button" class="btn-delete-item" data-id="${item.id}" title="Excluir este registro">
                         ${ICONS_SVG.trash}
@@ -1666,10 +1702,10 @@ document.addEventListener("DOMContentLoaded", () => {
             // Feedback ao usuário
             showToast(`Saída de ${peso} kg de ${tipoResiduo} registrada com sucesso!`, "success");
 
-            // Limpa apenas o campo de peso e observações (mantém a data e o tipo para agilizar próximos lançamentos)
+            // Limpa apenas o campo de peso e observações, reseta destino para Camarita
             pesoInput.value = "";
             obsInput.value = "";
-            destinoInput.value = "";
+            resetDestino();
             pesoInput.focus();
 
         } catch (error) {
