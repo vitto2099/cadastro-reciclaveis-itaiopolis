@@ -229,17 +229,28 @@
 }
 
 .waste-icon {
-    font-size: 1.35rem;
     flex-shrink: 0;
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
-    background: #f8fafc;
+    border-radius: 9px;
     transition: all 0.2s ease;
 }
+
+.pill-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+.dot-emerald { background-color: #10b981; }
+.dot-amber   { background-color: #f59e0b; }
+.dot-indigo  { background-color: #6366f1; }
+.dot-cyan    { background-color: #06b6d4; }
+.dot-gold    { background-color: #eab308; }
 
 .waste-info {
     flex: 1;

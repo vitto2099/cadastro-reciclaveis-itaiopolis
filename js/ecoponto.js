@@ -8,13 +8,25 @@ const GOOGLE_APPS_SCRIPT_ECOPONTO_URL = "https://script.google.com/macros/s/AKfy
 
 const STORAGE_KEY = "ecoponto_coletas_itaiopolis_v2";
 
+// Ícones SVG minimalistas com contornos modernos e cores vivas
+const ICONS_SVG = {
+    recycle: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/><path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12"/><path d="m14 16 3 3 3-3"/><path d="M8.293 13.596 3.4 9.5 8.293 5.4"/><path d="m12.44 2.21 4.893 8.494"/><path d="M7 6.012V3.83a1.83 1.83 0 0 1 .915-1.583 1.785 1.785 0 0 1 1.802.003l6.18 3.568"/></svg>`,
+    battery: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="10" x="2" y="7" rx="2" ry="2"/><line x1="22" x2="22" y1="11" y2="13"/><path d="m11 10-2 4h4l-2 3"/></svg>`,
+    electronics: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>`,
+    glass: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8"/><path d="M12 15v7"/><path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-2-8H9c-1.5 4-2 6-2 8a5 5 0 0 0 5 5Z"/></svg>`,
+    lamp: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>`,
+    trash: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>`,
+    calendar: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`,
+    package: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>`
+};
+
 // Metadados das categorias
 const WASTE_METADATA = {
-    "Recicláveis": { icon: "♻️", color: "emerald", label: "Recicláveis" },
-    "Baterias e Pilhas": { icon: "🔋", color: "amber", label: "Baterias e Pilhas" },
-    "Eletrônicos": { icon: "💻", color: "indigo", label: "Eletrônicos" },
-    "Vidros": { icon: "🍾", color: "cyan", label: "Vidros" },
-    "Lâmpadas": { icon: "💡", color: "gold", label: "Lâmpadas" }
+    "Recicláveis": { svg: ICONS_SVG.recycle, colorClass: "badge-emerald", label: "Recicláveis" },
+    "Baterias e Pilhas": { svg: ICONS_SVG.battery, colorClass: "badge-amber", label: "Baterias e Pilhas" },
+    "Eletrônicos": { svg: ICONS_SVG.electronics, colorClass: "badge-indigo", label: "Eletrônicos" },
+    "Vidros": { svg: ICONS_SVG.glass, colorClass: "badge-cyan", label: "Vidros" },
+    "Lâmpadas": { svg: ICONS_SVG.lamp, colorClass: "badge-gold", label: "Lâmpadas" }
 };
 
 // Dados históricos oficiais importados de 'Reciclaveis Meio Ambiente.xlsx' (127 registros)
@@ -1521,7 +1533,7 @@ document.addEventListener("DOMContentLoaded", () => {
         coletasList.style.display = "flex";
 
         filtered.forEach(item => {
-            const meta = WASTE_METADATA[item.tipoResiduo] || { icon: "📦", color: "emerald", label: item.tipoResiduo };
+            const meta = WASTE_METADATA[item.tipoResiduo] || { svg: ICONS_SVG.package, colorClass: "badge-emerald", label: item.tipoResiduo };
             
             // Formatar data para DD/MM/AAAA
             let dataFormatada = item.dataColeta;
@@ -1535,21 +1547,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Detalhes opcionais
             const detalhes = [];
-            if (item.destino) detalhes.push(`🚚 ${escapeHtml(item.destino)}`);
-            if (item.obs) detalhes.push(`📝 ${escapeHtml(item.obs)}`);
+            if (item.destino) detalhes.push(`Destino: <strong>${escapeHtml(item.destino)}</strong>`);
+            if (item.obs) detalhes.push(`${escapeHtml(item.obs)}`);
             const subtext = detalhes.length > 0 ? detalhes.join(" • ") : "Sem observações adicionais";
 
             card.innerHTML = `
                 <div class="coleta-main-col">
-                    <div class="coleta-icon-badge" style="background: var(--bg-card, #f1f5f9);">
-                        <span>${meta.icon}</span>
+                    <div class="coleta-icon-badge icon-badge ${meta.colorClass}">
+                        ${meta.svg}
                     </div>
                     <div class="coleta-meta">
                         <div class="coleta-title-row">
                             <span class="coleta-type-title">${escapeHtml(item.tipoResiduo)}</span>
-                            <span class="coleta-date-badge">📅 ${dataFormatada}</span>
+                            <span class="coleta-date-badge" style="display: inline-flex; align-items: center; gap: 4px;">${ICONS_SVG.calendar} ${dataFormatada}</span>
                         </div>
-                        <div class="coleta-subtext" title="${escapeHtml(subtext)}">${subtext}</div>
+                        <div class="coleta-subtext" title="${escapeHtml(subtext.replace(/<[^>]*>?/gm, ''))}">${subtext}</div>
                     </div>
                 </div>
                 <div class="coleta-weight-col">
@@ -1558,7 +1570,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <div class="coleta-weight-unit">kg aproximados</div>
                     </div>
                     <button type="button" class="btn-delete-item" data-id="${item.id}" title="Excluir este registro">
-                        🗑️
+                        ${ICONS_SVG.trash}
                     </button>
                 </div>
             `;
@@ -1652,7 +1664,7 @@ document.addEventListener("DOMContentLoaded", () => {
             renderApp();
 
             // Feedback ao usuário
-            showToast(`✅ Saída de ${peso} kg de ${tipoResiduo} registrada com sucesso!`, "success");
+            showToast(`Saída de ${peso} kg de ${tipoResiduo} registrada com sucesso!`, "success");
 
             // Limpa apenas o campo de peso e observações (mantém a data e o tipo para agilizar próximos lançamentos)
             pesoInput.value = "";
@@ -1671,7 +1683,9 @@ document.addEventListener("DOMContentLoaded", () => {
     function setLoading(isLoading) {
         submitBtn.disabled = isLoading;
         btnLoader.style.display = isLoading ? "inline-block" : "none";
-        btnText.textContent = isLoading ? "Registrando Saída..." : "💾 Registrar Saída do Ecoponto";
+        btnText.innerHTML = isLoading 
+            ? `<span>Registrando Saída...</span>` 
+            : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg><span>Registrar Saída do Ecoponto</span>`;
     }
 
     // Função de envio para o Google Sheets (pronta e conectada)
@@ -1747,7 +1761,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
 
-        showToast("📥 Planilha CSV exportada com sucesso!", "success");
+        showToast("Planilha CSV exportada com sucesso!", "success");
     });
 
     // Limpar histórico total
@@ -1774,12 +1788,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const toast = document.createElement("div");
         toast.className = `toast-message toast-${type}`;
         
-        let icon = "ℹ️";
-        if (type === "success") icon = "✅";
-        if (type === "error") icon = "⚠️";
+        let iconSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #3b82f6;"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="16" y2="12"/><line x1="12" x2="12.01" y1="8" y2="8"/></svg>`;
+        if (type === "success") {
+            iconSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #10b981;"><path d="M20 6 9 17l-5-5"/></svg>`;
+        } else if (type === "error") {
+            iconSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #ef4444;"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>`;
+        }
 
         toast.innerHTML = `
-            <span style="font-size: 1.1rem; margin-right: 8px;">${icon}</span>
+            <span style="display: inline-flex; align-items: center; justify-content: center; margin-right: 8px; flex-shrink: 0;">${iconSvg}</span>
             <span>${escapeHtml(message)}</span>
         `;
 

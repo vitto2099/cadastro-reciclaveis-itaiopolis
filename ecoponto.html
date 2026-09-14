@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ecoponto Municipal - Registro de Coletas - Itaiópolis</title>
     <link rel="icon" type="image/svg+xml"
-        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='80' font-size='80'>📦</text></svg>">
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230284c7' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='m7.5 4.27 9 5.15'/><path d='M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z'/><path d='m3.3 7 8.7 5 8.7-5'/><path d='M12 22V12'/></svg>">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,18 +32,25 @@
                 </div>
             </div>
             <nav class="header-links" aria-label="Navegação Principal" style="display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap;">
-                <!-- Botões para Trocar de Página: Principal (Sacos Recicláveis) vs Nova (Ecoponto) -->
                 <div class="nav-page-switcher" role="tablist" aria-label="Navegação entre Módulos">
-                    <a href="index.html#sacos" class="nav-link nav-btn-page" id="btn-nav-sacos" role="tab" title="Página Principal: Cadastro de Sacos Recicláveis">
-                        🏠 Sacos Recicláveis
+                    <a href="index.html#sacos" class="nav-link nav-btn-page" id="btn-nav-sacos" role="tab" title="Página Principal: Cadastro de Sacos Recicláveis" style="display: inline-flex; align-items: center; gap: 6px;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                        <span>Sacos Recicláveis</span>
                     </a>
-                    <a href="index.html#ecoponto" class="nav-link nav-btn-page active" id="btn-nav-ecoponto" role="tab" aria-selected="true" title="Nova Página: Saídas do Ecoponto Municipal">
-                        📦 Ecoponto
+                    <a href="index.html#ecoponto" class="nav-link nav-btn-page active" id="btn-nav-ecoponto" role="tab" aria-selected="true" title="Nova Página: Saídas do Ecoponto Municipal" style="display: inline-flex; align-items: center; gap: 6px;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+                        <span>Ecoponto</span>
                     </a>
                 </div>
 
-                <a href="https://itaiopolis.atende.net/" target="_blank" class="nav-link">🏛️ Portal da Prefeitura</a>
-                <a href="https://docs.google.com/spreadsheets/d/1uSyYlt-wivncL1ugcP-86eon92iv3lElK4wDvFQa2og/edit?usp=sharing" target="_blank" class="nav-link">📊 Ver Planilha</a>
+                <a href="https://itaiopolis.atende.net/" target="_blank" class="nav-link" style="display: inline-flex; align-items: center; gap: 6px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V9"/><path d="M19 21V9"/><path d="M9 21V9"/><path d="M15 21V9"/><path d="m2 9 10-6 10 6"/><path d="M10 9h4"/></svg>
+                    <span>Portal da Prefeitura</span>
+                </a>
+                <a href="https://docs.google.com/spreadsheets/d/1uSyYlt-wivncL1ugcP-86eon92iv3lElK4wDvFQa2og/edit?usp=sharing" target="_blank" class="nav-link" style="display: inline-flex; align-items: center; gap: 6px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>
+                    <span>Ver Planilha</span>
+                </a>
             </nav>
             <script>
                 // Redireciona para o aplicativo unificado em index.html#ecoponto mantendo a mesma navegação
@@ -56,28 +63,36 @@
         <!-- Indicadores Rápidos do Ecoponto -->
         <section class="stats-section">
             <div class="stat-card">
-                <span class="stat-icon">⚖️</span>
+                <span class="stat-icon icon-badge badge-amber">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+                </span>
                 <div>
                     <span class="stat-number" id="stat-total-peso">0 kg</span>
                     <span class="stat-label">Peso Total Coletado</span>
                 </div>
             </div>
             <div class="stat-card">
-                <span class="stat-icon">📋</span>
+                <span class="stat-icon icon-badge badge-emerald">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
+                </span>
                 <div>
                     <span class="stat-number" id="stat-total-registros">0</span>
                     <span class="stat-label">Registros de Coletas</span>
                 </div>
             </div>
             <div class="stat-card">
-                <span class="stat-icon">📅</span>
+                <span class="stat-icon icon-badge badge-blue">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                </span>
                 <div>
                     <span class="stat-number" id="stat-ultima-coleta" style="font-size: 1.4rem;">--/--/----</span>
                     <span class="stat-label">Última Coleta Feita</span>
                 </div>
             </div>
             <div class="stat-card">
-                <span class="stat-icon">🏷️</span>
+                <span class="stat-icon icon-badge badge-purple">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/><circle cx="7" cy="7" r=".5" fill="currentColor"/></svg>
+                </span>
                 <div>
                     <span class="stat-number" id="stat-tipo-top" style="font-size: 1.3rem;">--</span>
                     <span class="stat-label">Principal Resíduo</span>
@@ -102,8 +117,9 @@
                         <!-- Campo 1: Data da Coleta (Puxa hoje automático com opção de alterar) -->
                         <div class="form-group">
                             <div class="label-with-actions">
-                                <label for="data-coleta">
-                                    <span>📅 Data da Coleta</span>
+                                <label for="data-coleta" style="display: inline-flex; align-items: center; gap: 5px;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary-color);"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                                    <span>Data da Coleta</span>
                                     <span class="field-badge">Obrigatório</span>
                                 </label>
                                 <div class="quick-date-btns">
@@ -119,16 +135,18 @@
 
                         <!-- Campo 2: Tipo de Resíduo (Seleção Visual) -->
                         <div class="form-group">
-                            <label>
-                                <span>🗑️ Categoria de Lixo / Resíduo</span>
+                            <label style="display: inline-flex; align-items: center; gap: 5px;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary-color);"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                                <span>Categoria de Resíduo</span>
                                 <span class="field-badge">Selecione uma opção</span>
                             </label>
                             <input type="hidden" id="tipo-residuo" name="tipoResiduo" required>
                             
                             <div class="waste-type-grid" id="waste-grid">
-                                
-                                <button type="button" class="waste-type-card" data-type="Recicláveis" data-icon="♻️" data-color="emerald">
-                                    <span class="waste-icon">♻️</span>
+                                <button type="button" class="waste-type-card" data-type="Recicláveis">
+                                    <span class="waste-icon icon-badge badge-emerald">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/><path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12"/><path d="m14 16 3 3 3-3"/><path d="M8.293 13.596 3.4 9.5 8.293 5.4"/><path d="m12.44 2.21 4.893 8.494"/><path d="M7 6.012V3.83a1.83 1.83 0 0 1 .915-1.583 1.785 1.785 0 0 1 1.802.003l6.18 3.568"/></svg>
+                                    </span>
                                     <div class="waste-info">
                                         <strong>Recicláveis</strong>
                                         <small>Papel, papelão, plásticos e metais</small>
@@ -136,8 +154,10 @@
                                     <span class="waste-check">✓</span>
                                 </button>
 
-                                <button type="button" class="waste-type-card" data-type="Baterias e Pilhas" data-icon="🔋" data-color="amber">
-                                    <span class="waste-icon">🔋</span>
+                                <button type="button" class="waste-type-card" data-type="Baterias e Pilhas">
+                                    <span class="waste-icon icon-badge badge-amber">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="10" x="2" y="7" rx="2" ry="2"/><line x1="22" x2="22" y1="11" y2="13"/><path d="m11 10-2 4h4l-2 3"/></svg>
+                                    </span>
                                     <div class="waste-info">
                                         <strong>Baterias e Pilhas</strong>
                                         <small>Pilhas alcalinas, baterias automotivas/celular</small>
@@ -145,8 +165,10 @@
                                     <span class="waste-check">✓</span>
                                 </button>
 
-                                <button type="button" class="waste-type-card" data-type="Eletrônicos" data-icon="💻" data-color="indigo">
-                                    <span class="waste-icon">💻</span>
+                                <button type="button" class="waste-type-card" data-type="Eletrônicos">
+                                    <span class="waste-icon icon-badge badge-indigo">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+                                    </span>
                                     <div class="waste-info">
                                         <strong>Eletrônicos</strong>
                                         <small>Computadores, televisores, fios e placas</small>
@@ -154,8 +176,10 @@
                                     <span class="waste-check">✓</span>
                                 </button>
 
-                                <button type="button" class="waste-type-card" data-type="Vidros" data-icon="🍾" data-color="cyan">
-                                    <span class="waste-icon">🍾</span>
+                                <button type="button" class="waste-type-card" data-type="Vidros">
+                                    <span class="waste-icon icon-badge badge-cyan">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8"/><path d="M12 15v7"/><path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-2-8H9c-1.5 4-2 6-2 8a5 5 0 0 0 5 5Z"/></svg>
+                                    </span>
                                     <div class="waste-info">
                                         <strong>Vidros</strong>
                                         <small>Garrafas, frascos, potes e cacos de vidro</small>
@@ -163,11 +187,13 @@
                                     <span class="waste-check">✓</span>
                                 </button>
 
-                                <button type="button" class="waste-type-card" data-type="Lâmpadas" data-icon="💡" data-color="gold">
-                                    <span class="waste-icon">💡</span>
+                                <button type="button" class="waste-type-card" data-type="Lâmpadas">
+                                    <span class="waste-icon icon-badge badge-gold">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                                    </span>
                                     <div class="waste-info">
                                         <strong>Lâmpadas</strong>
-                                        <small>Fluorescentes (tubulares/compactas) e LED</small>
+                                        <small>Fluorescentes e LED</small>
                                     </div>
                                     <span class="waste-check">✓</span>
                                 </button>
@@ -176,8 +202,9 @@
 
                         <!-- Campo 3: Peso Aproximado -->
                         <div class="form-group">
-                            <label for="peso-coleta">
-                                <span>⚖️ Peso Aproximado</span>
+                            <label for="peso-coleta" style="display: inline-flex; align-items: center; gap: 5px;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary-color);"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4"/><path d="M12 16V8"/></svg>
+                                <span>Peso Aproximado</span>
                                 <span class="field-badge">Obrigatório</span>
                             </label>
                             
@@ -200,16 +227,18 @@
 
                         <!-- Campos Complementares (Opcionais) -->
                         <div class="form-group">
-                            <label for="destino-coleta">
-                                <span>🚚 Destino / Empresa Receptora</span>
+                            <label for="destino-coleta" style="display: inline-flex; align-items: center; gap: 5px;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary-color);"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
+                                <span>Destino / Empresa Receptora</span>
                                 <small style="color: var(--text-muted); font-weight: normal;">(Opcional)</small>
                             </label>
                             <input type="text" id="destino-coleta" name="destinoColeta" placeholder="Ex: Camarita / Cooperativa / Logística Reversa">
                         </div>
 
                         <div class="form-group">
-                            <label for="obs-coleta">
-                                <span>📝 Observações Adicionais</span>
+                            <label for="obs-coleta" style="display: inline-flex; align-items: center; gap: 5px;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary-color);"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                                <span>Observações Adicionais</span>
                                 <small style="color: var(--text-muted); font-weight: normal;">(Opcional)</small>
                             </label>
                             <input type="text" id="obs-coleta" name="obsColeta" placeholder="Ex: 3 caixas lacradas, lote entregue em bom estado">
@@ -217,7 +246,10 @@
 
                         <!-- Botão de Envio -->
                         <button type="submit" id="btn-salvar-coleta" class="submit-btn">
-                            <span class="btn-text">💾 Registrar Saída do Ecoponto</span>
+                            <span class="btn-text" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                                Registrar Saída do Ecoponto
+                            </span>
                             <span class="loader" id="btn-loader" style="display: none;"></span>
                         </button>
 
@@ -234,11 +266,12 @@
                             <p>Controle das saídas de materiais recolhidos no Ecoponto.</p>
                         </div>
                         <div class="history-actions">
-                            <button type="button" id="btn-export-csv" class="action-btn-secondary" title="Exportar coletas para arquivo Excel/CSV">
-                                📥 Exportar CSV
+                            <button type="button" id="btn-export-csv" class="action-btn-secondary" style="display: inline-flex; align-items: center; gap: 6px;" title="Exportar coletas para arquivo Excel/CSV">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                                Exportar CSV
                             </button>
-                            <button type="button" id="btn-clear-history" class="action-btn-danger" title="Limpar histórico local">
-                                🗑️
+                            <button type="button" id="btn-clear-history" class="action-btn-danger" style="display: inline-flex; align-items: center; justify-content: center;" title="Limpar histórico local">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
                             </button>
                         </div>
                     </div>
@@ -247,11 +280,11 @@
                     <div class="filter-pills-bar">
                         <span class="filter-label">Filtrar:</span>
                         <button type="button" class="filter-pill active" data-filter="all">Todos (<span id="count-filter-all">0</span>)</button>
-                        <button type="button" class="filter-pill" data-filter="Recicláveis">♻️ Recicláveis</button>
-                        <button type="button" class="filter-pill" data-filter="Baterias e Pilhas">🔋 Pilhas/Baterias</button>
-                        <button type="button" class="filter-pill" data-filter="Eletrônicos">💻 Eletrônicos</button>
-                        <button type="button" class="filter-pill" data-filter="Vidros">🍾 Vidros</button>
-                        <button type="button" class="filter-pill" data-filter="Lâmpadas">💡 Lâmpadas</button>
+                        <button type="button" class="filter-pill" data-filter="Recicláveis"><span class="pill-dot dot-emerald"></span> Recicláveis</button>
+                        <button type="button" class="filter-pill" data-filter="Baterias e Pilhas"><span class="pill-dot dot-amber"></span> Pilhas/Baterias</button>
+                        <button type="button" class="filter-pill" data-filter="Eletrônicos"><span class="pill-dot dot-indigo"></span> Eletrônicos</button>
+                        <button type="button" class="filter-pill" data-filter="Vidros"><span class="pill-dot dot-cyan"></span> Vidros</button>
+                        <button type="button" class="filter-pill" data-filter="Lâmpadas"><span class="pill-dot dot-gold"></span> Lâmpadas</button>
                     </div>
 
                     <!-- Lista de Coletas Registradas -->
@@ -262,7 +295,9 @@
 
                         <!-- Estado Vazio (quando não houver dados) -->
                         <div id="empty-state" class="empty-state">
-                            <div class="empty-icon">📦</div>
+                            <div class="empty-icon">
+                                <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+                            </div>
                             <h3>Nenhuma coleta registrada ainda</h3>
                             <p>Utilize o formulário ao lado para registrar o primeiro recolhimento de materiais do Ecoponto.</p>
                         </div>
@@ -270,7 +305,9 @@
 
                     <!-- Aviso de Integração com Google Sheets -->
                     <div class="integration-notice">
-                        <span class="notice-icon">✅</span>
+                        <span class="notice-icon" style="color: var(--primary-color); display: inline-flex; align-items: center;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                        </span>
                         <div class="notice-text">
                             <strong>Conectado à Planilha do Google:</strong> Os registros são sincronizados automaticamente com a aba "Ecoponto" da planilha oficial e salvos com segurança.
                         </div>
@@ -330,7 +367,9 @@
                             <h4>Atendimento ao Cidadão</h4>
                             <ul class="footer-contact-list">
                                 <li class="footer-contact-item">
-                                    <span class="footer-contact-icon">📍</span>
+                                    <span class="footer-contact-icon">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                                    </span>
                                     <div>
                                         <strong>Endereço:</strong><br>
                                         Av. Getúlio Vargas, 308, Centro<br>
@@ -338,21 +377,27 @@
                                     </div>
                                 </li>
                                 <li class="footer-contact-item">
-                                    <span class="footer-contact-icon">📞</span>
+                                    <span class="footer-contact-icon">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                    </span>
                                     <div>
                                         <strong>Telefone:</strong><br>
                                         <a href="tel:4736522211">(47) 3652-2211</a>
                                     </div>
                                 </li>
                                 <li class="footer-contact-item">
-                                    <span class="footer-contact-icon">✉️</span>
+                                    <span class="footer-contact-icon">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                                    </span>
                                     <div>
                                         <strong>E-mail:</strong><br>
                                         <a href="mailto:prefeitura@itaiopolis.sc.gov.br">prefeitura@itaiopolis.sc.gov.br</a>
                                     </div>
                                 </li>
                                 <li class="footer-contact-item">
-                                    <span class="footer-contact-icon">⏰</span>
+                                    <span class="footer-contact-icon">
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                    </span>
                                     <div>
                                         <strong>Horário:</strong><br>
                                         Seg a Sex: 08h–12h e 13h30–17h
@@ -367,22 +412,34 @@
                             <ul class="footer-links-list">
                                 <li>
                                     <a href="index.html#sacos">
-                                        <span>🏠</span> Sacos Recicláveis
+                                        <span class="footer-link-icon">
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                                        </span>
+                                        <span>Sacos Recicláveis</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="index.html#ecoponto">
-                                        <span>📦</span> Ecoponto Municipal
+                                        <span class="footer-link-icon">
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+                                        </span>
+                                        <span>Ecoponto Municipal</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="https://itaiopolis.atende.net/" target="_blank" rel="noopener noreferrer">
-                                        <span>🏛️</span> Portal da Prefeitura
+                                        <span class="footer-link-icon">
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" x2="22" y1="20" y2="20"/><path d="M5 20v-8"/><path d="M19 20v-8"/><path d="M10 20v-8"/><path d="M14 20v-8"/><path d="m2 10 10-6 10 6"/></svg>
+                                        </span>
+                                        <span>Portal da Prefeitura</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="https://docs.google.com/spreadsheets/d/1uSyYlt-wivncL1ugcP-86eon92iv3lElK4wDvFQa2og/edit?usp=sharing" target="_blank" rel="noopener noreferrer">
-                                        <span>📊</span> Planilha Integrada
+                                        <span class="footer-link-icon">
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>
+                                        </span>
+                                        <span>Planilha Integrada</span>
                                     </a>
                                 </li>
                             </ul>
