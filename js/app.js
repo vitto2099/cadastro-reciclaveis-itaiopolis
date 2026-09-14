@@ -682,7 +682,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         display: true,
                         position: 'right',
                         labels: {
-                            font: { family: 'Inter', size: 12 },
+                            font: { family: 'Plus Jakarta Sans', size: 12 },
                             padding: 15,
                             usePointStyle: true,
                             pointStyle: 'circle'
@@ -923,7 +923,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const props = feature.properties;
 
                 const tooltipContent = `
-                    <div style="font-family: Inter, sans-serif; min-width: 140px;">
+                    <div style="font-family: 'Plus Jakarta Sans', sans-serif; min-width: 140px;">
                         <h3 style="margin: 0 0 5px 0; color: ${props.color};">${props.bairro}</h3>
                         <p style="margin: 0; font-size: 0.95rem;">Pessoas: <strong>${props.pessoas}</strong></p>
                         <p style="margin: 0; font-size: 0.95rem;">Sacolas: <strong>${props.sacolas}</strong></p>
