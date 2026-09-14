@@ -13,6 +13,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- Chart.js para Balanço Mensal e Gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <!-- Folhas de Estilo -->
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/ecoponto.css">
@@ -85,18 +88,15 @@
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
                 </span>
                 <div>
-                    <span class="stat-number" id="stat-ultima-coleta" style="font-size: 1.4rem;">--/--/----</span>
-                    <span class="stat-label">Última Saída</span>
+                    <span class="stat-number" id="stat-mes-atual" style="font-size: 1.35rem;">0 kg</span>
+                    <span class="stat-label" id="stat-mes-atual-label">Saídas no Mês</span>
                 </div>
             </div>
-            <div class="stat-card">
-                <span class="stat-icon icon-badge badge-purple">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/><circle cx="7" cy="7" r=".5" fill="currentColor"/></svg>
+            <div class="stat-card action-card" id="btn-ecoponto-dashboard" style="cursor: pointer; background: var(--primary-light); border-color: var(--primary-color);">
+                <span class="stat-icon icon-badge badge-emerald" style="width: 38px; height: 38px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg>
                 </span>
-                <div>
-                    <span class="stat-number" id="stat-tipo-top" style="font-size: 1.3rem;">--</span>
-                    <span class="stat-label">Mais Coletado</span>
-                </div>
+                <span class="stat-label" style="color: var(--primary-color); font-weight: 700;">Ver Balanço do Mês</span>
             </div>
         </section>
 
@@ -246,7 +246,11 @@
                             <h2>Histórico de Saídas</h2>
                         </div>
                         <div class="history-actions">
-                            <button type="button" id="btn-export-csv" class="action-btn-secondary" style="display: inline-flex; align-items: center; gap: 6px;" title="Exportar coletas para arquivo Excel/CSV">
+                            <button type="button" id="btn-ecoponto-dash-header" class="action-btn-secondary" style="display: inline-flex; align-items: center; gap: 6px;" title="Ver Balanço Mensal e Gráficos">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg>
+                                Balanço Mensal
+                            </button>
+                            <button type="button" id="btn-export-ecoponto-csv" class="action-btn-secondary" style="display: inline-flex; align-items: center; gap: 6px;" title="Exportar coletas para arquivo Excel/CSV">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
                                 Exportar CSV
                             </button>
@@ -430,6 +434,100 @@
                 </div>
             </div>
         </footer>
+
+        <!-- Modal: Balanço Mensal e Métricas do Ecoponto -->
+        <div id="ecoponto-dashboard-modal" class="modal-overlay" style="display: none;">
+            <div class="modal-content modal-large">
+                <span class="close-modal" id="btn-close-ecoponto-dash" title="Fechar balanço">&times;</span>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                    <span class="icon-badge badge-emerald" style="width: 34px; height: 34px;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg>
+                    </span>
+                    <h2 style="margin: 0; font-size: 1.4rem;">Balanço Mensal & Métricas — Ecoponto</h2>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 0; margin-bottom: 1.25rem;">
+                    Monitore o volume que saiu em cada mês, distribuição por resíduo e evolução histórica de coletas.
+                </p>
+
+                <!-- Controles: Seleção de Mês, Modo de Visão e Exportação -->
+                <div class="dashboard-controls" style="flex-wrap: wrap; gap: 10px; align-items: center;">
+                    <div class="control-group" style="display: flex; align-items: center; gap: 8px;">
+                        <label for="ecoponto-dash-month" style="font-weight: 600; font-size: 0.9rem;">Mês:</label>
+                        <select id="ecoponto-dash-month" class="dash-select" style="min-width: 170px;">
+                            <!-- Preenchido via JS -->
+                        </select>
+                    </div>
+                    
+                    <div class="control-group toggle-group">
+                        <button id="btn-ecoponto-view-resumo" class="toggle-btn active" style="display: inline-flex; align-items: center; gap: 6px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/></svg>
+                            <span>Resumo</span>
+                        </button>
+                        <button id="btn-ecoponto-view-chart" class="toggle-btn" style="display: inline-flex; align-items: center; gap: 6px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+                            <span>Categorias</span>
+                        </button>
+                        <button id="btn-ecoponto-view-evolucao" class="toggle-btn" style="display: inline-flex; align-items: center; gap: 6px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                            <span>Evolução</span>
+                        </button>
+                    </div>
+                    
+                    <button id="btn-export-ecoponto-month-csv" class="export-btn" style="margin-left: auto; display: inline-flex; align-items: center; gap: 6px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                        <span>Exportar Mês</span>
+                    </button>
+                </div>
+
+                <!-- Mini KPIs do Mês Selecionado -->
+                <div class="ecoponto-dash-kpis" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 1.25rem;">
+                    <div class="stat-card" style="padding: 10px 14px;">
+                        <div>
+                            <span class="stat-number" id="dash-month-peso" style="font-size: 1.3rem; color: var(--primary-color);">0 kg</span>
+                            <span class="stat-label">Total do Mês</span>
+                        </div>
+                    </div>
+                    <div class="stat-card" style="padding: 10px 14px;">
+                        <div>
+                            <span class="stat-number" id="dash-month-saidas" style="font-size: 1.3rem;">0</span>
+                            <span class="stat-label">Saídas/Viagens</span>
+                        </div>
+                    </div>
+                    <div class="stat-card" style="padding: 10px 14px;">
+                        <div>
+                            <span class="stat-number" id="dash-month-top-cat" style="font-size: 1.15rem;">--</span>
+                            <span class="stat-label">Maior Saída</span>
+                        </div>
+                    </div>
+                    <div class="stat-card" style="padding: 10px 14px;">
+                        <div>
+                            <span class="stat-number" id="dash-month-top-dest" style="font-size: 1.15rem;">--</span>
+                            <span class="stat-label">Principal Destino</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Container de Visualizações -->
+                <div class="dashboard-view-container" style="flex: 1; min-height: 320px; width: 100%; display: flex; flex-direction: column;">
+                    <!-- 1. Visão Resumo por Categoria -->
+                    <div id="ecoponto-view-resumo" style="display: flex; flex-direction: column; gap: 14px; flex: 1; width: 100%; overflow-y: auto; padding: 4px;">
+                        <!-- Inserido dinamicamente via JS -->
+                    </div>
+
+                    <!-- 2. Visão Gráfico Categorias (Doughnut) -->
+                    <div id="ecoponto-view-chart-box" style="display: none; width: 100%; height: 340px; position: relative;">
+                        <div style="position: relative; width: 100%; max-width: 480px; height: 320px; margin: 0 auto;">
+                            <canvas id="ecopontoCategoryChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- 3. Visão Gráfico Evolução Mensal (Barras) -->
+                    <div id="ecoponto-view-evolucao-box" style="display: none; position: relative; width: 100%; height: 320px; max-height: 340px;">
+                        <canvas id="ecopontoMonthlyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Toast de Notificações Rápidas -->
         <div id="toast-container" class="toast-container"></div>

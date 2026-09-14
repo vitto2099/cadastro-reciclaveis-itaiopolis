@@ -1499,11 +1499,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function updateStats(coletas) {
+        const statMesAtual = document.getElementById("stat-mes-atual");
+        const statMesAtualLabel = document.getElementById("stat-mes-atual-label");
+
         if (!coletas || coletas.length === 0) {
-            statTotalPeso.textContent = "0 kg";
-            statTotalRegistros.textContent = "0";
-            statUltimaColeta.textContent = "--/--/----";
-            statTipoTop.textContent = "--";
+            if (statTotalPeso) statTotalPeso.textContent = "0 kg";
+            if (statTotalRegistros) statTotalRegistros.textContent = "0";
+            if (statUltimaColeta) statUltimaColeta.textContent = "--/--/----";
+            if (statTipoTop) statTipoTop.textContent = "--";
+            if (statMesAtual) statMesAtual.textContent = "0 kg";
             return;
         }
 
@@ -1517,32 +1521,72 @@ document.addEventListener("DOMContentLoaded", () => {
             typeWeights[item.tipoResiduo] = (typeWeights[item.tipoResiduo] || 0) + p;
         });
 
-        // Formatação do peso (se for mais de 1000 kg, mostra t ou kg com separador)
-        if (totalPeso >= 1000) {
-            statTotalPeso.textContent = (totalPeso / 1000).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 2 }) + " t";
-        } else {
-            statTotalPeso.textContent = totalPeso.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + " kg";
+        // Formatação do peso geral
+        if (statTotalPeso) {
+            if (totalPeso >= 1000) {
+                statTotalPeso.textContent = (totalPeso / 1000).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 2 }) + " t";
+            } else {
+                statTotalPeso.textContent = totalPeso.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + " kg";
+            }
         }
 
-        statTotalRegistros.textContent = coletas.length;
+        if (statTotalRegistros) statTotalRegistros.textContent = coletas.length;
 
         // Data da coleta mais recente
         const datasOrdenadas = [...coletas].sort((a, b) => (b.dataColeta || "").localeCompare(a.dataColeta || ""));
-        if (datasOrdenadas[0] && datasOrdenadas[0].dataColeta) {
+        if (datasOrdenadas[0] && datasOrdenadas[0].dataColeta && statUltimaColeta) {
             const parts = datasOrdenadas[0].dataColeta.split("-");
             statUltimaColeta.textContent = `${parts[2]}/${parts[1]}/${parts[0]}`;
         }
 
         // Tipo mais coletado por peso
-        let topTipo = "--";
-        let maxPeso = -1;
-        for (const [tipo, peso] of Object.entries(typeWeights)) {
-            if (peso > maxPeso) {
-                maxPeso = peso;
-                topTipo = tipo;
+        if (statTipoTop) {
+            let topTipo = "--";
+            let maxPeso = -1;
+            for (const [tipo, peso] of Object.entries(typeWeights)) {
+                if (peso > maxPeso) {
+                    maxPeso = peso;
+                    topTipo = tipo;
+                }
             }
+            statTipoTop.textContent = topTipo;
         }
-        statTipoTop.textContent = topTipo;
+
+        // ============================================================
+        // CÁLCULO DE SAÍDAS DO MÊS ("O QUE SAIU NO MÊS")
+        // ============================================================
+        const now = new Date();
+        const curY = now.getFullYear();
+        const curM = String(now.getMonth() + 1).padStart(2, '0');
+        const curMonthKey = `${curY}-${curM}`;
+        const monthNames = [
+            "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+            "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+        ];
+        const curMonthName = monthNames[now.getMonth()];
+
+        let coletasMes = coletas.filter(c => c.dataColeta && c.dataColeta.startsWith(curMonthKey));
+        let activeMonthName = curMonthName;
+
+        // Se o mês atual ainda não tem coletas cadastradas, busca o mês com dados mais recente para exibir dados relevantes
+        if (coletasMes.length === 0 && datasOrdenadas[0] && datasOrdenadas[0].dataColeta) {
+            const latestMonthKey = datasOrdenadas[0].dataColeta.substring(0, 7);
+            const [ly, lm] = latestMonthKey.split("-");
+            const lmIdx = parseInt(lm, 10) - 1;
+            coletasMes = coletas.filter(c => c.dataColeta && c.dataColeta.startsWith(latestMonthKey));
+            activeMonthName = `${monthNames[lmIdx] || lm}`;
+        }
+
+        const pesoMes = coletasMes.reduce((acc, c) => acc + (parseFloat(c.peso) || 0), 0);
+
+        if (statMesAtual) {
+            statMesAtual.textContent = pesoMes >= 1000
+                ? (pesoMes / 1000).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 2 }) + " t"
+                : pesoMes.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + " kg";
+        }
+        if (statMesAtualLabel) {
+            statMesAtualLabel.textContent = `Saídas em ${activeMonthName}`;
+        }
     }
 
     function renderList(coletas) {
@@ -1863,8 +1907,523 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // -------------------------------------------------------------
+    // 9. BALANÇO MENSAL, MÉTRICAS E GRÁFICOS DO ECOPONTO
+    // -------------------------------------------------------------
+    let ecopontoCatChartInstance = null;
+    let ecopontoMonthChartInstance = null;
+
+    function setupEcopontoDashboard() {
+        const modal = document.getElementById("ecoponto-dashboard-modal");
+        const btnOpenStat = document.getElementById("btn-ecoponto-dashboard");
+        const btnOpenHeader = document.getElementById("btn-ecoponto-dash-header");
+        const btnClose = document.getElementById("btn-close-ecoponto-dash");
+        const selectMonth = document.getElementById("ecoponto-dash-month");
+
+        const btnResumo = document.getElementById("btn-ecoponto-view-resumo");
+        const btnChart = document.getElementById("btn-ecoponto-view-chart");
+        const btnEvolucao = document.getElementById("btn-ecoponto-view-evolucao");
+
+        const viewResumo = document.getElementById("ecoponto-view-resumo");
+        const viewChartBox = document.getElementById("ecoponto-view-chart-box");
+        const viewEvolucaoBox = document.getElementById("ecoponto-view-evolucao-box");
+
+        const kpiPeso = document.getElementById("dash-month-peso");
+        const kpiSaidas = document.getElementById("dash-month-saidas");
+        const kpiTopCat = document.getElementById("dash-month-top-cat");
+        const kpiTopDest = document.getElementById("dash-month-top-dest");
+
+        const btnExportMonthCsv = document.getElementById("btn-export-ecoponto-month-csv");
+
+        if (!modal) return;
+
+        function openModal() {
+            populateMonthSelect();
+            updateDashboardView();
+            modal.style.display = "flex";
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeModal() {
+            modal.style.display = "none";
+            document.body.style.overflow = "";
+        }
+
+        if (btnOpenStat) btnOpenStat.addEventListener("click", openModal);
+        if (btnOpenHeader) btnOpenHeader.addEventListener("click", openModal);
+        if (btnClose) btnClose.addEventListener("click", closeModal);
+
+        modal.addEventListener("click", (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && modal.style.display === "flex") {
+                closeModal();
+            }
+        });
+
+        // Alternador de abas (Resumo, Categorias, Evolução)
+        function setActiveTab(tab) {
+            if (btnResumo) btnResumo.classList.toggle("active", tab === "resumo");
+            if (btnChart) btnChart.classList.toggle("active", tab === "chart");
+            if (btnEvolucao) btnEvolucao.classList.toggle("active", tab === "evolucao");
+
+            if (viewResumo) viewResumo.style.display = tab === "resumo" ? "flex" : "none";
+            if (viewChartBox) viewChartBox.style.display = tab === "chart" ? "block" : "none";
+            if (viewEvolucaoBox) viewEvolucaoBox.style.display = tab === "evolucao" ? "block" : "none";
+
+            updateDashboardView();
+        }
+
+        if (btnResumo) btnResumo.addEventListener("click", () => setActiveTab("resumo"));
+        if (btnChart) btnChart.addEventListener("click", () => setActiveTab("chart"));
+        if (btnEvolucao) btnEvolucao.addEventListener("click", () => setActiveTab("evolucao"));
+
+        if (selectMonth) {
+            selectMonth.addEventListener("change", () => {
+                updateDashboardView();
+            });
+        }
+
+        const monthNames = [
+            "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+            "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+        ];
+
+        function populateMonthSelect() {
+            if (!selectMonth) return;
+            const coletas = loadColetas();
+            const monthsSet = new Set();
+            
+            // Adiciona mês atual
+            const now = new Date();
+            const curY = now.getFullYear();
+            const curM = String(now.getMonth() + 1).padStart(2, '0');
+            monthsSet.add(`${curY}-${curM}`);
+
+            coletas.forEach(c => {
+                if (c.dataColeta && c.dataColeta.length >= 7) {
+                    monthsSet.add(c.dataColeta.substring(0, 7));
+                }
+            });
+
+            // Ordena decrescente
+            const sortedMonths = Array.from(monthsSet).sort((a, b) => b.localeCompare(a));
+            
+            const currentSelected = selectMonth.value;
+            selectMonth.innerHTML = "";
+
+            // Opção "Todos"
+            const optAll = document.createElement("option");
+            optAll.value = "all";
+            optAll.textContent = "Todos os Meses (Histórico Geral)";
+            selectMonth.appendChild(optAll);
+
+            sortedMonths.forEach(mKey => {
+                const [ano, mes] = mKey.split("-");
+                const mesNum = parseInt(mes, 10) - 1;
+                const nomeMes = monthNames[mesNum] || mes;
+
+                const opt = document.createElement("option");
+                opt.value = mKey;
+                opt.textContent = `${nomeMes} de ${ano}${mKey === `${curY}-${curM}` ? ' (Mês Atual)' : ''}`;
+                selectMonth.appendChild(opt);
+            });
+
+            // Se já tinha algo selecionado, mantém; senão seleciona o mês mais recente com coletas ou o mês atual
+            if (currentSelected && Array.from(selectMonth.options).some(o => o.value === currentSelected)) {
+                selectMonth.value = currentSelected;
+            } else {
+                const monthWithData = sortedMonths.find(m => coletas.some(c => c.dataColeta && c.dataColeta.startsWith(m)));
+                selectMonth.value = monthWithData || `${curY}-${curM}`;
+            }
+        }
+
+        function updateDashboardView() {
+            const coletas = loadColetas();
+            const selectedMonth = selectMonth ? selectMonth.value : "all";
+
+            const filteredColetas = selectedMonth === "all" 
+                ? coletas 
+                : coletas.filter(c => c.dataColeta && c.dataColeta.startsWith(selectedMonth));
+
+            // Calcular KPIs
+            let totalPeso = 0;
+            const categoryMap = {
+                "Recicláveis": { peso: 0, count: 0, color: "#10b981", class: "badge-emerald" },
+                "Baterias e Pilhas": { peso: 0, count: 0, color: "#f59e0b", class: "badge-amber" },
+                "Eletrônicos": { peso: 0, count: 0, color: "#6366f1", class: "badge-indigo" },
+                "Vidros": { peso: 0, count: 0, color: "#06b6d4", class: "badge-cyan" },
+                "Lâmpadas": { peso: 0, count: 0, color: "#eab308", class: "badge-gold" }
+            };
+            const destinoMap = {};
+
+            filteredColetas.forEach(item => {
+                const p = parseFloat(item.peso) || 0;
+                totalPeso += p;
+                
+                if (!categoryMap[item.tipoResiduo]) {
+                    categoryMap[item.tipoResiduo] = { peso: 0, count: 0, color: "#94a3b8", class: "badge-emerald" };
+                }
+                categoryMap[item.tipoResiduo].peso += p;
+                categoryMap[item.tipoResiduo].count += 1;
+
+                const dest = item.destino || "Não especificado";
+                destinoMap[dest] = (destinoMap[dest] || 0) + p;
+            });
+
+            // Encontrar Top Categoria e Top Destino
+            let topCat = "--";
+            let maxCatPeso = -1;
+            Object.entries(categoryMap).forEach(([cat, data]) => {
+                if (data.peso > maxCatPeso && data.peso > 0) {
+                    maxCatPeso = data.peso;
+                    topCat = cat;
+                }
+            });
+
+            let topDest = "--";
+            let maxDestPeso = -1;
+            Object.entries(destinoMap).forEach(([dest, peso]) => {
+                if (peso > maxDestPeso && peso > 0) {
+                    maxDestPeso = peso;
+                    topDest = dest;
+                }
+            });
+
+            // Atualiza KPIs do Modal
+            if (kpiPeso) {
+                kpiPeso.textContent = totalPeso >= 1000 
+                    ? (totalPeso / 1000).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 2 }) + " t"
+                    : totalPeso.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + " kg";
+            }
+            if (kpiSaidas) kpiSaidas.textContent = filteredColetas.length;
+            if (kpiTopCat) kpiTopCat.textContent = topCat;
+            if (kpiTopDest) kpiTopDest.textContent = topDest;
+
+            // Renderizar a visão ativa
+            if (btnResumo && btnResumo.classList.contains("active")) {
+                renderResumoView(filteredColetas, categoryMap, totalPeso);
+            } else if (btnChart && btnChart.classList.contains("active")) {
+                renderCategoryChart(categoryMap, totalPeso);
+            } else if (btnEvolucao && btnEvolucao.classList.contains("active")) {
+                renderEvolutionChart(coletas);
+            }
+        }
+
+        // 1. VISÃO RESUMO (Cards por Categoria com barras e tabela detalhada)
+        function renderResumoView(filteredColetas, categoryMap, totalPeso) {
+            if (!viewResumo) return;
+            viewResumo.innerHTML = "";
+
+            if (filteredColetas.length === 0) {
+                viewResumo.innerHTML = `
+                    <div style="text-align: center; padding: 2.5rem 1rem; color: #64748b;">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 8px;"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                        <h4 style="margin: 0 0 4px 0; color: #334155; font-size: 1.05rem;">Nenhuma saída neste período</h4>
+                        <p style="margin: 0; font-size: 0.88rem;">Não foram registradas saídas para o mês selecionado.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Grid de Categorias
+            const cardsGrid = document.createElement("div");
+            cardsGrid.style.display = "grid";
+            cardsGrid.style.gridTemplateColumns = "repeat(auto-fit, minmax(220px, 1fr))";
+            cardsGrid.style.gap = "12px";
+
+            // Ordena categorias por peso decrescente
+            const sortedCats = Object.entries(categoryMap).sort((a, b) => b[1].peso - a[1].peso);
+
+            sortedCats.forEach(([catName, data]) => {
+                const meta = WASTE_METADATA[catName] || { svg: ICONS_SVG.package, label: catName };
+                const pct = totalPeso > 0 ? ((data.peso / totalPeso) * 100).toFixed(1) : "0.0";
+
+                const card = document.createElement("div");
+                card.className = "ecoponto-month-card";
+                card.innerHTML = `
+                    <div class="month-card-header">
+                        <div class="month-card-title-group">
+                            <span class="icon-badge ${meta.colorClass || 'badge-emerald'}" style="width: 28px; height: 28px;">
+                                ${meta.svg}
+                            </span>
+                            <span class="month-card-title">${escapeHtml(catName)}</span>
+                        </div>
+                        <span class="month-card-count-badge">${data.count} ${data.count === 1 ? 'saída' : 'saídas'}</span>
+                    </div>
+                    <div class="month-progress-bg">
+                        <div class="month-progress-fill" style="width: ${pct}%; background-color: ${data.color};"></div>
+                    </div>
+                    <div class="month-card-footer">
+                        <span class="month-card-weight">${data.peso.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} kg</span>
+                        <span class="month-card-percent">${pct}% do total</span>
+                    </div>
+                `;
+                cardsGrid.appendChild(card);
+            });
+
+            viewResumo.appendChild(cardsGrid);
+
+            // Detalhes / Tabela de Saídas do Período
+            const detailsSec = document.createElement("div");
+            detailsSec.className = "month-details-section";
+            
+            const sortedItems = [...filteredColetas].sort((a, b) => (b.dataColeta || "").localeCompare(a.dataColeta || ""));
+
+            let rowsHtml = sortedItems.map(item => {
+                let dataFmt = item.dataColeta || "";
+                if (dataFmt.includes("-")) {
+                    const [y, m, d] = dataFmt.split("-");
+                    dataFmt = `${d}/${m}/${y}`;
+                }
+                return `
+                    <tr>
+                        <td style="font-weight: 600;">${dataFmt}</td>
+                        <td><span class="badge ${WASTE_METADATA[item.tipoResiduo]?.colorClass || 'badge-emerald'}" style="font-size: 0.75rem; padding: 2px 6px; border-radius: 4px;">${escapeHtml(item.tipoResiduo)}</span></td>
+                        <td style="font-weight: 700; color: #047857;">${Number(item.peso).toLocaleString('pt-BR', { minimumFractionDigits: 1 })} kg</td>
+                        <td>${escapeHtml(item.destino || 'Camarita')}</td>
+                        <td style="color: #64748b; font-size: 0.78rem;">${escapeHtml(item.obs || '-')}</td>
+                    </tr>
+                `;
+            }).join("");
+
+            detailsSec.innerHTML = `
+                <div class="month-details-header">
+                    <span>Lista Detalhada de Saídas (${filteredColetas.length})</span>
+                    <small style="color: #64748b; font-weight: normal;">Ordenado por data recente</small>
+                </div>
+                <div class="month-details-table-wrap">
+                    <table class="month-details-table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Categoria</th>
+                                <th>Peso</th>
+                                <th>Destino</th>
+                                <th>Observação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rowsHtml}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            viewResumo.appendChild(detailsSec);
+        }
+
+        // 2. VISÃO GRÁFICO DE CATEGORIAS (Chart.js Doughnut)
+        function renderCategoryChart(categoryMap, totalPeso) {
+            if (typeof Chart === "undefined") return;
+
+            const canvas = document.getElementById("ecopontoCategoryChart");
+            if (!canvas) return;
+
+            if (ecopontoCatChartInstance) {
+                ecopontoCatChartInstance.destroy();
+                ecopontoCatChartInstance = null;
+            }
+
+            const activeCats = Object.entries(categoryMap).filter(([_, d]) => d.peso > 0);
+
+            if (activeCats.length === 0) {
+                const ctx = canvas.getContext("2d");
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                return;
+            }
+
+            const labels = activeCats.map(([cat]) => cat);
+            const dataValues = activeCats.map(([_, d]) => d.peso);
+            const bgColors = activeCats.map(([_, d]) => d.color);
+
+            const ctx = canvas.getContext("2d");
+            ecopontoCatChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: dataValues,
+                        backgroundColor: bgColors,
+                        borderWidth: 2,
+                        borderColor: '#ffffff',
+                        hoverOffset: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    family: "'Plus Jakarta Sans', sans-serif",
+                                    size: 12,
+                                    weight: '600'
+                                },
+                                padding: 15,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const val = context.raw || 0;
+                                    const pct = totalPeso > 0 ? ((val / totalPeso) * 100).toFixed(1) : 0;
+                                    return ` ${context.label}: ${val.toLocaleString('pt-BR', { minimumFractionDigits: 1 })} kg (${pct}%)`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '62%'
+                }
+            });
+        }
+
+        // 3. VISÃO GRÁFICO EVOLUÇÃO MENSAL (Chart.js Bar)
+        function renderEvolutionChart(coletas) {
+            if (typeof Chart === "undefined") return;
+
+            const canvas = document.getElementById("ecopontoMonthlyChart");
+            if (!canvas) return;
+
+            if (ecopontoMonthChartInstance) {
+                ecopontoMonthChartInstance.destroy();
+                ecopontoMonthChartInstance = null;
+            }
+
+            const monthlyWeights = {};
+            coletas.forEach(c => {
+                if (c.dataColeta && c.dataColeta.length >= 7) {
+                    const mKey = c.dataColeta.substring(0, 7);
+                    const p = parseFloat(c.peso) || 0;
+                    monthlyWeights[mKey] = (monthlyWeights[mKey] || 0) + p;
+                }
+            });
+
+            const sortedMonths = Object.keys(monthlyWeights).sort();
+            const labels = sortedMonths.map(mKey => {
+                const [y, m] = mKey.split("-");
+                const mIdx = parseInt(m, 10) - 1;
+                const mName = monthNames[mIdx] ? monthNames[mIdx].substring(0, 3) : m;
+                return `${mName}/${y.substring(2)}`;
+            });
+            const values = sortedMonths.map(mKey => monthlyWeights[mKey]);
+
+            const ctx = canvas.getContext("2d");
+            ecopontoMonthChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Total Saído (kg)',
+                        data: values,
+                        backgroundColor: '#10b981',
+                        borderRadius: 6,
+                        hoverBackgroundColor: '#059669',
+                        maxBarThickness: 45
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString('pt-BR') + ' kg';
+                                },
+                                font: {
+                                    family: "'Plus Jakarta Sans', sans-serif"
+                                }
+                            },
+                            grid: {
+                                color: '#f1f5f9'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    family: "'Plus Jakarta Sans', sans-serif",
+                                    weight: '600'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const val = context.raw || 0;
+                                    return ` Total: ${val.toLocaleString('pt-BR', { minimumFractionDigits: 1 })} kg`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Exportar CSV do Mês Selecionado
+        if (btnExportMonthCsv) {
+            btnExportMonthCsv.addEventListener("click", () => {
+                const coletas = loadColetas();
+                const selectedMonth = selectMonth ? selectMonth.value : "all";
+
+                const filtered = selectedMonth === "all"
+                    ? coletas
+                    : coletas.filter(c => c.dataColeta && c.dataColeta.startsWith(selectedMonth));
+
+                if (filtered.length === 0) {
+                    showToast("Nenhum dado encontrado para exportar neste mês.", "error");
+                    return;
+                }
+
+                let csvContent = "\uFEFFData;Tipo de Resíduo;Peso (kg);Destino;Observações\n";
+                filtered.forEach(item => {
+                    let dataFmt = item.dataColeta || "";
+                    if (dataFmt.includes("-")) {
+                        const [y, m, d] = dataFmt.split("-");
+                        dataFmt = `${d}/${m}/${y}`;
+                    }
+                    const row = [
+                        `"${dataFmt}"`,
+                        `"${item.tipoResiduo}"`,
+                        `"${String(item.peso).replace('.', ',')}"`,
+                        `"${(item.destino || '').replace(/"/g, '""')}"`,
+                        `"${(item.obs || '').replace(/"/g, '""')}"`
+                    ];
+                    csvContent += row.join(";") + "\n";
+                });
+
+                const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.setAttribute("href", url);
+                link.setAttribute("download", `balanco_ecoponto_${selectedMonth}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+
+                showToast(`Balanço exportado com sucesso (${filtered.length} registros)!`, "success");
+            });
+        }
+    }
+
+    // -------------------------------------------------------------
     // 10. INICIALIZAÇÃO
     // -------------------------------------------------------------
     window.renderEcopontoApp = renderApp;
     renderApp();
+    setupEcopontoDashboard();
 });
