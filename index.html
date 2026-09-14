@@ -17,7 +17,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <!-- Folha de Estilos -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/ecoponto.css">
 </head>
 
 <body>
@@ -26,20 +27,35 @@
         <header class="header">
             <div class="logo-container">
                 <div class="logo-placeholder">
-                    <img src="Brasao_itaiopolis.jpg" alt="Brasão de Itaiópolis" class="city-logo">
+                    <img src="img/Brasao_itaiopolis.jpg" alt="Brasão de Itaiópolis" class="city-logo">
                     <div class="logo-text">
-                        <h1>CADASTRO DE SACOS RECICLÁVEIS</h1>
-                        <span>MUNICÍPIO DE ITAIÓPOLIS</span>
+                        <h1 id="app-main-title">CADASTRO DE SACOS RECICLÁVEIS</h1>
+                        <span id="app-main-subtitle">MUNICÍPIO DE ITAIÓPOLIS</span>
                     </div>
                 </div>
             </div>
             <div class="header-links"
                 style="display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap;">
+                <!-- Botões para Trocar de Página: Principal (Sacos Recicláveis) vs Nova (Ecoponto) -->
+                <div class="nav-page-switcher" role="tablist" aria-label="Navegação entre Módulos">
+                    <button type="button" id="btn-nav-sacos" class="nav-link nav-btn-page active" onclick="trocarPagina('sacos')" role="tab" aria-selected="true" title="Página Principal: Cadastro de Sacos Recicláveis">
+                        🏠 Sacos Recicláveis
+                    </button>
+                    <button type="button" id="btn-nav-ecoponto" class="nav-link nav-btn-page" onclick="trocarPagina('ecoponto')" role="tab" aria-selected="false" title="Nova Página: Saídas do Ecoponto Municipal">
+                        📦 Ecoponto
+                    </button>
+                </div>
+
                 <a href="https://itaiopolis.atende.net/" target="_blank" class="nav-link">🏛️ Portal da Prefeitura</a>
                 <a href="https://docs.google.com/spreadsheets/d/1uSyYlt-wivncL1ugcP-86eon92iv3lElK4wDvFQa2og/edit?usp=sharing"
                     target="_blank" class="nav-link">📊 Ver Planilha</a>
             </div>
         </header>
+
+        <!-- ========================================== -->
+        <!-- PÁGINA 1: SACOS RECICLÁVEIS (A Principal)  -->
+        <!-- ========================================== -->
+        <div id="pagina-sacos-reciclaveis">
 
         <section class="stats-section">
             <div class="stat-card">
@@ -192,16 +208,357 @@
                 </aside>
             </div>
         </main>
+        </div> <!-- Fim de #pagina-sacos-reciclaveis -->
 
-        <footer class="footer">
-            <div class="footer-content">
-                <img src="Brasao_itaiopolis.jpg" alt="Brasão de Itaiópolis" class="footer-logo">
-                <p><strong>MUNICÍPIO DE ITAIÓPOLIS</strong></p>
-                <p class="footer-address">Avenida Getúlio Vargas, Nº 308, Centro<br>Itaiópolis/SC - CEP: 89.340-000</p>
-                <p class="footer-contact">(47) 3652-2211<br>PREFEITURA@ITAIOPOLIS.SC.GOV.BR</p>
-                <p class="footer-update" style="margin-top: 15px; font-size: 0.85rem; color: #a0aec0; font-style: italic;">Última atualização: 21/07/2026</p>
+        <!-- ========================================== -->
+        <!-- PÁGINA 2: ECOPONTO (A Nova Página)         -->
+        <!-- ========================================== -->
+        <div id="pagina-ecoponto" style="display: none;">
+            <!-- Indicadores Rápidos do Ecoponto -->
+            <section class="stats-section">
+                <div class="stat-card">
+                    <span class="stat-icon">⚖️</span>
+                    <div>
+                        <span class="stat-number" id="stat-total-peso">0 kg</span>
+                        <span class="stat-label">Peso Total Coletado</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">📋</span>
+                    <div>
+                        <span class="stat-number" id="stat-total-registros">0</span>
+                        <span class="stat-label">Registros de Saídas</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">📅</span>
+                    <div>
+                        <span class="stat-number" id="stat-ultima-coleta" style="font-size: 1.4rem;">--/--/----</span>
+                        <span class="stat-label">Última Saída Feita</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">🏷️</span>
+                    <div>
+                        <span class="stat-number" id="stat-tipo-top" style="font-size: 1.3rem;">--</span>
+                        <span class="stat-label">Principal Resíduo</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Conteúdo Principal: Formulário de Saída + Histórico -->
+            <main class="main-content">
+                <div class="ecoponto-grid-layout">
+                    
+                    <!-- Formulário de Registro de Saídas -->
+                    <section class="ecoponto-card form-box">
+                        <div class="card-header">
+                            <div class="header-badge">REGISTRO DE SAÍDA</div>
+                            <h2>Lançamento de Saída do Ecoponto</h2>
+                            <p>Informe a data da saída, selecione o resíduo recolhido e o peso aproximado.</p>
+                        </div>
+
+                        <form id="ecoponto-form" autocomplete="off">
+                            
+                            <!-- Data da Coleta/Saída -->
+                            <div class="form-group">
+                                <div class="label-with-actions">
+                                    <label for="data-coleta">
+                                        <span>📅 Data da Saída</span>
+                                        <span class="field-badge">Obrigatório</span>
+                                    </label>
+                                    <div class="quick-date-btns">
+                                        <button type="button" class="btn-quick-date" id="btn-date-today" title="Preencher com a data de hoje">Hoje</button>
+                                        <button type="button" class="btn-quick-date" id="btn-date-yesterday" title="Preencher com a data de ontem">Ontem</button>
+                                    </div>
+                                </div>
+                                <div class="date-input-container">
+                                    <input type="date" id="data-coleta" name="dataColeta" required>
+                                </div>
+                                <small class="field-hint">Preenchido com o dia de hoje. Altere caso esteja registrando uma saída anterior.</small>
+                            </div>
+
+                            <!-- Categoria de Resíduo -->
+                            <div class="form-group">
+                                <label>
+                                    <span>🗑️ Categoria de Lixo / Resíduo</span>
+                                    <span class="field-badge">Selecione uma opção</span>
+                                </label>
+                                <input type="hidden" id="tipo-residuo" name="tipoResiduo" required>
+                                
+                                <div class="waste-type-grid" id="waste-grid">
+                                    <button type="button" class="waste-type-card" data-type="Recicláveis" data-icon="♻️" data-color="emerald">
+                                        <span class="waste-icon">♻️</span>
+                                        <div class="waste-info">
+                                            <strong>Recicláveis</strong>
+                                            <small>Papel, papelão, plásticos e metais</small>
+                                        </div>
+                                        <span class="waste-check">✓</span>
+                                    </button>
+
+                                    <button type="button" class="waste-type-card" data-type="Baterias e Pilhas" data-icon="🔋" data-color="amber">
+                                        <span class="waste-icon">🔋</span>
+                                        <div class="waste-info">
+                                            <strong>Baterias e Pilhas</strong>
+                                            <small>Pilhas alcalinas, baterias</small>
+                                        </div>
+                                        <span class="waste-check">✓</span>
+                                    </button>
+
+                                    <button type="button" class="waste-type-card" data-type="Eletrônicos" data-icon="💻" data-color="indigo">
+                                        <span class="waste-icon">💻</span>
+                                        <div class="waste-info">
+                                            <strong>Eletrônicos</strong>
+                                            <small>Computadores, TVs, cabos, placas</small>
+                                        </div>
+                                        <span class="waste-check">✓</span>
+                                    </button>
+
+                                    <button type="button" class="waste-type-card" data-type="Vidros" data-icon="🍾" data-color="cyan">
+                                        <span class="waste-icon">🍾</span>
+                                        <div class="waste-info">
+                                            <strong>Vidros</strong>
+                                            <small>Garrafas, frascos, potes e cacos</small>
+                                        </div>
+                                        <span class="waste-check">✓</span>
+                                    </button>
+
+                                    <button type="button" class="waste-type-card" data-type="Lâmpadas" data-icon="💡" data-color="gold">
+                                        <span class="waste-icon">💡</span>
+                                        <div class="waste-info">
+                                            <strong>Lâmpadas</strong>
+                                            <small>Fluorescentes e LED</small>
+                                        </div>
+                                        <span class="waste-check">✓</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Peso Aproximado -->
+                            <div class="form-group">
+                                <label for="peso-coleta">
+                                    <span>⚖️ Peso Aproximado</span>
+                                    <span class="field-badge">Obrigatório</span>
+                                </label>
+                                
+                                <div class="weight-input-wrapper">
+                                    <input type="number" id="peso-coleta" name="pesoColeta" step="0.1" min="0.1" max="99999" placeholder="Ex: 45.5" required>
+                                    <span class="weight-unit">kg</span>
+                                </div>
+
+                                <!-- Chips de Atalho de Peso -->
+                                <div class="weight-chips">
+                                    <span class="chips-label">Atalhos:</span>
+                                    <button type="button" class="btn-chip" data-weight="5">+5 kg</button>
+                                    <button type="button" class="btn-chip" data-weight="10">+10 kg</button>
+                                    <button type="button" class="btn-chip" data-weight="25">+25 kg</button>
+                                    <button type="button" class="btn-chip" data-weight="50">+50 kg</button>
+                                    <button type="button" class="btn-chip" data-weight="100">+100 kg</button>
+                                    <button type="button" class="btn-chip chip-clear" id="btn-clear-weight" title="Zerar peso">Zerar</button>
+                                </div>
+                            </div>
+
+                            <!-- Destino / Receptor -->
+                            <div class="form-group">
+                                <label for="destino-coleta">
+                                    <span>🚚 Destino / Receptor</span>
+                                    <small style="color: var(--text-muted); font-weight: normal;">(Opcional)</small>
+                                </label>
+                                <input type="text" id="destino-coleta" name="destinoColeta" placeholder="Ex: Camarita / APAE / IMA">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="obs-coleta">
+                                    <span>📝 Observações</span>
+                                    <small style="color: var(--text-muted); font-weight: normal;">(Opcional)</small>
+                                </label>
+                                <input type="text" id="obs-coleta" name="obsColeta" placeholder="Ex: Fardos prensados, caixas lacradas">
+                            </div>
+
+                            <!-- Botão de Envio -->
+                            <button type="submit" id="btn-salvar-coleta" class="submit-btn">
+                                <span class="btn-text">💾 Registrar Saída do Ecoponto</span>
+                                <span class="loader" id="btn-loader-ecoponto" style="display: none;"></span>
+                            </button>
+
+                            <div id="form-feedback" class="form-message" style="display: none;"></div>
+                        </form>
+                    </section>
+
+                    <!-- Histórico de Saídas -->
+                    <section class="ecoponto-card history-box">
+                        <div class="history-header">
+                            <div>
+                                <div class="header-badge badge-neutral">HISTÓRICO LOCAL</div>
+                                <h2>Saídas Registradas</h2>
+                                <p>Controle das saídas de materiais recolhidos no Ecoponto.</p>
+                            </div>
+                            <div class="history-actions">
+                                <button type="button" id="btn-export-ecoponto-csv" class="action-btn-secondary" title="Exportar para arquivo Excel/CSV">
+                                    📥 Exportar CSV
+                                </button>
+                                <button type="button" id="btn-clear-history" class="action-btn-danger" title="Limpar histórico local">
+                                    🗑️
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Filtros Rápidos -->
+                        <div class="filter-pills-bar">
+                            <span class="filter-label">Filtrar:</span>
+                            <button type="button" class="filter-pill active" data-filter="all">Todos (<span id="count-filter-all">0</span>)</button>
+                            <button type="button" class="filter-pill" data-filter="Recicláveis">♻️ Recicláveis</button>
+                            <button type="button" class="filter-pill" data-filter="Baterias e Pilhas">🔋 Pilhas/Baterias</button>
+                            <button type="button" class="filter-pill" data-filter="Eletrônicos">💻 Eletrônicos</button>
+                            <button type="button" class="filter-pill" data-filter="Vidros">🍾 Vidros</button>
+                            <button type="button" class="filter-pill" data-filter="Lâmpadas">💡 Lâmpadas</button>
+                        </div>
+
+                        <!-- Lista de Saídas -->
+                        <div class="coletas-list-wrapper">
+                            <div id="coletas-list" class="coletas-list"></div>
+
+                            <div id="empty-state" class="empty-state">
+                                <div class="empty-icon">📦</div>
+                                <h3>Nenhuma saída registrada ainda</h3>
+                                <p>Utilize o formulário ao lado para registrar o recolhimento de materiais do Ecoponto.</p>
+                            </div>
+                        </div>
+
+                        <div class="integration-notice">
+                            <span class="notice-icon">💡</span>
+                            <div class="notice-text">
+                                <strong>Dados Históricos Integrados:</strong> A lista já contém todos os 127 registros oficiais importados da planilha desde a inauguração.
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </main>
+        </div> <!-- Fim de #pagina-ecoponto -->
+
+        <!-- Rodapé Retrátil / Expansível -->
+        <footer class="footer footer-retractable" id="main-footer">
+            <div class="footer-top-accent"></div>
+
+            <!-- Barra Compacta (Pequenininha - Sempre Visível) -->
+            <div class="footer-compact-bar">
+                <div class="footer-compact-left">
+                    <img src="img/Brasao_itaiopolis.jpg" alt="Brasão de Itaiópolis" class="footer-compact-logo">
+                    <div class="footer-compact-text">
+                        <strong>Município de Itaiópolis</strong>
+                        <span class="footer-compact-sub">Secretaria de Meio Ambiente</span>
+                    </div>
+                </div>
+
+                <!-- Botão para Abrir e Fechar o Conteúdo Grande -->
+                <div class="footer-compact-center">
+                    <button type="button" id="btn-toggle-footer" class="btn-toggle-footer" aria-expanded="false" onclick="toggleFooter()">
+                        <span class="toggle-footer-icon">▲</span>
+                        <span id="btn-toggle-footer-text">Informações & Contatos</span>
+                    </button>
+                </div>
             </div>
-            <div class="footer-bottom"></div>
+
+            <!-- Conteúdo Grande Expansível (Abre para cima suavemente) -->
+            <div class="footer-expandable-content" id="footer-expandable">
+                <div class="footer-container">
+                    <div class="footer-grid">
+                        <!-- Coluna 1: Identidade Institucional -->
+                        <div class="footer-brand">
+                            <div class="footer-brand-header">
+                                <img src="img/Brasao_itaiopolis.jpg" alt="Brasão de Itaiópolis" class="footer-logo">
+                                <div class="footer-brand-text">
+                                    <h3>MUNICÍPIO DE ITAIÓPOLIS</h3>
+                                    <span>Secretaria de Meio Ambiente</span>
+                                </div>
+                            </div>
+                            <p class="footer-desc">
+                                Sistema oficial para gestão ambiental, distribuição de sacolas recicláveis aos munícipes e controle operacional de resíduos do Ecoponto Municipal.
+                            </p>
+                            <div class="footer-badge-status">
+                                <span class="status-dot"></span>
+                                <span>Sistema Ativo & Operacional</span>
+                            </div>
+                        </div>
+
+                        <!-- Coluna 2: Atendimento e Localização -->
+                        <div class="footer-col">
+                            <h4>Atendimento ao Cidadão</h4>
+                            <ul class="footer-contact-list">
+                                <li class="footer-contact-item">
+                                    <span class="footer-contact-icon">📍</span>
+                                    <div>
+                                        <strong>Endereço:</strong><br>
+                                        Av. Getúlio Vargas, 308, Centro<br>
+                                        Itaiópolis/SC — CEP 89.340-000
+                                    </div>
+                                </li>
+                                <li class="footer-contact-item">
+                                    <span class="footer-contact-icon">📞</span>
+                                    <div>
+                                        <strong>Telefone:</strong><br>
+                                        <a href="tel:4736522211">(47) 3652-2211</a>
+                                    </div>
+                                </li>
+                                <li class="footer-contact-item">
+                                    <span class="footer-contact-icon">✉️</span>
+                                    <div>
+                                        <strong>E-mail:</strong><br>
+                                        <a href="mailto:prefeitura@itaiopolis.sc.gov.br">prefeitura@itaiopolis.sc.gov.br</a>
+                                    </div>
+                                </li>
+                                <li class="footer-contact-item">
+                                    <span class="footer-contact-icon">⏰</span>
+                                    <div>
+                                        <strong>Horário:</strong><br>
+                                        Seg a Sex: 08h–12h e 13h30–17h
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Coluna 3: Acesso Rápido -->
+                        <div class="footer-col">
+                            <h4>Módulos e Links Rápidos</h4>
+                            <ul class="footer-links-list">
+                                <li>
+                                    <button type="button" onclick="trocarPagina('sacos'); toggleFooter(false);">
+                                        <span>🏠</span> Sacos Recicláveis
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="button" onclick="trocarPagina('ecoponto'); toggleFooter(false);">
+                                        <span>📦</span> Ecoponto Municipal
+                                    </button>
+                                </li>
+                                <li>
+                                    <a href="https://itaiopolis.atende.net/" target="_blank" rel="noopener noreferrer">
+                                        <span>🏛️</span> Portal da Prefeitura
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://docs.google.com/spreadsheets/d/1uSyYlt-wivncL1ugcP-86eon92iv3lElK4wDvFQa2og/edit?usp=sharing" target="_blank" rel="noopener noreferrer">
+                                        <span>📊</span> Planilha Integrada
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Barra Inferior -->
+                    <div class="footer-bottom-bar">
+                        <div>
+                            © 2026 <strong>Município de Itaiópolis / SC</strong> — Secretaria Municipal de Meio Ambiente.
+                        </div>
+                        <div style="display: flex; gap: 12px; align-items: center;">
+                            <span>Versão <strong>2.4</strong></span>
+                            <span>•</span>
+                            <span>Última atualização: <strong>21/07/2026</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </footer>
 
         <!-- Modal Dashboard (Gráficos e Mapa) -->
@@ -249,8 +606,99 @@
         <!-- Toast Container -->
         <div id="toast-container" class="toast-container"></div>
 
-        <!-- Script da Aplicação -->
-        <script src="app.js"></script>
+        <!-- Scripts da Aplicação -->
+        <script src="js/footer.js"></script>
+        <script src="js/app.js"></script>
+        <script src="js/ecoponto.js"></script>
+        <script>
+            // ============================================================
+            // ALTERNADOR DE PÁGINAS: PRINCIPAL (SACOS) vs NOVA (ECOPONTO)
+            // ============================================================
+            function trocarPagina(pagina) {
+                const pagSacos = document.getElementById('pagina-sacos-reciclaveis');
+                const pagEcoponto = document.getElementById('pagina-ecoponto');
+                const btnSacos = document.getElementById('btn-nav-sacos');
+                const btnEcoponto = document.getElementById('btn-nav-ecoponto');
+                const logoTitle = document.getElementById('app-main-title');
+                const logoSubtitle = document.getElementById('app-main-subtitle');
+
+                if (pagina === 'ecoponto') {
+                    if (pagSacos) pagSacos.style.display = 'none';
+                    if (pagEcoponto) pagEcoponto.style.display = 'block';
+
+                    if (btnSacos) {
+                        btnSacos.classList.remove('active');
+                        btnSacos.setAttribute('aria-selected', 'false');
+                    }
+                    if (btnEcoponto) {
+                        btnEcoponto.classList.add('active');
+                        btnEcoponto.setAttribute('aria-selected', 'true');
+                    }
+
+                    if (logoTitle) logoTitle.textContent = 'ECOPONTO MUNICIPAL';
+                    if (logoSubtitle) logoSubtitle.textContent = 'SECRETARIA DE MEIO AMBIENTE • ITAIÓPOLIS/SC';
+                    document.title = 'Ecoponto Municipal - Saídas de Materiais - Itaiópolis';
+
+                    // Re-renderiza e atualiza estatísticas se disponível
+                    if (typeof window.renderEcopontoApp === 'function') {
+                        window.renderEcopontoApp();
+                    }
+
+                    try {
+                        if (window.location.hash !== '#ecoponto') {
+                            window.history.replaceState(null, '', '#ecoponto');
+                        }
+                    } catch (e) {}
+
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    if (pagEcoponto) pagEcoponto.style.display = 'none';
+                    if (pagSacos) pagSacos.style.display = 'block';
+
+                    if (btnEcoponto) {
+                        btnEcoponto.classList.remove('active');
+                        btnEcoponto.setAttribute('aria-selected', 'false');
+                    }
+                    if (btnSacos) {
+                        btnSacos.classList.add('active');
+                        btnSacos.setAttribute('aria-selected', 'true');
+                    }
+
+                    if (logoTitle) logoTitle.textContent = 'CADASTRO DE SACOS RECICLÁVEIS';
+                    if (logoSubtitle) logoSubtitle.textContent = 'MUNICÍPIO DE ITAIÓPOLIS';
+                    document.title = 'Cadastro de Sacos Recicláveis - Meio Ambiente Itaiópolis';
+
+                    try {
+                        if (window.location.hash === '#ecoponto') {
+                            window.history.replaceState(null, '', '#sacos');
+                        }
+                    } catch (e) {}
+
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }
+
+            // Expor globalmente para clique em qualquer lugar
+            window.trocarPagina = trocarPagina;
+
+            // Inicializar página baseada no hash (#ecoponto ou #sacos)
+            window.addEventListener('DOMContentLoaded', () => {
+                if (window.location.hash === '#ecoponto') {
+                    trocarPagina('ecoponto');
+                } else {
+                    trocarPagina('sacos');
+                }
+            });
+
+            // Resposta a botões Voltar/Avançar do navegador
+            window.addEventListener('hashchange', () => {
+                if (window.location.hash === '#ecoponto') {
+                    trocarPagina('ecoponto');
+                } else {
+                    trocarPagina('sacos');
+                }
+            });
+        </script>
     </div>
 </body>
 

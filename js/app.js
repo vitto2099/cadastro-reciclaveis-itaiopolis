@@ -1,5 +1,5 @@
-// URL do Web App gerada no Google Apps Script.
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVet-1KMR-ORHwrTHIrXs3IWU8ALQW5gNgstcc7gYmE-D_QaBrRU1E8Xtb3j8fC_fF/exec";
+// URL do Web App gerada no Google Apps Script (Versão Unificada).
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby99-spfhSHDEu9lDo6mQ8IUlz-2k83RHSkDsRk-zh4n4MrGsyJFcJVi5demkNn_Om4/exec";
 
 document.addEventListener('DOMContentLoaded', () => {
 

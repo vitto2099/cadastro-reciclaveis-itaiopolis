@@ -1,0 +1,1272 @@
+[
+  {
+    "id": "hist-0127",
+    "dataColeta": "2026-07-31",
+    "tipoResiduo": "Vidros",
+    "peso": 90.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1785466800127
+  },
+  {
+    "id": "hist-0126",
+    "dataColeta": "2026-07-30",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 50.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1785380400126
+  },
+  {
+    "id": "hist-0125",
+    "dataColeta": "2026-07-30",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1785380400125
+  },
+  {
+    "id": "hist-0124",
+    "dataColeta": "2026-07-27",
+    "tipoResiduo": "Vidros",
+    "peso": 80.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1785121200124
+  },
+  {
+    "id": "hist-0123",
+    "dataColeta": "2026-07-27",
+    "tipoResiduo": "Recicláveis",
+    "peso": 60.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1785121200123
+  },
+  {
+    "id": "hist-0122",
+    "dataColeta": "2026-07-24",
+    "tipoResiduo": "Vidros",
+    "peso": 90.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1784862000122
+  },
+  {
+    "id": "hist-0121",
+    "dataColeta": "2026-07-24",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 50.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1784862000121
+  },
+  {
+    "id": "hist-0120",
+    "dataColeta": "2026-07-24",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1784862000120
+  },
+  {
+    "id": "hist-0119",
+    "dataColeta": "2026-07-20",
+    "tipoResiduo": "Vidros",
+    "peso": 80.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1784516400119
+  },
+  {
+    "id": "hist-0118",
+    "dataColeta": "2026-07-20",
+    "tipoResiduo": "Recicláveis",
+    "peso": 60.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1784516400118
+  },
+  {
+    "id": "hist-0117",
+    "dataColeta": "2026-07-17",
+    "tipoResiduo": "Vidros",
+    "peso": 90.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1784257200117
+  },
+  {
+    "id": "hist-0116",
+    "dataColeta": "2026-07-17",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 50.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1784257200116
+  },
+  {
+    "id": "hist-0115",
+    "dataColeta": "2026-07-17",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1784257200115
+  },
+  {
+    "id": "hist-0114",
+    "dataColeta": "2026-07-13",
+    "tipoResiduo": "Vidros",
+    "peso": 80.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1783911600114
+  },
+  {
+    "id": "hist-0113",
+    "dataColeta": "2026-07-13",
+    "tipoResiduo": "Recicláveis",
+    "peso": 60.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1783911600113
+  },
+  {
+    "id": "hist-0112",
+    "dataColeta": "2026-07-10",
+    "tipoResiduo": "Vidros",
+    "peso": 90.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1783652400112
+  },
+  {
+    "id": "hist-0111",
+    "dataColeta": "2026-07-10",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 50.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1783652400111
+  },
+  {
+    "id": "hist-0110",
+    "dataColeta": "2026-07-10",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1783652400110
+  },
+  {
+    "id": "hist-0109",
+    "dataColeta": "2026-07-06",
+    "tipoResiduo": "Vidros",
+    "peso": 80.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1783306800109
+  },
+  {
+    "id": "hist-0108",
+    "dataColeta": "2026-07-06",
+    "tipoResiduo": "Recicláveis",
+    "peso": 60.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1783306800108
+  },
+  {
+    "id": "hist-0107",
+    "dataColeta": "2026-07-03",
+    "tipoResiduo": "Vidros",
+    "peso": 90.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1783047600107
+  },
+  {
+    "id": "hist-0106",
+    "dataColeta": "2026-07-03",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 50.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1783047600106
+  },
+  {
+    "id": "hist-0105",
+    "dataColeta": "2026-07-03",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Julho",
+    "timestamp": 1783047600105
+  },
+  {
+    "id": "hist-0104",
+    "dataColeta": "2026-06-29",
+    "tipoResiduo": "Vidros",
+    "peso": 80.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1782702000104
+  },
+  {
+    "id": "hist-0103",
+    "dataColeta": "2026-06-29",
+    "tipoResiduo": "Recicláveis",
+    "peso": 60.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1782702000103
+  },
+  {
+    "id": "hist-0102",
+    "dataColeta": "2026-06-26",
+    "tipoResiduo": "Vidros",
+    "peso": 90.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1782442800102
+  },
+  {
+    "id": "hist-0101",
+    "dataColeta": "2026-06-26",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 50.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1782442800101
+  },
+  {
+    "id": "hist-0100",
+    "dataColeta": "2026-06-26",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1782442800100
+  },
+  {
+    "id": "hist-0099",
+    "dataColeta": "2026-06-22",
+    "tipoResiduo": "Vidros",
+    "peso": 80.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1782097200099
+  },
+  {
+    "id": "hist-0098",
+    "dataColeta": "2026-06-22",
+    "tipoResiduo": "Recicláveis",
+    "peso": 60.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1782097200098
+  },
+  {
+    "id": "hist-0097",
+    "dataColeta": "2026-06-19",
+    "tipoResiduo": "Vidros",
+    "peso": 90.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1781838000097
+  },
+  {
+    "id": "hist-0096",
+    "dataColeta": "2026-06-19",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 50.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1781838000096
+  },
+  {
+    "id": "hist-0095",
+    "dataColeta": "2026-06-19",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1781838000095
+  },
+  {
+    "id": "hist-0094",
+    "dataColeta": "2026-06-15",
+    "tipoResiduo": "Vidros",
+    "peso": 80.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1781492400094
+  },
+  {
+    "id": "hist-0093",
+    "dataColeta": "2026-06-15",
+    "tipoResiduo": "Recicláveis",
+    "peso": 60.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1781492400093
+  },
+  {
+    "id": "hist-0092",
+    "dataColeta": "2026-06-12",
+    "tipoResiduo": "Vidros",
+    "peso": 90.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1781233200092
+  },
+  {
+    "id": "hist-0091",
+    "dataColeta": "2026-06-12",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 50.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1781233200091
+  },
+  {
+    "id": "hist-0090",
+    "dataColeta": "2026-06-12",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1781233200090
+  },
+  {
+    "id": "hist-0089",
+    "dataColeta": "2026-06-08",
+    "tipoResiduo": "Vidros",
+    "peso": 80.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1780887600089
+  },
+  {
+    "id": "hist-0088",
+    "dataColeta": "2026-06-08",
+    "tipoResiduo": "Recicláveis",
+    "peso": 60.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1780887600088
+  },
+  {
+    "id": "hist-0087",
+    "dataColeta": "2026-06-05",
+    "tipoResiduo": "Recicláveis",
+    "peso": 80.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1780628400087
+  },
+  {
+    "id": "hist-0086",
+    "dataColeta": "2026-06-05",
+    "tipoResiduo": "Vidros",
+    "peso": 50.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1780628400086
+  },
+  {
+    "id": "hist-0085",
+    "dataColeta": "2026-06-01",
+    "tipoResiduo": "Vidros",
+    "peso": 90.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1780282800085
+  },
+  {
+    "id": "hist-0084",
+    "dataColeta": "2026-06-01",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 50.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1780282800084
+  },
+  {
+    "id": "hist-0083",
+    "dataColeta": "2026-06-01",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1780282800083
+  },
+  {
+    "id": "hist-0082",
+    "dataColeta": "2026-05-29",
+    "tipoResiduo": "Vidros",
+    "peso": 80.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1780023600082
+  },
+  {
+    "id": "hist-0081",
+    "dataColeta": "2026-05-29",
+    "tipoResiduo": "Recicláveis",
+    "peso": 60.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1780023600081
+  },
+  {
+    "id": "hist-0075",
+    "dataColeta": "2026-05-29",
+    "tipoResiduo": "Vidros",
+    "peso": 80.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Maio",
+    "timestamp": 1780023600075
+  },
+  {
+    "id": "hist-0074",
+    "dataColeta": "2026-05-29",
+    "tipoResiduo": "Recicláveis",
+    "peso": 60.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Maio",
+    "timestamp": 1780023600074
+  },
+  {
+    "id": "hist-0080",
+    "dataColeta": "2026-05-25",
+    "tipoResiduo": "Recicláveis",
+    "peso": 80.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1779678000080
+  },
+  {
+    "id": "hist-0079",
+    "dataColeta": "2026-05-25",
+    "tipoResiduo": "Vidros",
+    "peso": 50.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1779678000079
+  },
+  {
+    "id": "hist-0073",
+    "dataColeta": "2026-05-25",
+    "tipoResiduo": "Recicláveis",
+    "peso": 80.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Maio",
+    "timestamp": 1779678000073
+  },
+  {
+    "id": "hist-0072",
+    "dataColeta": "2026-05-25",
+    "tipoResiduo": "Vidros",
+    "peso": 50.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Maio",
+    "timestamp": 1779678000072
+  },
+  {
+    "id": "hist-0078",
+    "dataColeta": "2026-05-22",
+    "tipoResiduo": "Vidros",
+    "peso": 90.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1779418800078
+  },
+  {
+    "id": "hist-0077",
+    "dataColeta": "2026-05-22",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 50.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1779418800077
+  },
+  {
+    "id": "hist-0076",
+    "dataColeta": "2026-05-22",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Junho",
+    "timestamp": 1779418800076
+  },
+  {
+    "id": "hist-0071",
+    "dataColeta": "2026-05-22",
+    "tipoResiduo": "Vidros",
+    "peso": 90.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Maio",
+    "timestamp": 1779418800071
+  },
+  {
+    "id": "hist-0070",
+    "dataColeta": "2026-05-22",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 50.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Maio",
+    "timestamp": 1779418800070
+  },
+  {
+    "id": "hist-0069",
+    "dataColeta": "2026-05-22",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Maio",
+    "timestamp": 1779418800069
+  },
+  {
+    "id": "hist-0068",
+    "dataColeta": "2026-05-18",
+    "tipoResiduo": "Vidros",
+    "peso": 80.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Maio",
+    "timestamp": 1779073200068
+  },
+  {
+    "id": "hist-0067",
+    "dataColeta": "2026-05-18",
+    "tipoResiduo": "Recicláveis",
+    "peso": 60.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Maio",
+    "timestamp": 1779073200067
+  },
+  {
+    "id": "hist-0066",
+    "dataColeta": "2026-05-11",
+    "tipoResiduo": "Recicláveis",
+    "peso": 80.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Maio",
+    "timestamp": 1778468400066
+  },
+  {
+    "id": "hist-0065",
+    "dataColeta": "2026-05-11",
+    "tipoResiduo": "Vidros",
+    "peso": 50.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Maio",
+    "timestamp": 1778468400065
+  },
+  {
+    "id": "hist-0064",
+    "dataColeta": "2026-05-08",
+    "tipoResiduo": "Vidros",
+    "peso": 90.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Maio",
+    "timestamp": 1778209200064
+  },
+  {
+    "id": "hist-0063",
+    "dataColeta": "2026-05-08",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 50.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Maio",
+    "timestamp": 1778209200063
+  },
+  {
+    "id": "hist-0062",
+    "dataColeta": "2026-05-08",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Maio",
+    "timestamp": 1778209200062
+  },
+  {
+    "id": "hist-0061",
+    "dataColeta": "2026-05-05",
+    "tipoResiduo": "Recicláveis",
+    "peso": 60.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Maio",
+    "timestamp": 1777950000061
+  },
+  {
+    "id": "hist-0060",
+    "dataColeta": "2026-05-05",
+    "tipoResiduo": "Vidros",
+    "peso": 80.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Maio",
+    "timestamp": 1777950000060
+  },
+  {
+    "id": "hist-0059",
+    "dataColeta": "2026-05-01",
+    "tipoResiduo": "Recicláveis",
+    "peso": 80.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Maio",
+    "timestamp": 1777604400059
+  },
+  {
+    "id": "hist-0058",
+    "dataColeta": "2026-04-30",
+    "tipoResiduo": "Vidros",
+    "peso": 80.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Maio",
+    "timestamp": 1777518000058
+  },
+  {
+    "id": "hist-0057",
+    "dataColeta": "2026-04-28",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 80.0,
+    "destino": "APAE",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Maio",
+    "timestamp": 1777345200057
+  },
+  {
+    "id": "hist-0056",
+    "dataColeta": "2026-04-27",
+    "tipoResiduo": "Vidros",
+    "peso": 100.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Março e Abril",
+    "timestamp": 1777258800056
+  },
+  {
+    "id": "hist-0055",
+    "dataColeta": "2026-04-27",
+    "tipoResiduo": "Recicláveis",
+    "peso": 80.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Março e Abril",
+    "timestamp": 1777258800055
+  },
+  {
+    "id": "hist-0054",
+    "dataColeta": "2026-04-23",
+    "tipoResiduo": "Vidros",
+    "peso": 80.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Março e Abril",
+    "timestamp": 1776913200054
+  },
+  {
+    "id": "hist-0053",
+    "dataColeta": "2026-04-22",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Março e Abril",
+    "timestamp": 1776826800053
+  },
+  {
+    "id": "hist-0052",
+    "dataColeta": "2026-04-17",
+    "tipoResiduo": "Recicláveis",
+    "peso": 40.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Março e Abril",
+    "timestamp": 1776394800052
+  },
+  {
+    "id": "hist-0051",
+    "dataColeta": "2026-04-16",
+    "tipoResiduo": "Recicláveis",
+    "peso": 40.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Março e Abril",
+    "timestamp": 1776308400051
+  },
+  {
+    "id": "hist-0050",
+    "dataColeta": "2026-04-15",
+    "tipoResiduo": "Recicláveis",
+    "peso": 40.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Março e Abril",
+    "timestamp": 1776222000050
+  },
+  {
+    "id": "hist-0049",
+    "dataColeta": "2026-04-14",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Março e Abril",
+    "timestamp": 1776135600049
+  },
+  {
+    "id": "hist-0048",
+    "dataColeta": "2026-04-11",
+    "tipoResiduo": "Vidros",
+    "peso": 60.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Março e Abril",
+    "timestamp": 1775876400048
+  },
+  {
+    "id": "hist-0047",
+    "dataColeta": "2026-04-11",
+    "tipoResiduo": "Recicláveis",
+    "peso": 50.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Março e Abril",
+    "timestamp": 1775876400047
+  },
+  {
+    "id": "hist-0046",
+    "dataColeta": "2026-04-09",
+    "tipoResiduo": "Lâmpadas",
+    "peso": 60.0,
+    "destino": "IMA",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Março e Abril",
+    "timestamp": 1775703600046
+  },
+  {
+    "id": "hist-0045",
+    "dataColeta": "2026-04-09",
+    "tipoResiduo": "Recicláveis",
+    "peso": 90.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Março e Abril",
+    "timestamp": 1775703600045
+  },
+  {
+    "id": "hist-0044",
+    "dataColeta": "2026-04-09",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 50.0,
+    "destino": "APAE",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Março e Abril",
+    "timestamp": 1775703600044
+  },
+  {
+    "id": "hist-0043",
+    "dataColeta": "2026-04-06",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 50.0,
+    "destino": "APAE",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Março e Abril",
+    "timestamp": 1775444400043
+  },
+  {
+    "id": "hist-0042",
+    "dataColeta": "2026-04-06",
+    "tipoResiduo": "Vidros",
+    "peso": 40.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Março e Abril",
+    "timestamp": 1775444400042
+  },
+  {
+    "id": "hist-0041",
+    "dataColeta": "2026-04-06",
+    "tipoResiduo": "Recicláveis",
+    "peso": 80.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Março e Abril",
+    "timestamp": 1775444400041
+  },
+  {
+    "id": "hist-0040",
+    "dataColeta": "2026-04-01",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 30.0,
+    "destino": "APAE",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Março e Abril",
+    "timestamp": 1775012400040
+  },
+  {
+    "id": "hist-0039",
+    "dataColeta": "2026-03-31",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Março e Abril",
+    "timestamp": 1774926000039
+  },
+  {
+    "id": "hist-0038",
+    "dataColeta": "2026-03-27",
+    "tipoResiduo": "Recicláveis",
+    "peso": 50.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Março e Abril",
+    "timestamp": 1774580400038
+  },
+  {
+    "id": "hist-0037",
+    "dataColeta": "2026-03-27",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 40.0,
+    "destino": "APAE",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Março e Abril",
+    "timestamp": 1774580400037
+  },
+  {
+    "id": "hist-0034",
+    "dataColeta": "2026-03-23",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 50.0,
+    "destino": "APAE",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1774234800034
+  },
+  {
+    "id": "hist-0036",
+    "dataColeta": "2026-03-20",
+    "tipoResiduo": "Vidros",
+    "peso": 40.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1773975600036
+  },
+  {
+    "id": "hist-0035",
+    "dataColeta": "2026-03-20",
+    "tipoResiduo": "Recicláveis",
+    "peso": 45.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1773975600035
+  },
+  {
+    "id": "hist-0033",
+    "dataColeta": "2026-03-20",
+    "tipoResiduo": "Vidros",
+    "peso": 40.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1773975600033
+  },
+  {
+    "id": "hist-0032",
+    "dataColeta": "2026-03-20",
+    "tipoResiduo": "Recicláveis",
+    "peso": 35.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1773975600032
+  },
+  {
+    "id": "hist-0031",
+    "dataColeta": "2026-03-17",
+    "tipoResiduo": "Vidros",
+    "peso": 25.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1773716400031
+  },
+  {
+    "id": "hist-0030",
+    "dataColeta": "2026-03-17",
+    "tipoResiduo": "Recicláveis",
+    "peso": 40.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1773716400030
+  },
+  {
+    "id": "hist-0029",
+    "dataColeta": "2026-03-16",
+    "tipoResiduo": "Lâmpadas",
+    "peso": 65.0,
+    "destino": "IMA",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1773630000029
+  },
+  {
+    "id": "hist-0028",
+    "dataColeta": "2026-03-16",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 40.0,
+    "destino": "APAE",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1773630000028
+  },
+  {
+    "id": "hist-0027",
+    "dataColeta": "2026-03-13",
+    "tipoResiduo": "Recicláveis",
+    "peso": 30.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1773370800027
+  },
+  {
+    "id": "hist-0026",
+    "dataColeta": "2026-03-13",
+    "tipoResiduo": "Vidros",
+    "peso": 50.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1773370800026
+  },
+  {
+    "id": "hist-0025",
+    "dataColeta": "2026-03-12",
+    "tipoResiduo": "Vidros",
+    "peso": 70.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1773284400025
+  },
+  {
+    "id": "hist-0024",
+    "dataColeta": "2026-03-12",
+    "tipoResiduo": "Recicláveis",
+    "peso": 20.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1773284400024
+  },
+  {
+    "id": "hist-0023",
+    "dataColeta": "2026-03-09",
+    "tipoResiduo": "Recicláveis",
+    "peso": 50.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1773025200023
+  },
+  {
+    "id": "hist-0022",
+    "dataColeta": "2026-03-05",
+    "tipoResiduo": "Vidros",
+    "peso": 30.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1772679600022
+  },
+  {
+    "id": "hist-0021",
+    "dataColeta": "2026-03-05",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 15.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1772679600021
+  },
+  {
+    "id": "hist-0020",
+    "dataColeta": "2026-03-05",
+    "tipoResiduo": "Recicláveis",
+    "peso": 25.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1772679600020
+  },
+  {
+    "id": "hist-0019",
+    "dataColeta": "2026-03-05",
+    "tipoResiduo": "Baterias e Pilhas",
+    "peso": 12.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1772679600019
+  },
+  {
+    "id": "hist-0018",
+    "dataColeta": "2026-03-03",
+    "tipoResiduo": "Recicláveis",
+    "peso": 30.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1772506800018
+  },
+  {
+    "id": "hist-0017",
+    "dataColeta": "2026-03-03",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 2.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1772506800017
+  },
+  {
+    "id": "hist-0016",
+    "dataColeta": "2026-03-03",
+    "tipoResiduo": "Vidros",
+    "peso": 30.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1772506800016
+  },
+  {
+    "id": "hist-0015",
+    "dataColeta": "2026-03-02",
+    "tipoResiduo": "Recicláveis",
+    "peso": 40.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1772420400015
+  },
+  {
+    "id": "hist-0006",
+    "dataColeta": "2026-03-02",
+    "tipoResiduo": "Lâmpadas",
+    "peso": 60.0,
+    "destino": "IMA",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1772420400006
+  },
+  {
+    "id": "hist-0014",
+    "dataColeta": "2026-02-27",
+    "tipoResiduo": "Recicláveis",
+    "peso": 30.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1772161200014
+  },
+  {
+    "id": "hist-0010",
+    "dataColeta": "2026-02-27",
+    "tipoResiduo": "Vidros",
+    "peso": 15.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1772161200010
+  },
+  {
+    "id": "hist-0009",
+    "dataColeta": "2026-02-27",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 25.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1772161200009
+  },
+  {
+    "id": "hist-0003",
+    "dataColeta": "2026-02-27",
+    "tipoResiduo": "Baterias e Pilhas",
+    "peso": 15.0,
+    "destino": "IMA",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1772161200003
+  },
+  {
+    "id": "hist-0013",
+    "dataColeta": "2026-02-26",
+    "tipoResiduo": "Recicláveis",
+    "peso": 35.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1772074800013
+  },
+  {
+    "id": "hist-0012",
+    "dataColeta": "2026-02-23",
+    "tipoResiduo": "Recicláveis",
+    "peso": 4.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1771815600012
+  },
+  {
+    "id": "hist-0008",
+    "dataColeta": "2026-02-23",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 2.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1771815600008
+  },
+  {
+    "id": "hist-0005",
+    "dataColeta": "2026-02-23",
+    "tipoResiduo": "Lâmpadas",
+    "peso": 8.0,
+    "destino": "IMA",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1771815600005
+  },
+  {
+    "id": "hist-0002",
+    "dataColeta": "2026-02-23",
+    "tipoResiduo": "Baterias e Pilhas",
+    "peso": 7.0,
+    "destino": "IMA",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1771815600002
+  },
+  {
+    "id": "hist-0011",
+    "dataColeta": "2026-02-18",
+    "tipoResiduo": "Recicláveis",
+    "peso": 1.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1771383600011
+  },
+  {
+    "id": "hist-0007",
+    "dataColeta": "2026-02-18",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 40.0,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1771383600007
+  },
+  {
+    "id": "hist-0004",
+    "dataColeta": "2026-02-18",
+    "tipoResiduo": "Lâmpadas",
+    "peso": 35.0,
+    "destino": "IMA",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1771383600004
+  },
+  {
+    "id": "hist-0001",
+    "dataColeta": "2026-02-18",
+    "tipoResiduo": "Baterias e Pilhas",
+    "peso": 5.0,
+    "destino": "IMA",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Fevereiro",
+    "timestamp": 1771383600001
+  }
+]

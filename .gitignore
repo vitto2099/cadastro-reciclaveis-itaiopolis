@@ -1,0 +1,18 @@
+# Dependências e Node
+node_modules/
+package.json
+package-lock.json
+
+# Backups e Compactados
+backups/
+backup_projeto/
+*.zip
+
+# Sistema Operacional e Editores
+.vscode/
+.idea/
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
