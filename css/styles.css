@@ -1538,6 +1538,46 @@ body {
     }
 }
 
+/* ============================================================
+   ESTILOS GLOBAIS DE MODAIS (BASE & DESKTOP)
+   ============================================================ */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: var(--card-bg, #ffffff);
+    padding: 2rem;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 650px;
+    position: relative;
+    box-shadow: var(--shadow-lg, 0 12px 32px rgba(0, 0, 0, 0.18));
+    animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-content.modal-large {
+    max-width: calc(100vw - 80px);
+    width: calc(100vw - 80px);
+    height: calc(100vh - 80px);
+    max-height: calc(100vh - 80px);
+    border-radius: 20px;
+    padding: 2.25rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
 .modal-content h2 {
     color: var(--primary-color);
     text-align: center;
