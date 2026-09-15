@@ -24,11 +24,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const sacolasDisplay = document.getElementById('sacolas-count');
     const pessoasDisplay = document.getElementById('pessoas-count');
 
+    // Dados históricos consolidados municipais (base inicial garantida)
+    const DADOS_HISTORICOS_SACOLAS = {
+        total: 280,
+        totalSacolas: 288,
+        totalPessoas: 1361,
+        bairrosDist: {
+            "Centro": { "registros": 133, "pessoas": 881, "sacolas": 135 },
+            "Vila Nova": { "registros": 46, "pessoas": 144, "sacolas": 50 },
+            "Bom Jesus": { "registros": 46, "pessoas": 148, "sacolas": 46 },
+            "Interior": { "registros": 29, "pessoas": 112, "sacolas": 31 },
+            "Lucena": { "registros": 12, "pessoas": 37, "sacolas": 12 },
+            "Paraguaçu": { "registros": 4, "pessoas": 14, "sacolas": 4 },
+            "Vila Gaúcha": { "registros": 3, "pessoas": 8, "sacolas": 3 },
+            "São Pedro": { "registros": 1, "pessoas": 4, "sacolas": 1 },
+            "Vila José Dresseno": { "registros": 1, "pessoas": 4, "sacolas": 1 },
+            "São Lourenço": { "registros": 1, "pessoas": 3, "sacolas": 1 },
+            "Bom Sucesso": { "registros": 1, "pessoas": 2, "sacolas": 1 },
+            "Poço Claro": { "registros": 1, "pessoas": 2, "sacolas": 1 },
+            "Distrito": { "registros": 1, "pessoas": 1, "sacolas": 1 },
+            "Mafra": { "registros": 1, "pessoas": 1, "sacolas": 1 }
+        }
+    };
+
+    let bairrosData = DADOS_HISTORICOS_SACOLAS.bairrosDist; // Carrega dados históricos imediatamente
+    let bairrosBarChartInstance = null; // Instancia do grafico de barras (Ranking)
+    let bairrosDonutChartInstance = null; // Instancia do grafico de rosca (Proporcao)
+
     // Chamar a busca APÓS as variáveis terem sido declaradas
     fetchTotalCadastros();
-
-    let bairrosData = null; // Guardar dados do grafico
-    let bairrosChartInstance = null; // Instancia do grafico
 
     const btnCpf = document.getElementById('btn-cpf');
     const btnCnpj = document.getElementById('btn-cnpj');
@@ -220,43 +244,51 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateDashboardCounters(data) {
-        bairrosData = data.bairrosDist; // Armazena dados dos bairros
+        if (!data) return;
+        if (data.bairrosDist) {
+            bairrosData = data.bairrosDist;
+        }
 
-        countDisplay.textContent = data.total;
-        if (data.totalSacolas !== undefined) {
-            sacolasDisplay.textContent = data.totalSacolas * 10;
-        } else {
-            sacolasDisplay.textContent = data.total * 10;
+        if (countDisplay && data.total !== undefined) {
+            countDisplay.textContent = Number(data.total).toLocaleString('pt-BR');
+        }
+        if (sacolasDisplay) {
+            if (data.totalSacolas !== undefined) {
+                sacolasDisplay.textContent = (Number(data.totalSacolas) * 10).toLocaleString('pt-BR');
+            } else if (data.total !== undefined) {
+                sacolasDisplay.textContent = (Number(data.total) * 10).toLocaleString('pt-BR');
+            }
         }
 
         if (pessoasDisplay) {
             if (data.totalPessoas !== undefined) {
-                pessoasDisplay.textContent = data.totalPessoas;
+                pessoasDisplay.textContent = Number(data.totalPessoas).toLocaleString('pt-BR');
             } else {
                 pessoasDisplay.textContent = "--";
             }
         }
+
+        updateSacosModalKPIs(bairrosData);
     }
 
     // Buscar total de cadastros ao carregar a página
     async function fetchTotalCadastros() {
-        if (SCRIPT_URL === "COLOQUE_A_URL_DO_SEU_WEB_APP_AQUI") {
-            countDisplay.textContent = "Aguardando config...";
-            return;
-        }
-
         // Tentar carregar do cache
         const cached = localStorage.getItem('dashboardCache');
         if (cached) {
             try {
                 const data = JSON.parse(cached);
                 updateDashboardCounters(data);
-            } catch (e) { }
+            } catch (e) {
+                updateDashboardCounters(DADOS_HISTORICOS_SACOLAS);
+            }
         } else {
-            // Skeletons
-            countDisplay.innerHTML = '<span class="skeleton"></span>';
-            sacolasDisplay.innerHTML = '<span class="skeleton"></span>';
-            if (pessoasDisplay) pessoasDisplay.innerHTML = '<span class="skeleton"></span>';
+            // Inicializa imediatamente com dados municipais consolidados
+            updateDashboardCounters(DADOS_HISTORICOS_SACOLAS);
+        }
+
+        if (SCRIPT_URL === "COLOQUE_A_URL_DO_SEU_WEB_APP_AQUI") {
+            return;
         }
 
         try {
@@ -265,18 +297,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.status === 'success') {
                 localStorage.setItem('dashboardCache', JSON.stringify(data));
                 updateDashboardCounters(data);
-            } else {
-                if (!cached) {
-                    countDisplay.textContent = "Erro";
-                    sacolasDisplay.textContent = "Erro";
-                }
             }
         } catch (error) {
-            console.error("Erro ao buscar total:", error);
-            if (!cached) {
-                countDisplay.textContent = "---";
-                sacolasDisplay.textContent = "---";
-            }
+            console.warn("Aviso ao buscar total em tempo real (usando base local):", error);
         }
     }
 
@@ -523,6 +546,52 @@ document.addEventListener('DOMContentLoaded', () => {
         "Interior / Zona Rural": [-26.3385, -50.0500]
     };
 
+    // Helper para escapar strings HTML
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    // Atualiza os Mini-KPIs no topo do modal de sacolas
+    function updateSacosModalKPIs(data) {
+        if (!data) return;
+        let totalPessoas = 0;
+        let totalSacolas = 0;
+        let totalRegistros = 0;
+        let maxReg = -1;
+        let topBairro = '--';
+
+        Object.entries(data).forEach(([bairro, info]) => {
+            const p = info.pessoas || (typeof info === 'number' ? info : 0);
+            const s = info.sacolas ? info.sacolas * 10 : 0;
+            const r = info.registros || (typeof info === 'number' ? info : 0);
+
+            totalPessoas += p;
+            totalSacolas += s;
+            totalRegistros += r;
+
+            if (r > maxReg) {
+                maxReg = r;
+                topBairro = bairro;
+            }
+        });
+
+        const kpiSacolas = document.getElementById('dash-sacos-kpi-sacolas');
+        const kpiPessoas = document.getElementById('dash-sacos-kpi-pessoas');
+        const kpiTopBairro = document.getElementById('dash-sacos-kpi-bairro-top');
+        const kpiTotalBairros = document.getElementById('dash-sacos-kpi-total-bairros');
+
+        if (kpiSacolas) kpiSacolas.textContent = totalSacolas.toLocaleString('pt-BR');
+        if (kpiPessoas) kpiPessoas.textContent = totalPessoas.toLocaleString('pt-BR');
+        if (kpiTopBairro) kpiTopBairro.textContent = topBairro;
+        if (kpiTotalBairros) kpiTotalBairros.textContent = Object.keys(data).length;
+    }
+
     // === Lógica do Dashboard (Gráfico e Mapa) ===
     const btnShowChart = document.getElementById('btn-show-chart');
     const chartModal = document.getElementById('chart-modal');
@@ -530,81 +599,93 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Controles
     const dashMetric = document.getElementById('dash-metric');
+    const btnViewBars = document.getElementById('btn-view-chart-bars') || document.getElementById('btn-view-chart');
+    const btnViewDonut = document.getElementById('btn-view-chart-donut');
     const btnViewResumo = document.getElementById('btn-view-resumo');
-    const btnViewChart = document.getElementById('btn-view-chart');
     const btnViewMap = document.getElementById('btn-view-map');
+
+    const chartViewBars = document.getElementById('chart-view-bars') || document.getElementById('chart-view');
+    const chartViewDonut = document.getElementById('chart-view-donut');
     const resumoView = document.getElementById('resumo-view');
-    const chartView = document.getElementById('chart-view');
     const mapView = document.getElementById('map-view');
 
     let leafletMap = null;
     let currentMapLayer = null;
 
-    if (btnShowChart) {
-        btnShowChart.addEventListener('click', () => {
-            if (!bairrosData || Object.keys(bairrosData).length === 0) {
-                showToast("Os dados dos bairros ainda não foram carregados ou não existem cadastros.", "error");
-                return;
-            }
+    function openDashboardModal() {
+        if (!bairrosData || Object.keys(bairrosData).length === 0) {
+            bairrosData = DADOS_HISTORICOS_SACOLAS.bairrosDist;
+        }
+        if (chartModal) {
             chartModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
             updateDashboard();
-        });
+        }
+    }
+
+    function closeDashboardModal() {
+        if (chartModal) {
+            chartModal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+    }
+
+    if (btnShowChart) {
+        btnShowChart.addEventListener('click', openDashboardModal);
     }
 
     if (closeChartModal) {
-        closeChartModal.addEventListener('click', () => {
-            chartModal.style.display = 'none';
+        closeChartModal.addEventListener('click', closeDashboardModal);
+    }
+
+    if (chartModal) {
+        chartModal.addEventListener('click', (e) => {
+            if (e.target === chartModal) closeDashboardModal();
         });
     }
 
-    window.addEventListener('click', (e) => {
-        if (e.target === chartModal) {
-            chartModal.style.display = 'none';
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && chartModal && chartModal.style.display === 'flex') {
+            closeDashboardModal();
         }
     });
 
-    // Eventos dos Controles
-    dashMetric.addEventListener('change', updateDashboard);
+    // Alternância de Abas (Ranking, Proporção, Resumo, Mapa)
+    function setActiveDashTab(tab) {
+        if (btnViewBars) btnViewBars.classList.toggle('active', tab === 'bars');
+        if (btnViewDonut) btnViewDonut.classList.toggle('active', tab === 'donut');
+        if (btnViewResumo) btnViewResumo.classList.toggle('active', tab === 'resumo');
+        if (btnViewMap) btnViewMap.classList.toggle('active', tab === 'map');
 
-    btnViewResumo.addEventListener('click', () => {
-        btnViewResumo.classList.add('active');
-        btnViewChart.classList.remove('active');
-        btnViewMap.classList.remove('active');
-        resumoView.style.display = 'flex';
-        chartView.style.display = 'none';
-        mapView.style.display = 'none';
-        updateDashboard();
-    });
+        if (chartViewBars) chartViewBars.style.display = tab === 'bars' ? 'block' : 'none';
+        if (chartViewDonut) chartViewDonut.style.display = tab === 'donut' ? 'block' : 'none';
+        if (resumoView) resumoView.style.display = tab === 'resumo' ? 'flex' : 'none';
+        if (mapView) mapView.style.display = tab === 'map' ? 'block' : 'none';
 
-    btnViewChart.addEventListener('click', () => {
-        btnViewChart.classList.add('active');
-        btnViewResumo.classList.remove('active');
-        btnViewMap.classList.remove('active');
-        chartView.style.display = 'block';
-        resumoView.style.display = 'none';
-        mapView.style.display = 'none';
         updateDashboard();
-    });
 
-    btnViewMap.addEventListener('click', () => {
-        btnViewMap.classList.add('active');
-        btnViewChart.classList.remove('active');
-        btnViewResumo.classList.remove('active');
-        mapView.style.display = 'block';
-        chartView.style.display = 'none';
-        resumoView.style.display = 'none';
-        updateDashboard();
-    });
+        if (tab === 'map' && leafletMap) {
+            setTimeout(() => {
+                leafletMap.invalidateSize();
+            }, 250);
+        }
+    }
+
+    if (btnViewBars) btnViewBars.addEventListener('click', () => setActiveDashTab('bars'));
+    if (btnViewDonut) btnViewDonut.addEventListener('click', () => setActiveDashTab('donut'));
+    if (btnViewResumo) btnViewResumo.addEventListener('click', () => setActiveDashTab('resumo'));
+    if (btnViewMap) btnViewMap.addEventListener('click', () => setActiveDashTab('map'));
+
+    if (dashMetric) {
+        dashMetric.addEventListener('change', updateDashboard);
+    }
 
     const btnExportCsv = document.getElementById('btn-export-csv');
     if (btnExportCsv) {
         btnExportCsv.addEventListener('click', () => {
-            if (!bairrosData || Object.keys(bairrosData).length === 0) {
-                showToast("Sem dados para exportar.", "error");
-                return;
-            }
-            let csvContent = "\uFEFFBairro,Registros,Pessoas Atendidas,Pacotes Distribuidos,Sacolas Distribuidas\n";
-            Object.entries(bairrosData).forEach(([bairro, info]) => {
+            const dataToExport = bairrosData || DADOS_HISTORICOS_SACOLAS.bairrosDist;
+            let csvContent = "\uFEFFBairro,Registros,Munícipes Atendidos,Pacotes Distribuídos,Sacolas Distribuídas\n";
+            Object.entries(dataToExport).forEach(([bairro, info]) => {
                 const pessoas = info.pessoas || (typeof info === 'number' ? info : 0);
                 const pacotes = info.sacolas || 0;
                 const sacolas = info.sacolas ? info.sacolas * 10 : 0;
@@ -615,7 +696,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const link = document.createElement("a");
             const url = URL.createObjectURL(blob);
             link.setAttribute("href", url);
-            link.setAttribute("download", "relatorio_bairros.csv");
+            link.setAttribute("download", "relatorio_distribuicao_sacolas.csv");
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -623,88 +704,210 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateDashboard() {
-        if (!bairrosData) return;
+        const data = bairrosData || DADOS_HISTORICOS_SACOLAS.bairrosDist;
+        if (!data) return;
 
-        const metric = dashMetric.value; // 'pessoas', 'sacolas', 'registros'
-        const isMapMode = btnViewMap.classList.contains('active');
-        const isResumoMode = btnViewResumo.classList.contains('active');
+        updateSacosModalKPIs(data);
+        const metric = dashMetric ? dashMetric.value : 'pessoas';
 
-        if (isMapMode) {
-            renderMap(bairrosData, metric);
-        } else if (isResumoMode) {
-            renderResumo(bairrosData);
+        if (btnViewMap && btnViewMap.classList.contains('active')) {
+            renderMap(data, metric);
+        } else if (btnViewResumo && btnViewResumo.classList.contains('active')) {
+            renderResumo(data, metric);
+        } else if (btnViewDonut && btnViewDonut.classList.contains('active')) {
+            renderDonutChart(data, metric);
         } else {
-            renderChart(bairrosData, metric, 'doughnut');
+            renderBarChart(data, metric);
         }
     }
 
-    function renderChart(data, metric, type) {
-        const ctx = document.getElementById('bairrosChart').getContext('2d');
+    // 1. VISÃO GRÁFICO DE BARRAS HORIZONTAIS (Ranking ordenado)
+    function renderBarChart(data, metric) {
+        const canvas = document.getElementById('bairrosBarChart');
+        if (!canvas || typeof Chart === 'undefined') return;
 
-        // Determinar o valor baseado na métrica escolhida
+        if (bairrosBarChartInstance) {
+            bairrosBarChartInstance.destroy();
+            bairrosBarChartInstance = null;
+        }
+
         const getMetricValue = (item) => {
-            if (typeof item === 'number') return item; // fallback antigo
-            return metric === 'sacolas' ? item.sacolas * 10 : item[metric];
+            if (typeof item === 'number') return item;
+            return metric === 'sacolas' ? (item.sacolas * 10) : (item[metric] || 0);
         };
 
         const sortedEntries = Object.entries(data).sort((a, b) => getMetricValue(b[1]) - getMetricValue(a[1]));
         const labels = sortedEntries.map(e => e[0]);
         const values = sortedEntries.map(e => getMetricValue(e[1]));
 
-        if (bairrosChartInstance) {
-            bairrosChartInstance.destroy();
-        }
+        const metricLabels = {
+            'pessoas': 'Munícipes Atendidos',
+            'sacolas': 'Sacolas Distribuídas',
+            'registros': 'Registros Feitos'
+        };
+        const currentLabel = metricLabels[metric] || 'Quantidade';
 
-        const colors = [
-            '#2563eb', '#10b981', '#f59e0b', '#ef4444', '#f97316',
-            '#06b6d4', '#8b5cf6', '#14b8a6', '#84cc16', '#ec4899',
-            '#6366f1', '#3b82f6', '#10b981', '#f97316', '#eab308',
-            '#64748b', '#0284c7', '#059669', '#d97706', '#dc2626'
-        ];
+        const isDark = document.body.classList.contains('dark-theme');
+        const textColor = isDark ? '#cbd5e1' : '#334155';
+        const gridColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.05)';
 
-        bairrosChartInstance = new Chart(ctx, {
-            type: type,
+        // Degradê profissional: 1º lugar vibrante, top 3 em destaque, restante em tom coeso
+        const backgroundColors = values.map((_, idx) => {
+            if (idx === 0) return '#2563eb'; // 1º lugar: Azul Royal
+            if (idx === 1) return '#3b82f6'; // 2º lugar
+            if (idx === 2) return '#60a5fa'; // 3º lugar
+            if (idx < 6) return '#93c5fd';
+            return isDark ? '#475569' : '#cbd5e1';
+        });
+
+        const ctx = canvas.getContext('2d');
+        bairrosBarChartInstance = new Chart(ctx, {
+            type: 'bar',
             data: {
                 labels: labels,
                 datasets: [{
-                    label: dashMetric.options[dashMetric.selectedIndex].text,
+                    label: currentLabel,
                     data: values,
-                    backgroundColor: colors,
+                    backgroundColor: backgroundColors,
+                    borderRadius: 6,
+                    borderSkipped: false,
+                    barPercentage: 0.75,
+                    categoryPercentage: 0.85
+                }]
+            },
+            options: {
+                indexAxis: 'y', // Barras horizontais para clareza máxima dos nomes
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: isDark ? '#1e293b' : '#0f172a',
+                        titleColor: '#ffffff',
+                        bodyColor: '#e2e8f0',
+                        padding: 12,
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function (context) {
+                                const label = context.label || '';
+                                const rawData = data[label];
+                                if (!rawData || typeof rawData === 'number') {
+                                    return ` ${context.formattedValue} ${currentLabel.toLowerCase()}`;
+                                }
+                                return [
+                                    ` ${currentLabel}: ${Number(context.raw).toLocaleString('pt-BR')}`,
+                                    ` Munícipes Atendidos: ${Number(rawData.pessoas).toLocaleString('pt-BR')}`,
+                                    ` Sacolas Distribuídas: ${Number(rawData.sacolas * 10).toLocaleString('pt-BR')}`,
+                                    ` Registros Realizados: ${Number(rawData.registros).toLocaleString('pt-BR')}`
+                                ];
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: gridColor
+                        },
+                        ticks: {
+                            color: textColor,
+                            font: { family: 'Plus Jakarta Sans', size: 11, weight: '500' }
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: textColor,
+                            font: { family: 'Plus Jakarta Sans', size: 12, weight: '600' }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // 2. VISÃO GRÁFICO DE ROSCA / PROPORÇÃO (Top 5 + Demais)
+    function renderDonutChart(data, metric) {
+        const canvas = document.getElementById('bairrosDonutChart');
+        if (!canvas || typeof Chart === 'undefined') return;
+
+        if (bairrosDonutChartInstance) {
+            bairrosDonutChartInstance.destroy();
+            bairrosDonutChartInstance = null;
+        }
+
+        const getMetricValue = (item) => {
+            if (typeof item === 'number') return item;
+            return metric === 'sacolas' ? (item.sacolas * 10) : (item[metric] || 0);
+        };
+
+        const sortedEntries = Object.entries(data).sort((a, b) => getMetricValue(b[1]) - getMetricValue(a[1]));
+        const topEntries = sortedEntries.slice(0, 5);
+        const otherEntries = sortedEntries.slice(5);
+
+        const labels = topEntries.map(e => e[0]);
+        const values = topEntries.map(e => getMetricValue(e[1]));
+
+        if (otherEntries.length > 0) {
+            const othersSum = otherEntries.reduce((acc, curr) => acc + getMetricValue(curr[1]), 0);
+            labels.push(`Demais Bairros (${otherEntries.length})`);
+            values.push(othersSum);
+        }
+
+        const colors = [
+            '#2563eb', // Azul Royal
+            '#10b981', // Verde Esmeralda
+            '#f59e0b', // Âmbar
+            '#8b5cf6', // Roxo
+            '#06b6d4', // Ciano
+            '#94a3b8'  // Cinza Suave
+        ];
+
+        const isDark = document.body.classList.contains('dark-theme');
+        const legendTextColor = isDark ? '#e2e8f0' : '#334155';
+
+        const ctx = canvas.getContext('2d');
+        bairrosDonutChartInstance = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: values,
+                    backgroundColor: colors.slice(0, labels.length),
                     borderWidth: 2,
-                    borderColor: '#ffffff',
+                    borderColor: isDark ? '#1e293b' : '#ffffff',
                     hoverOffset: 8
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                cutout: '60%',
+                cutout: '65%',
                 plugins: {
                     legend: {
-                        display: true,
-                        position: 'right',
+                        position: 'bottom',
                         labels: {
-                            font: { family: 'Plus Jakarta Sans', size: 12 },
-                            padding: 15,
+                            color: legendTextColor,
+                            font: { family: 'Plus Jakarta Sans', size: 12, weight: '600' },
+                            padding: 14,
                             usePointStyle: true,
                             pointStyle: 'circle'
                         }
                     },
                     tooltip: {
+                        backgroundColor: isDark ? '#1e293b' : '#0f172a',
+                        padding: 12,
+                        cornerRadius: 8,
                         callbacks: {
                             label: function (context) {
-                                let label = context.label || '';
-                                let rawData = data[label];
-
-                                if (typeof rawData === 'number') {
-                                    return `${label}: ${context.raw} registros`;
-                                }
-
-                                return [
-                                    `Pessoas atendidas: ${rawData.pessoas}`,
-                                    `Registros feitos: ${rawData.registros}`,
-                                    `Sacolas distrib.: ${rawData.sacolas * 10}`
-                                ];
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const val = context.raw || 0;
+                                const pct = total > 0 ? ((val / total) * 100).toFixed(1) : '0.0';
+                                return ` ${context.label}: ${val.toLocaleString('pt-BR')} (${pct}%)`;
                             }
                         }
                     }
@@ -713,13 +916,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function renderResumo(data) {
+    // 3. VISÃO RESUMO (Tabela Executiva com Medalhas e Barra de Progresso)
+    function renderResumo(data, metric) {
         if (!resumoView) return;
+
+        const getMetricValue = (item) => {
+            if (typeof item === 'number') return item;
+            return metric === 'sacolas' ? (item.sacolas * 10) : (item[metric] || 0);
+        };
 
         let totalPessoas = 0;
         let totalSacolas = 0;
         let totalPacotes = 0;
         let totalRegistros = 0;
+        let maxReg = -1;
         let bairroMaisAtivo = { nome: '-', max: -1 };
 
         Object.entries(data).forEach(([bairro, info]) => {
@@ -733,29 +943,52 @@ document.addEventListener('DOMContentLoaded', () => {
             totalPacotes += pacotes;
             totalRegistros += registros;
 
-            if (registros > bairroMaisAtivo.max) {
+            if (registros > maxReg) {
+                maxReg = registros;
                 bairroMaisAtivo = { nome: bairro, max: registros };
             }
         });
 
+        const sorted = Object.entries(data).sort((a, b) => getMetricValue(b[1]) - getMetricValue(a[1]));
+        const totalMetric = sorted.reduce((acc, curr) => acc + getMetricValue(curr[1]), 0);
+
         let tableRows = '';
-        Object.entries(data).sort((a, b) => {
-            const regA = a[1].registros || (typeof a[1] === 'number' ? a[1] : 0);
-            const regB = b[1].registros || (typeof b[1] === 'number' ? b[1] : 0);
-            return regB - regA;
-        }).forEach(([bairro, info]) => {
+        sorted.forEach(([bairro, info], index) => {
             const pessoas = info.pessoas || (typeof info === 'number' ? info : 0);
             const pacotes = info.sacolas || 0;
             const sacolas = info.sacolas ? info.sacolas * 10 : 0;
             const registros = info.registros || (typeof info === 'number' ? info : 0);
+            const val = getMetricValue(info);
+            const pct = totalMetric > 0 ? ((val / totalMetric) * 100).toFixed(1) : '0.0';
+
+            let rankBadge = `<span class="rank-badge rank-default">${index + 1}º</span>`;
+            let barColor = '#3b82f6';
+            if (index === 0) {
+                rankBadge = `<span class="rank-badge rank-1">🥇 1º</span>`;
+                barColor = '#eab308';
+            } else if (index === 1) {
+                rankBadge = `<span class="rank-badge rank-2">🥈 2º</span>`;
+                barColor = '#94a3b8';
+            } else if (index === 2) {
+                rankBadge = `<span class="rank-badge rank-3">🥉 3º</span>`;
+                barColor = '#f97316';
+            }
 
             tableRows += `
                 <tr>
-                    <td><strong>${bairro}</strong></td>
-                    <td>${registros}</td>
-                    <td>${pessoas}</td>
-                    <td>${pacotes}</td>
-                    <td>${sacolas}</td>
+                    <td style="width: 55px;">${rankBadge}</td>
+                    <td><strong>${escapeHtml(bairro)}</strong></td>
+                    <td style="font-weight: 600; color: #10b981;">${pessoas.toLocaleString('pt-BR')}</td>
+                    <td style="font-weight: 700; color: #2563eb;">${sacolas.toLocaleString('pt-BR')}</td>
+                    <td>${registros.toLocaleString('pt-BR')}</td>
+                    <td style="min-width: 130px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; margin-bottom: 3px;">
+                            <span>${pct}%</span>
+                        </div>
+                        <div class="resumo-progress-bg">
+                            <div class="resumo-progress-fill" style="width: ${pct}%; background-color: ${barColor};"></div>
+                        </div>
+                    </td>
                 </tr>
             `;
         });
@@ -763,24 +996,24 @@ document.addEventListener('DOMContentLoaded', () => {
         resumoView.innerHTML = `
             <div class="resumo-cards-wrapper">
                 <div class="resumo-card-info">
-                    <h3>Total de Bairros Atendidos</h3>
+                    <h3>Bairros Atendidos</h3>
                     <span class="res-value">${Object.keys(data).length}</span>
-                    <span class="res-sub">Locais com entregas</span>
+                    <span class="res-sub">Comunidades ativas</span>
                 </div>
                 <div class="resumo-card-info">
                     <h3>Bairro Mais Ativo</h3>
-                    <span class="res-value" style="font-size: 1.4rem;">${bairroMaisAtivo.nome}</span>
+                    <span class="res-value" style="font-size: 1.35rem;">${escapeHtml(bairroMaisAtivo.nome)}</span>
                     <span class="res-sub">${bairroMaisAtivo.max} registros</span>
                 </div>
                 <div class="resumo-card-info">
-                    <h3>Média de Pacotes</h3>
-                    <span class="res-value">${totalRegistros > 0 ? Math.round(totalPacotes / totalRegistros) : 0}</span>
-                    <span class="res-sub">Pacotes por registro</span>
+                    <h3>Média de Sacolas</h3>
+                    <span class="res-value">${totalRegistros > 0 ? (totalSacolas / totalRegistros).toFixed(1) : 0}</span>
+                    <span class="res-sub">Sacolas por família</span>
                 </div>
                 <div class="resumo-card-info">
-                    <h3>Média de Pessoas</h3>
+                    <h3>Média de Munícipes</h3>
                     <span class="res-value">${totalRegistros > 0 ? (totalPessoas / totalRegistros).toFixed(1) : 0}</span>
-                    <span class="res-sub">Pessoas por registro</span>
+                    <span class="res-sub">Pessoas por domicílio</span>
                 </div>
             </div>
             
@@ -788,11 +1021,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 <table class="resumo-table">
                     <thead>
                         <tr>
+                            <th style="width: 55px;">Pos.</th>
                             <th>Bairro</th>
+                            <th>Munícipes</th>
+                            <th>Sacolas</th>
                             <th>Registros</th>
-                            <th>Pessoas Atendidas</th>
-                            <th>Pacotes Distribuídos</th>
-                            <th>Sacolas Distribuídas</th>
+                            <th>Participação</th>
                         </tr>
                     </thead>
                     <tbody>

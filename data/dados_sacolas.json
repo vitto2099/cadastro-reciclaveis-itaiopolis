@@ -1,0 +1,78 @@
+{
+  "status": "success",
+  "total": 280,
+  "totalSacolas": 288,
+  "totalPessoas": 1361,
+  "bairrosDist": {
+    "Centro": {
+      "registros": 133,
+      "pessoas": 881,
+      "sacolas": 135
+    },
+    "Vila Nova": {
+      "registros": 46,
+      "pessoas": 144,
+      "sacolas": 50
+    },
+    "Vila Gaúcha": {
+      "registros": 3,
+      "pessoas": 8,
+      "sacolas": 3
+    },
+    "Interior": {
+      "registros": 29,
+      "pessoas": 112,
+      "sacolas": 31
+    },
+    "Bom Sucesso": {
+      "registros": 1,
+      "pessoas": 2,
+      "sacolas": 1
+    },
+    "Paraguaçu": {
+      "registros": 4,
+      "pessoas": 14,
+      "sacolas": 4
+    },
+    "São Lourenço": {
+      "registros": 1,
+      "pessoas": 3,
+      "sacolas": 1
+    },
+    "Lucena": {
+      "registros": 12,
+      "pessoas": 37,
+      "sacolas": 12
+    },
+    "Bom Jesus": {
+      "registros": 46,
+      "pessoas": 148,
+      "sacolas": 46
+    },
+    "Mafra": {
+      "registros": 1,
+      "pessoas": 1,
+      "sacolas": 1
+    },
+    "São Pedro": {
+      "registros": 1,
+      "pessoas": 4,
+      "sacolas": 1
+    },
+    "Distrito": {
+      "registros": 1,
+      "pessoas": 1,
+      "sacolas": 1
+    },
+    "Poço Claro": {
+      "registros": 1,
+      "pessoas": 2,
+      "sacolas": 1
+    },
+    "Vila José Dresseno": {
+      "registros": 1,
+      "pessoas": 4,
+      "sacolas": 1
+    }
+  }
+}
