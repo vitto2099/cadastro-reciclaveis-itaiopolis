@@ -656,10 +656,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const colors = [
-            '#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231',
-            '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe',
-            '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000',
-            '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080'
+            '#2563eb', '#10b981', '#f59e0b', '#ef4444', '#f97316',
+            '#06b6d4', '#8b5cf6', '#14b8a6', '#84cc16', '#ec4899',
+            '#6366f1', '#3b82f6', '#10b981', '#f97316', '#eab308',
+            '#64748b', '#0284c7', '#059669', '#d97706', '#dc2626'
         ];
 
         bairrosChartInstance = new Chart(ctx, {

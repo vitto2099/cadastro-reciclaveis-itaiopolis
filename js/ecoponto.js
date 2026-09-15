@@ -20,13 +20,13 @@ const ICONS_SVG = {
     package: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>`
 };
 
-// Metadados das categorias
+// Metadados das categorias seguindo as cores oficiais das lixeiras de reciclagem
 const WASTE_METADATA = {
-    "Recicláveis": { svg: ICONS_SVG.recycle, colorClass: "badge-emerald", label: "Recicláveis" },
-    "Baterias e Pilhas": { svg: ICONS_SVG.battery, colorClass: "badge-amber", label: "Baterias e Pilhas" },
-    "Eletrônicos": { svg: ICONS_SVG.electronics, colorClass: "badge-indigo", label: "Eletrônicos" },
-    "Vidros": { svg: ICONS_SVG.glass, colorClass: "badge-cyan", label: "Vidros" },
-    "Lâmpadas": { svg: ICONS_SVG.lamp, colorClass: "badge-gold", label: "Lâmpadas" }
+    "Vidros": { svg: ICONS_SVG.glass, colorClass: "badge-emerald", color: "#10b981", label: "Vidros" }, // Verde: Vidro
+    "Recicláveis": { svg: ICONS_SVG.recycle, colorClass: "badge-blue", color: "#2563eb", label: "Recicláveis" }, // Azul: Papel/Reciclável
+    "Baterias e Pilhas": { svg: ICONS_SVG.battery, colorClass: "badge-orange", color: "#f97316", label: "Baterias e Pilhas" }, // Laranja: Baterias/Perigosos
+    "Eletrônicos": { svg: ICONS_SVG.electronics, colorClass: "badge-red", color: "#ef4444", label: "Eletrônicos" }, // Vermelho: Eletrônicos/Plásticos
+    "Lâmpadas": { svg: ICONS_SVG.lamp, colorClass: "badge-gold", color: "#eab308", label: "Lâmpadas" } // Amarelo: Metais/Lâmpadas
 };
 
 // Dados históricos oficiais importados de 'Reciclaveis Meio Ambiente.xlsx' (127 registros)
@@ -2047,14 +2047,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 ? coletas 
                 : coletas.filter(c => c.dataColeta && c.dataColeta.startsWith(selectedMonth));
 
-            // Calcular KPIs
+            // Calcular KPIs com cores oficiais das lixeiras de reciclagem (CONAMA)
             let totalPeso = 0;
             const categoryMap = {
-                "Recicláveis": { peso: 0, count: 0, color: "#10b981", class: "badge-emerald" },
-                "Baterias e Pilhas": { peso: 0, count: 0, color: "#f59e0b", class: "badge-amber" },
-                "Eletrônicos": { peso: 0, count: 0, color: "#6366f1", class: "badge-indigo" },
-                "Vidros": { peso: 0, count: 0, color: "#06b6d4", class: "badge-cyan" },
-                "Lâmpadas": { peso: 0, count: 0, color: "#eab308", class: "badge-gold" }
+                "Vidros": { peso: 0, count: 0, color: "#10b981", class: "badge-emerald" }, // Verde: Vidro
+                "Recicláveis": { peso: 0, count: 0, color: "#2563eb", class: "badge-blue" }, // Azul: Papel/Reciclável
+                "Baterias e Pilhas": { peso: 0, count: 0, color: "#f97316", class: "badge-orange" }, // Laranja: Baterias/Perigosos
+                "Eletrônicos": { peso: 0, count: 0, color: "#ef4444", class: "badge-red" }, // Vermelho: Eletrônicos
+                "Lâmpadas": { peso: 0, count: 0, color: "#eab308", class: "badge-gold" } // Amarelo: Metais/Lâmpadas
             };
             const destinoMap = {};
 
@@ -2312,6 +2312,9 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             const values = sortedMonths.map(mKey => monthlyWeights[mKey]);
 
+            const binColors = ['#10b981', '#2563eb', '#f97316', '#ef4444', '#eab308', '#06b6d4'];
+            const barColors = values.map((_, i) => binColors[i % binColors.length]);
+
             const ctx = canvas.getContext("2d");
             ecopontoMonthChartInstance = new Chart(ctx, {
                 type: 'bar',
@@ -2320,9 +2323,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     datasets: [{
                         label: 'Total Saído (kg)',
                         data: values,
-                        backgroundColor: '#10b981',
+                        backgroundColor: barColors,
                         borderRadius: 6,
-                        hoverBackgroundColor: '#059669',
+                        hoverBackgroundColor: barColors,
+                        borderColor: '#ffffff',
+                        borderWidth: 1,
                         maxBarThickness: 45
                     }]
                 },

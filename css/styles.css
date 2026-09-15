@@ -178,6 +178,8 @@ body {
 }
 .badge-emerald { background: rgba(16, 185, 129, 0.12); color: #059669; }
 .badge-amber   { background: rgba(245, 158, 11, 0.14); color: #d97706; }
+.badge-orange  { background: rgba(249, 115, 22, 0.14); color: #ea580c; }
+.badge-red     { background: rgba(239, 68, 68, 0.12); color: #dc2626; }
 .badge-indigo  { background: rgba(99, 102, 241, 0.12); color: #4f46e5; }
 .badge-cyan    { background: rgba(6, 182, 212, 0.14); color: #0891b2; }
 .badge-gold    { background: rgba(234, 179, 8, 0.16); color: #b45309; }
@@ -272,11 +274,12 @@ body {
 .form-group input[type="number"],
 .doc-input-wrapper input[type="text"] {
     width: 100%;
-    padding: 0.65rem 0.95rem;
+    padding: 0.7rem 0.95rem;
     border: 1px solid #cbd5e0;
     border-radius: 8px;
-    font-size: 0.95rem;
+    font-size: 1rem; /* 16px: previne auto-zoom no iOS Safari */
     font-family: inherit;
+    min-height: 44px;
     transition: all 0.2s ease;
     background: var(--input-bg);
     color: var(--text-main);
@@ -646,9 +649,10 @@ body {
 
 @media (max-width: 768px) {
     .footer-compact-bar {
-        padding: 0.75rem 1rem;
+        padding: 0.65rem 0.85rem calc(0.65rem + env(safe-area-inset-bottom, 0px)) 0.85rem;
         justify-content: center;
         text-align: center;
+        gap: 8px;
     }
     .footer-compact-left, .footer-compact-center, .footer-compact-right {
         justify-content: center;
@@ -1144,107 +1148,394 @@ body {
     }
 }
 
+/* ============================================================
+   RESPONSIVIDADE MOBILE & TABLET (PADRÃO APP MUNICIPAL)
+   ============================================================ */
+
 @media (max-width: 768px) {
+    /* 1. CABEÇALHO COMPACTO E ERGONÔMICO */
     .header {
         flex-direction: column;
-        gap: 15px;
-        text-align: center;
+        gap: 8px;
+        padding: 0.5rem 0.85rem calc(0.4rem + env(safe-area-inset-top, 0px)) 0.85rem;
+        text-align: left;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(12px);
+    }
+
+    .header.scrolled {
+        padding: 0.25rem 0.75rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        gap: 4px;
     }
 
     .logo-placeholder {
-        flex-direction: column;
-    }
-    
-    .stats-section {
-        padding: 1.5rem 5% 1rem;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        flex-direction: row;
+        align-items: center;
         gap: 10px;
-    }
-    
-    .stat-card {
-        min-width: unset;
-        padding: 1rem;
-        flex-direction: column;
-        text-align: center;
-        gap: 8px;
+        width: 100%;
     }
 
-    .stat-number, .stat-icon {
-        font-size: 1.8rem;
+    .city-logo {
+        height: 34px;
+        width: auto;
+    }
+
+    .header.scrolled .city-logo {
+        height: 24px;
+    }
+
+    .logo-text h1 {
+        font-size: 0.95rem;
+        font-weight: 800;
+        line-height: 1.15;
+        margin-bottom: 0;
+        letter-spacing: -0.01em;
+    }
+
+    .header.scrolled .logo-text h1 {
+        font-size: 0.85rem;
+    }
+
+    .logo-text span {
+        font-size: 0.65rem;
+        font-weight: 700;
+        display: block;
+        line-height: 1.15;
+        color: var(--primary-color);
+        letter-spacing: 0.04em;
+    }
+
+    .header.scrolled .logo-text span {
+        display: none;
+    }
+
+    .header.scrolled .nav-btn-page {
+        min-height: 32px;
+        padding: 0.28rem 0.45rem !important;
+        font-size: 0.78rem !important;
+    }
+
+    .header-links {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+    }
+
+    /* Alternador de módulos tipo segmented control no mobile */
+    .nav-page-switcher {
+        width: 100%;
+        display: flex;
+        gap: 4px;
+        padding: 3px;
+        border-radius: 10px;
+        background: #f1f5f9;
+        border: 1px solid #cbd5e1;
+    }
+
+    .nav-btn-page {
+        flex: 1;
+        justify-content: center;
+        padding: 0.45rem 0.5rem !important;
+        font-size: 0.82rem !important;
+        min-height: 38px;
+        border-radius: 8px !important;
+        gap: 5px !important;
+    }
+
+    /* Ocultar links externos secundários do cabeçalho fixo no mobile */
+    .header .nav-link-external {
+        display: none !important;
+    }
+
+    /* 2. CARDS DE INDICADORES / MÉTRICAS (GRID 2x2 MODERNO) */
+    .stats-section {
+        padding: 0.65rem 0.75rem 0.35rem;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 7px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .stat-card {
+        min-width: unset;
+        padding: 0.6rem 0.7rem;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        text-align: left;
+        gap: 8px;
+        border-radius: 12px;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .stat-card .stat-icon,
+    .stat-card .icon-badge {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+        border-radius: 8px;
+        flex-shrink: 0;
+    }
+
+    .stat-number {
+        font-size: 1.25rem;
+        font-weight: 800;
+        line-height: 1.1;
+        display: block;
     }
 
     .stat-label {
-        font-size: 0.85rem;
+        font-size: 0.72rem;
+        line-height: 1.15;
+        display: block;
+        color: var(--text-muted);
+        font-weight: 600;
     }
-    
-    .form-section {
-        padding: 2rem;
-        margin: 0 1rem;
-        width: auto;
-    }
-}
 
-@media (max-width: 480px) {
-    .stats-section {
-        grid-template-columns: repeat(2, 1fr);
+    .stat-card.action-card {
+        grid-column: span 2;
+        justify-content: center;
+        padding: 0.65rem 1rem;
+        background: #ecfdf5 !important;
+        border: 1.5px solid #059669 !important;
+    }
+
+    .stat-card.action-card .stat-label {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #059669 !important;
+    }
+
+    /* 3. CONTEÚDO PRINCIPAL E FORMULÁRIO */
+    .main-content {
+        padding: 0.35rem 0.65rem 2rem 0.65rem;
+    }
+
+    .form-section {
+        padding: 1.2rem 0.95rem;
+        margin: 0;
+        width: 100%;
+        border-radius: 14px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-header h2 {
+        font-size: 1.18rem;
+        line-height: 1.3;
+        margin-bottom: 0.35rem;
+    }
+
+    .form-header p {
+        font-size: 0.82rem;
+        line-height: 1.4;
+        margin-bottom: 1rem;
+    }
+
+    .form-group {
+        margin-bottom: 0.9rem;
+    }
+
+    .form-group label {
+        font-size: 0.86rem;
+        margin-bottom: 0.35rem;
     }
 
     .form-row {
         flex-direction: column;
-        gap: 1.2rem;
-    }
-    
-    .form-section {
-        padding: 1.5rem;
-        border-radius: 12px;
+        gap: 0.9rem;
     }
 
-    .form-header h2 {
-        font-size: 1.4rem;
+    /* Inputs com font-size 16px para trava de zoom e touch seguro */
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .doc-input-wrapper input[type="text"],
+    select {
+        font-size: 16px !important;
+        min-height: 44px;
+        padding: 0.65rem 0.85rem;
+        border-radius: 8px;
     }
 
+    /* Seletor de CPF / CNPJ */
+    .doc-type-selector {
+        display: flex;
+        gap: 6px;
+    }
+
+    .doc-type-btn {
+        flex: 1;
+        min-height: 42px;
+        font-size: 0.88rem;
+        font-weight: 700;
+        border-radius: 8px;
+    }
+
+    /* Checkboxes de exceção (Sem documento / S/N) */
+    .doc-input-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+    }
+
+    .sem-doc-check {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 8px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        min-height: 42px;
+        cursor: pointer;
+    }
+
+    .sem-doc-check input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--primary-color);
+        margin: 0;
+    }
+
+    .sem-doc-check label {
+        font-size: 0.84rem;
+        font-weight: 600;
+        margin-bottom: 0;
+        cursor: pointer;
+    }
+
+    /* Grid de Bairros no Celular: 2 colunas com altura de toque ergonômica */
+    .bairro-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+        max-height: 240px;
+        overflow-y: auto;
+        padding: 5px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        background: #f8fafc;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .bairro-btn {
+        min-height: 38px;
+        padding: 6px 8px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Botão de Envio */
     .submit-btn {
-        padding: 1rem;
+        min-height: 48px;
         font-size: 1rem;
+        padding: 0.85rem 1rem;
+        border-radius: 10px;
+        margin-top: 1rem;
     }
-}
 
-/* MODAL GRAFICO */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    backdrop-filter: blur(5px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
+    /* 4. MODAIS MOBILE ESTILO BOTTOM SHEET COM BOTÃO FECHAR STICKY */
+    .modal-overlay {
+        align-items: flex-end !important;
+        padding: 0 !important;
+    }
 
-.modal-content {
-    background: var(--card-bg);
-    padding: 2rem;
-    border-radius: 16px;
-    width: 90%;
-    max-width: 650px;
-    position: relative;
-    box-shadow: var(--shadow-lg);
-    animation: slideUp 0.4s ease;
-}
+    .modal-content.modal-large {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 92vh !important;
+        max-height: 92vh !important;
+        border-radius: 22px 22px 0 0 !important;
+        padding: 1.15rem 0.95rem calc(1rem + env(safe-area-inset-bottom, 0px)) 0.95rem !important;
+        margin: 0 !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.25);
+    }
 
-.modal-content.modal-large {
-    max-width: calc(100vw - 80px);
-    width: calc(100vw - 80px);
-    height: calc(100vh - 80px);
-    max-height: calc(100vh - 80px);
-    border-radius: 20px;
-    padding: 2.5rem;
-    display: flex;
-    flex-direction: column;
+    /* O botão fechar permanece fixo/sticky no topo superior direito durante a rolagem */
+    .modal-content .close-modal {
+        position: sticky !important;
+        top: 0 !important;
+        float: right;
+        margin-top: -4px;
+        margin-right: -2px;
+        z-index: 100;
+        width: 40px !important;
+        height: 40px !important;
+        min-height: 40px !important;
+        border-radius: 50% !important;
+        background: #f1f5f9 !important;
+        border: 1.5px solid #cbd5e1 !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+    }
+
+    .modal-content h2 {
+        font-size: 1.15rem !important;
+        text-align: left !important;
+        margin-top: 0;
+        margin-bottom: 0.75rem;
+        padding-right: 42px;
+    }
+
+    .dashboard-controls {
+        flex-direction: column !important;
+        gap: 8px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .dashboard-controls .control-group {
+        width: 100% !important;
+    }
+
+    .dashboard-controls .dash-select {
+        min-width: 100% !important;
+        font-size: 16px !important;
+        min-height: 42px;
+    }
+
+    .dashboard-controls .toggle-group {
+        width: 100% !important;
+        margin-left: 0 !important;
+        display: flex !important;
+        padding: 3px;
+        border-radius: 9px;
+    }
+
+    .dashboard-controls .toggle-btn {
+        flex: 1 !important;
+        min-height: 38px;
+        font-size: 0.8rem !important;
+        padding: 6px 8px !important;
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+    }
+
+    .dashboard-controls .export-btn {
+        width: 100% !important;
+        min-height: 42px;
+        margin-left: 0 !important;
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .chart-container,
+    .map-container {
+        min-height: 250px !important;
+        max-height: 270px !important;
+    }
 }
 
 .modal-content h2 {
@@ -1255,17 +1546,51 @@ body {
 
 .close-modal {
     position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 1.8rem;
-    font-weight: bold;
+    top: 16px;
+    right: 18px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    border: 1.5px solid #cbd5e1;
+    color: #475569;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    color: var(--text-muted);
-    transition: color 0.2s;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+    z-index: 100;
+    padding: 0;
+    outline: none;
 }
 
 .close-modal:hover {
-    color: var(--primary-color);
+    background: #fee2e2;
+    border-color: #fca5a5;
+    color: #dc2626;
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.18);
+}
+
+.close-modal:active {
+    transform: scale(0.94);
+}
+
+body.dark-theme .close-modal {
+    background: #1e293b;
+    border-color: #334155;
+    color: #94a3b8;
+}
+
+body.dark-theme .close-modal:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: #ef4444;
+    color: #f87171;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
 
 /* Dashboard Controls */
