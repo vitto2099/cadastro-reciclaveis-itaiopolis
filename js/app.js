@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let bairrosData = DADOS_HISTORICOS_SACOLAS.bairrosDist; // Carrega dados históricos imediatamente
     let bairrosBarChartInstance = null; // Instancia do grafico de barras (Ranking)
     let bairrosDonutChartInstance = null; // Instancia do grafico de rosca (Proporcao)
+    let bairrosPolarChartInstance = null; // Instancia do grafico polar (Radar/Amplitude)
 
     // Chamar a busca APÓS as variáveis terem sido declaradas
     fetchTotalCadastros();
@@ -601,13 +602,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const dashMetric = document.getElementById('dash-metric');
     const btnViewBars = document.getElementById('btn-view-chart-bars') || document.getElementById('btn-view-chart');
     const btnViewDonut = document.getElementById('btn-view-chart-donut');
+    const btnViewPolar = document.getElementById('btn-view-chart-polar');
     const btnViewResumo = document.getElementById('btn-view-resumo');
     const btnViewMap = document.getElementById('btn-view-map');
 
     const chartViewBars = document.getElementById('chart-view-bars') || document.getElementById('chart-view');
     const chartViewDonut = document.getElementById('chart-view-donut');
+    const chartViewPolar = document.getElementById('chart-view-polar');
     const resumoView = document.getElementById('resumo-view');
     const mapView = document.getElementById('map-view');
+    const btnExportSacosPng = document.getElementById('btn-export-sacos-png');
+    const btnExportAllSacosPng = document.getElementById('btn-export-all-sacos-png');
 
     let leafletMap = null;
     let currentMapLayer = null;
@@ -650,15 +655,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Alternância de Abas (Ranking, Proporção, Resumo, Mapa)
+    // Alternância de Abas (Ranking, Proporção, Polar, Resumo, Mapa)
     function setActiveDashTab(tab) {
         if (btnViewBars) btnViewBars.classList.toggle('active', tab === 'bars');
         if (btnViewDonut) btnViewDonut.classList.toggle('active', tab === 'donut');
+        if (btnViewPolar) btnViewPolar.classList.toggle('active', tab === 'polar');
         if (btnViewResumo) btnViewResumo.classList.toggle('active', tab === 'resumo');
         if (btnViewMap) btnViewMap.classList.toggle('active', tab === 'map');
 
         if (chartViewBars) chartViewBars.style.display = tab === 'bars' ? 'block' : 'none';
         if (chartViewDonut) chartViewDonut.style.display = tab === 'donut' ? 'block' : 'none';
+        if (chartViewPolar) chartViewPolar.style.display = tab === 'polar' ? 'block' : 'none';
         if (resumoView) resumoView.style.display = tab === 'resumo' ? 'flex' : 'none';
         if (mapView) mapView.style.display = tab === 'map' ? 'block' : 'none';
 
@@ -673,11 +680,337 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnViewBars) btnViewBars.addEventListener('click', () => setActiveDashTab('bars'));
     if (btnViewDonut) btnViewDonut.addEventListener('click', () => setActiveDashTab('donut'));
+    if (btnViewPolar) btnViewPolar.addEventListener('click', () => setActiveDashTab('polar'));
     if (btnViewResumo) btnViewResumo.addEventListener('click', () => setActiveDashTab('resumo'));
     if (btnViewMap) btnViewMap.addEventListener('click', () => setActiveDashTab('map'));
 
     if (dashMetric) {
         dashMetric.addEventListener('change', updateDashboard);
+    }
+
+    // Exportação do Gráfico Ativo em Imagem PNG de Alta Definição
+    function exportChartToPng(chartInstance, filename, title, subtitle) {
+        if (!chartInstance || !chartInstance.canvas) {
+            showToast("Selecione uma visualização gráfica para baixar a imagem.", "warning");
+            return;
+        }
+
+        try {
+            const srcCanvas = chartInstance.canvas;
+            const targetWidth = Math.max(srcCanvas.width, 900);
+            const scale = targetWidth / srcCanvas.width;
+            const targetHeight = Math.round(srcCanvas.height * scale);
+
+            const padX = 36;
+            const padTop = 90;
+            const padBottom = 48;
+
+            const outCanvas = document.createElement('canvas');
+            outCanvas.width = targetWidth + (padX * 2);
+            outCanvas.height = targetHeight + padTop + padBottom;
+            const ctx = outCanvas.getContext('2d');
+
+            // Fundo Branco
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, outCanvas.width, outCanvas.height);
+
+            // Faixa azul no topo (identidade municipal)
+            ctx.fillStyle = '#1a365d';
+            ctx.fillRect(0, 0, outCanvas.width, 6);
+
+            // Título
+            ctx.fillStyle = '#0f172a';
+            ctx.font = 'bold 22px "Plus Jakarta Sans", system-ui, -apple-system, sans-serif';
+            ctx.fillText(title, padX, 42);
+
+            // Subtítulo
+            ctx.fillStyle = '#64748b';
+            ctx.font = '500 13px "Plus Jakarta Sans", system-ui, -apple-system, sans-serif';
+            ctx.fillText(subtitle, padX, 66);
+
+            // Divisória sutil
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(padX, 78);
+            ctx.lineTo(outCanvas.width - padX, 78);
+            ctx.stroke();
+
+            // Gráfico desenhado em alta resolução
+            ctx.drawImage(srcCanvas, padX, padTop, targetWidth, targetHeight);
+
+            // Linha do rodapé
+            const footerY = outCanvas.height - 18;
+            ctx.strokeStyle = '#f1f5f9';
+            ctx.beginPath();
+            ctx.moveTo(padX, outCanvas.height - padBottom + 12);
+            ctx.lineTo(outCanvas.width - padX, outCanvas.height - padBottom + 12);
+            ctx.stroke();
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '11px "Plus Jakarta Sans", system-ui, -apple-system, sans-serif';
+            ctx.fillText("Prefeitura Municipal de Itaiópolis / SC — Secretaria de Meio Ambiente", padX, footerY);
+
+            const nowStr = new Date().toLocaleDateString('pt-BR');
+            const rightText = `Exportado em ${nowStr}`;
+            const rightW = ctx.measureText(rightText).width;
+            ctx.fillText(rightText, outCanvas.width - padX - rightW, footerY);
+
+            // Disparo automático do download
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = outCanvas.toDataURL('image/png');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showToast("Gráfico baixado como imagem PNG com sucesso!", "success");
+        } catch (e) {
+            console.error("Erro ao exportar imagem:", e);
+            showToast("Erro ao gerar imagem do gráfico.", "error");
+        }
+    }
+
+    if (btnExportSacosPng) {
+        btnExportSacosPng.addEventListener('click', () => {
+            const metric = dashMetric ? dashMetric.value : 'pessoas';
+            const metricName = metric === 'sacolas' ? 'Sacolas Distribuídas' : (metric === 'registros' ? 'Registros Realizados' : 'Munícipes Atendidos');
+            
+            if (btnViewPolar && btnViewPolar.classList.contains('active')) {
+                exportChartToPng(
+                    bairrosPolarChartInstance, 
+                    `grafico_polar_bairros_${metric}_itaiopolis.png`,
+                    `Distribuição Polar por Bairro — ${metricName}`,
+                    "Programa de Sacolas Recicláveis — Município de Itaiópolis / SC"
+                );
+            } else if (btnViewDonut && btnViewDonut.classList.contains('active')) {
+                exportChartToPng(
+                    bairrosDonutChartInstance, 
+                    `grafico_proporcao_bairros_${metric}_itaiopolis.png`,
+                    `Proporção Territorial por Bairro — ${metricName}`,
+                    "Programa de Sacolas Recicláveis — Município de Itaiópolis / SC"
+                );
+            } else if (btnViewBars && btnViewBars.classList.contains('active')) {
+                exportChartToPng(
+                    bairrosBarChartInstance, 
+                    `grafico_ranking_bairros_${metric}_itaiopolis.png`,
+                    `Ranking de Distribuição por Bairro — ${metricName}`,
+                    "Programa de Sacolas Recicláveis — Município de Itaiópolis / SC"
+                );
+            } else {
+                showToast("Para baixar a imagem, selecione uma das opções gráficas (Ranking, Proporção ou Polar).", "info");
+            }
+        });
+    }
+
+    // Helper para gerar cartão institucional a partir de configuração Chart.js em canvas offscreen
+    function generateSacosInstitutionalCardFromConfig(config, title, subtitle, accentColor) {
+        const targetWidth = 1000;
+        const targetHeight = 520;
+        const padX = 36;
+        const padTop = 90;
+        const padBottom = 48;
+
+        const chartCanvas = document.createElement('canvas');
+        chartCanvas.width = targetWidth;
+        chartCanvas.height = targetHeight;
+        const chartCtx = chartCanvas.getContext('2d');
+
+        config.options = config.options || {};
+        config.options.animation = false;
+        config.options.responsive = false;
+        config.options.maintainAspectRatio = false;
+
+        const tempChart = new Chart(chartCtx, config);
+
+        const outCanvas = document.createElement('canvas');
+        outCanvas.width = targetWidth + (padX * 2);
+        outCanvas.height = targetHeight + padTop + padBottom;
+        const ctx = outCanvas.getContext('2d');
+
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, outCanvas.width, outCanvas.height);
+
+        ctx.fillStyle = accentColor || '#1a365d';
+        ctx.fillRect(0, 0, outCanvas.width, 6);
+
+        ctx.fillStyle = '#0f172a';
+        ctx.font = 'bold 22px "Plus Jakarta Sans", system-ui, -apple-system, sans-serif';
+        ctx.fillText(title, padX, 42);
+
+        ctx.fillStyle = '#64748b';
+        ctx.font = '500 13px "Plus Jakarta Sans", system-ui, -apple-system, sans-serif';
+        ctx.fillText(subtitle, padX, 66);
+
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(padX, 78);
+        ctx.lineTo(outCanvas.width - padX, 78);
+        ctx.stroke();
+
+        ctx.drawImage(chartCanvas, padX, padTop, targetWidth, targetHeight);
+
+        const footerY = outCanvas.height - 18;
+        ctx.strokeStyle = '#f1f5f9';
+        ctx.beginPath();
+        ctx.moveTo(padX, outCanvas.height - padBottom + 12);
+        ctx.lineTo(outCanvas.width - padX, outCanvas.height - padBottom + 12);
+        ctx.stroke();
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '11px "Plus Jakarta Sans", system-ui, -apple-system, sans-serif';
+        ctx.fillText("Prefeitura Municipal de Itaiópolis / SC — Secretaria de Meio Ambiente", padX, footerY);
+
+        const nowStr = new Date().toLocaleDateString('pt-BR');
+        const rightText = `Exportado em ${nowStr}`;
+        const rightW = ctx.measureText(rightText).width;
+        ctx.fillText(rightText, outCanvas.width - padX - rightW, footerY);
+
+        const dataUrl = outCanvas.toDataURL('image/png');
+        tempChart.destroy();
+        return dataUrl;
+    }
+
+    if (btnExportAllSacosPng) {
+        btnExportAllSacosPng.addEventListener('click', () => {
+            const data = bairrosData || DADOS_HISTORICOS_SACOLAS.bairrosDist;
+            if (!data || Object.keys(data).length === 0) {
+                showToast("Nenhum dado disponível para exportar gráficos.", "warning");
+                return;
+            }
+
+            const metric = dashMetric ? dashMetric.value : 'pessoas';
+            const metricName = metric === 'sacolas' ? 'Sacolas Distribuídas' : (metric === 'registros' ? 'Registros Realizados' : 'Munícipes Atendidos');
+
+            showToast("Gerando pacote com todos os 3 gráficos de bairros...", "info");
+
+            const getMetricValue = (item) => {
+                if (typeof item === 'number') return item;
+                return metric === 'sacolas' ? (item.sacolas * 10) : (item[metric] || 0);
+            };
+
+            const sortedEntries = Object.entries(data).sort((a, b) => getMetricValue(b[1]) - getMetricValue(a[1]));
+            const barLabels = sortedEntries.map(e => e[0]);
+            const barValues = sortedEntries.map(e => getMetricValue(e[1]));
+
+            // 1. Config Ranking de Barras
+            const configBars = {
+                type: 'bar',
+                data: {
+                    labels: barLabels,
+                    datasets: [{
+                        label: metricName,
+                        data: barValues,
+                        backgroundColor: barValues.map((_, idx) => idx === 0 ? '#2563eb' : (idx < 3 ? '#3b82f6' : '#93c5fd')),
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    plugins: { legend: { display: false } },
+                    scales: { x: { beginAtZero: true } }
+                }
+            };
+
+            // 2. Config Donut Top Bairros
+            const top5 = sortedEntries.slice(0, 5);
+            const othersTotal = sortedEntries.slice(5).reduce((acc, curr) => acc + getMetricValue(curr[1]), 0);
+            const donutLabels = top5.map(e => e[0]);
+            const donutValues = top5.map(e => getMetricValue(e[1]));
+            if (othersTotal > 0) {
+                donutLabels.push('Outros Bairros');
+                donutValues.push(othersTotal);
+            }
+            const donutColors = ['#2563eb', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#94a3b8'];
+            const configDonut = {
+                type: 'doughnut',
+                data: {
+                    labels: donutLabels,
+                    datasets: [{
+                        data: donutValues,
+                        backgroundColor: donutColors.slice(0, donutLabels.length),
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { font: { family: "'Plus Jakarta Sans', sans-serif", size: 12, weight: '600' }, padding: 16 }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            };
+
+            // 3. Config Polar Area
+            const top7 = sortedEntries.slice(0, 7);
+            const polarLabels = top7.map(i => i[0]);
+            const polarValues = top7.map(i => getMetricValue(i[1]));
+            const polarColors = ['rgba(37, 99, 235, 0.78)', 'rgba(16, 185, 129, 0.78)', 'rgba(245, 158, 11, 0.78)', 'rgba(139, 92, 246, 0.78)', 'rgba(239, 68, 68, 0.78)', 'rgba(6, 182, 212, 0.78)', 'rgba(100, 116, 139, 0.78)'];
+            const configPolar = {
+                type: 'polarArea',
+                data: {
+                    labels: polarLabels,
+                    datasets: [{
+                        data: polarValues,
+                        backgroundColor: polarColors.slice(0, polarLabels.length),
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: { font: { family: "'Plus Jakarta Sans', sans-serif", size: 11, weight: '600' }, padding: 12 }
+                        }
+                    }
+                }
+            };
+
+            const img1 = generateSacosInstitutionalCardFromConfig(
+                configBars,
+                `Ranking de Distribuição por Bairro — ${metricName}`,
+                "Programa de Sacolas Recicláveis — Município de Itaiópolis / SC",
+                "#1a365d"
+            );
+            const img2 = generateSacosInstitutionalCardFromConfig(
+                configDonut,
+                `Proporção Territorial por Bairro — ${metricName}`,
+                "Programa de Sacolas Recicláveis — Município de Itaiópolis / SC",
+                "#1a365d"
+            );
+            const img3 = generateSacosInstitutionalCardFromConfig(
+                configPolar,
+                `Distribuição Polar por Bairro — ${metricName}`,
+                "Programa de Sacolas Recicláveis — Município de Itaiópolis / SC",
+                "#1a365d"
+            );
+
+            const downloads = [
+                { dataUrl: img1, filename: `1_ranking_bairros_${metric}_itaiopolis.png` },
+                { dataUrl: img2, filename: `2_proporcao_bairros_${metric}_itaiopolis.png` },
+                { dataUrl: img3, filename: `3_distribuicao_polar_bairros_${metric}_itaiopolis.png` }
+            ];
+
+            downloads.forEach((dl, idx) => {
+                setTimeout(() => {
+                    const link = document.createElement('a');
+                    link.download = dl.filename;
+                    link.href = dl.dataUrl;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }, idx * 350);
+            });
+
+            setTimeout(() => {
+                showToast("📦 Todos os 3 gráficos foram baixados com sucesso!", "success");
+            }, 1100);
+        });
     }
 
     const btnExportCsv = document.getElementById('btn-export-csv');
@@ -716,6 +1049,8 @@ document.addEventListener('DOMContentLoaded', () => {
             renderResumo(data, metric);
         } else if (btnViewDonut && btnViewDonut.classList.contains('active')) {
             renderDonutChart(data, metric);
+        } else if (btnViewPolar && btnViewPolar.classList.contains('active')) {
+            renderPolarChart(data, metric);
         } else {
             renderBarChart(data, metric);
         }
@@ -908,6 +1243,103 @@ document.addEventListener('DOMContentLoaded', () => {
                                 const val = context.raw || 0;
                                 const pct = total > 0 ? ((val / total) * 100).toFixed(1) : '0.0';
                                 return ` ${context.label}: ${val.toLocaleString('pt-BR')} (${pct}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // 2.1. VISÃO GRÁFICO POLAR AREA (Amplitude Top Bairros)
+    function renderPolarChart(data, metric) {
+        const canvas = document.getElementById('bairrosPolarChart');
+        if (!canvas || typeof Chart === 'undefined') return;
+
+        if (bairrosPolarChartInstance) {
+            bairrosPolarChartInstance.destroy();
+            bairrosPolarChartInstance = null;
+        }
+
+        const getMetricValue = (item) => {
+            if (typeof item === 'number') return item;
+            return metric === 'sacolas' ? (item.sacolas * 10) : (item[metric] || 0);
+        };
+
+        const sortedEntries = Object.entries(data)
+            .map(([bairro, info]) => ({ bairro, val: getMetricValue(info) }))
+            .filter(item => item.val > 0)
+            .sort((a, b) => b.val - a.val);
+
+        const topN = sortedEntries.slice(0, 7);
+        const labels = topN.map(i => i.bairro);
+        const values = topN.map(i => i.val);
+
+        const colors = [
+            'rgba(37, 99, 235, 0.78)',   // Azul
+            'rgba(16, 185, 129, 0.78)',  // Esmeralda
+            'rgba(245, 158, 11, 0.78)',  // Âmbar
+            'rgba(139, 92, 246, 0.78)',  // Roxo
+            'rgba(239, 68, 68, 0.78)',   // Vermelho
+            'rgba(6, 182, 212, 0.78)',   // Ciano
+            'rgba(100, 116, 139, 0.78)'  // Cinza
+        ];
+
+        const metricLabels = {
+            'pessoas': 'Munícipes',
+            'sacolas': 'Sacolas',
+            'registros': 'Registros'
+        };
+
+        const isDark = document.body.classList.contains('dark-theme');
+        const textColor = isDark ? '#e2e8f0' : '#334155';
+
+        const ctx = canvas.getContext('2d');
+        bairrosPolarChartInstance = new Chart(ctx, {
+            type: 'polarArea',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: values,
+                    backgroundColor: colors.slice(0, labels.length),
+                    borderWidth: 2,
+                    borderColor: isDark ? '#1e293b' : '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        ticks: {
+                            color: textColor,
+                            backdropColor: 'transparent',
+                            font: { family: 'Plus Jakarta Sans', size: 10 }
+                        },
+                        grid: {
+                            color: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            color: textColor,
+                            font: { family: 'Plus Jakarta Sans', size: 11, weight: '600' },
+                            padding: 12,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: isDark ? '#1e293b' : '#0f172a',
+                        padding: 12,
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function (context) {
+                                const val = context.raw || 0;
+                                return ` ${context.label}: ${val.toLocaleString('pt-BR')} ${metricLabels[metric] || ''}`;
                             }
                         }
                     }

@@ -1547,12 +1547,16 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* Permite rolagem externa natural sem cortar topo/rodapé */
+    overflow-y: auto !important; /* ROLAGEM EXTERNA: a tela toda pode ser rolada por fora */
+    -webkit-overflow-scrolling: touch;
+    padding: 2.5rem 1.25rem;
+    box-sizing: border-box;
     z-index: 1000;
 }
 
@@ -1562,20 +1566,24 @@ body {
     border-radius: 16px;
     width: 90%;
     max-width: 650px;
+    margin: auto; /* Centraliza verticalmente se couber; rola do topo ao fim se for maior */
     position: relative;
     box-shadow: var(--shadow-lg, 0 12px 32px rgba(0, 0, 0, 0.18));
     animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .modal-content.modal-large {
-    max-width: calc(100vw - 80px);
-    width: calc(100vw - 80px);
-    height: calc(100vh - 80px);
-    max-height: calc(100vh - 80px);
+    max-width: 1240px;
+    width: 95vw;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    margin: auto;
     border-radius: 20px;
-    padding: 2.25rem 2.5rem;
+    padding: 2rem 2.25rem;
     display: flex;
     flex-direction: column;
+    overflow: visible !important;
 }
 
 .modal-content h2 {
@@ -1585,9 +1593,11 @@ body {
 }
 
 .close-modal {
-    position: absolute;
-    top: 16px;
-    right: 18px;
+    position: sticky;
+    top: 14px;
+    float: right;
+    margin-top: -6px;
+    margin-right: -6px;
     width: 38px;
     height: 38px;
     border-radius: 50%;
@@ -1602,7 +1612,7 @@ body {
     font-weight: 700;
     line-height: 1;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     z-index: 100;
     padding: 0;
     outline: none;
@@ -1717,6 +1727,35 @@ body.dark-theme .close-modal:hover {
     box-shadow: var(--shadow-sm);
 }
 
+.export-btn-img {
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    color: #ffffff;
+}
+
+.export-btn-img:hover {
+    background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+    color: #ffffff;
+}
+
+.export-btn-all {
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+    color: #ffffff;
+}
+
+.export-btn-all:hover {
+    background: linear-gradient(135deg, #4338ca 0%, #3730a3 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+}
+
+.export-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-left: auto;
+}
+
 .dashboard-view-container {
     margin-top: 10px;
     flex: 1;
@@ -1739,13 +1778,24 @@ body.dark-theme .close-modal:hover {
 /* Resumo View */
 /* Estilos Modernos para Dashboard de Sacolas Amarelas (#chart-modal) */
 #chart-modal .modal-content {
-    max-width: 960px;
-    width: 94%;
-    max-height: 90vh;
-    height: auto;
-    overflow-y: auto;
+    max-width: 1240px;
+    width: 95vw;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: visible !important;
     padding: 2rem 2.25rem;
     border-radius: 20px;
+}
+
+#chart-modal .dashboard-view-container {
+    width: 100%;
+    min-height: 360px;
+    display: flex;
+    flex-direction: column;
 }
 
 .sacos-dash-kpis {

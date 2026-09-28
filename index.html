@@ -662,6 +662,10 @@
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
                             <span>Proporção</span>
                         </button>
+                        <button id="btn-view-chart-polar" class="toggle-btn" style="display: inline-flex; align-items: center; gap: 6px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                            <span>Polar / Radar</span>
+                        </button>
                         <button id="btn-view-resumo" class="toggle-btn" style="display: inline-flex; align-items: center; gap: 6px;">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/></svg>
                             <span>Resumo</span>
@@ -672,32 +676,49 @@
                         </button>
                     </div>
                     
-                    <button id="btn-export-csv" class="export-btn" style="margin-left: auto; display: inline-flex; align-items: center; gap: 6px;">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-                        <span>Exportar CSV</span>
-                    </button>
+                    <div class="export-actions">
+                        <button id="btn-export-sacos-png" class="export-btn export-btn-img" style="display: inline-flex; align-items: center; gap: 6px;" title="Baixar imagem em PNG do gráfico em evidência">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                            <span>Baixar Gráfico (PNG)</span>
+                        </button>
+                        <button id="btn-export-all-sacos-png" class="export-btn export-btn-all" style="display: inline-flex; align-items: center; gap: 6px;" title="Baixar todos os 3 gráficos de bairros de uma só vez">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                            <span>📦 Baixar Todos os Gráficos</span>
+                        </button>
+                        <button id="btn-export-csv" class="export-btn" style="display: inline-flex; align-items: center; gap: 6px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                            <span>Exportar CSV</span>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="dashboard-view-container" style="flex: 1; min-height: 350px; width: 100%; display: flex; flex-direction: column;">
+                <div class="dashboard-view-container" style="width: 100%; display: flex; flex-direction: column;">
                     <!-- 1. Visão Gráfico Barras (Ranking ordenado) -->
-                    <div class="chart-container" id="chart-view-bars" style="position: relative; flex: 1; width: 100%; min-height: 360px; height: 380px;">
+                    <div class="chart-container" id="chart-view-bars" style="position: relative; width: 100%; height: clamp(280px, 46vh, 380px);">
                         <canvas id="bairrosBarChart"></canvas>
                     </div>
 
                     <!-- 2. Visão Gráfico Donut (Proporção Top Bairros + Outros) -->
-                    <div class="chart-container" id="chart-view-donut" style="display: none; position: relative; flex: 1; width: 100%; min-height: 350px;">
-                        <div style="position: relative; width: 100%; max-width: 500px; height: 340px; margin: 0 auto;">
+                    <div class="chart-container" id="chart-view-donut" style="display: none; position: relative; width: 100%;">
+                        <div style="position: relative; width: 100%; max-width: 480px; height: clamp(260px, 44vh, 360px); margin: 0 auto;">
                             <canvas id="bairrosDonutChart"></canvas>
                         </div>
                     </div>
 
-                    <!-- 3. Visão Resumo (Tabela com medalhas e barra visual de progresso) -->
-                    <div class="resumo-container" id="resumo-view" style="display: none; flex: 1; width: 100%; overflow-y: auto; padding: 4px;">
+                    <!-- 3. Visão Gráfico Polar Area (Amplitude Top Bairros) -->
+                    <div class="chart-container" id="chart-view-polar" style="display: none; position: relative; width: 100%;">
+                        <div style="position: relative; width: 100%; max-width: 480px; height: clamp(260px, 44vh, 360px); margin: 0 auto;">
+                            <canvas id="bairrosPolarChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 4. Visão Resumo (Tabela com medalhas e barra visual de progresso) -->
+                    <div class="resumo-container" id="resumo-view" style="display: none; width: 100%; padding: 4px;">
                         <!-- Preenchido via JS -->
                     </div>
 
-                    <!-- 4. Visão Mapa (Leaflet) -->
-                    <div class="map-container" id="map-view" style="display: none; flex: 1; width: 100%; min-height: 350px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); position: relative;">
+                    <!-- 5. Visão Mapa (Leaflet) -->
+                    <div class="map-container" id="map-view" style="display: none; width: 100%; height: clamp(300px, 48vh, 400px); border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); position: relative;">
                         <div id="bairrosMap" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1;"></div>
                     </div>
                 </div>
@@ -741,16 +762,34 @@
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
                             <span>Categorias</span>
                         </button>
+                        <button id="btn-ecoponto-view-destinos" class="toggle-btn" style="display: inline-flex; align-items: center; gap: 6px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
+                            <span>Destinos</span>
+                        </button>
+                        <button id="btn-ecoponto-view-composicao" class="toggle-btn" style="display: inline-flex; align-items: center; gap: 6px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>
+                            <span>Composição Mensal</span>
+                        </button>
                         <button id="btn-ecoponto-view-evolucao" class="toggle-btn" style="display: inline-flex; align-items: center; gap: 6px;">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
                             <span>Evolução</span>
                         </button>
                     </div>
                     
-                    <button id="btn-export-ecoponto-month-csv" class="export-btn" style="margin-left: auto; display: inline-flex; align-items: center; gap: 6px;">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-                        <span>Exportar Mês</span>
-                    </button>
+                    <div class="export-actions">
+                        <button id="btn-export-ecoponto-png" class="export-btn export-btn-img" style="display: inline-flex; align-items: center; gap: 6px;" title="Baixar imagem em PNG do gráfico em evidência">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                            <span>Baixar Gráfico (PNG)</span>
+                        </button>
+                        <button id="btn-export-all-ecoponto-png" class="export-btn export-btn-all" style="display: inline-flex; align-items: center; gap: 6px;" title="Baixar todos os 4 gráficos do Ecoponto de uma só vez">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                            <span>📦 Baixar Todos os Gráficos</span>
+                        </button>
+                        <button id="btn-export-ecoponto-month-csv" class="export-btn" style="display: inline-flex; align-items: center; gap: 6px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                            <span>Exportar Mês</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Mini KPIs do Mês Selecionado -->
@@ -782,21 +821,33 @@
                 </div>
 
                 <!-- Container de Visualizações -->
-                <div class="dashboard-view-container" style="flex: 1; min-height: 320px; width: 100%; display: flex; flex-direction: column;">
+                <div class="dashboard-view-container" style="width: 100%; display: flex; flex-direction: column;">
                     <!-- 1. Visão Resumo por Categoria -->
-                    <div id="ecoponto-view-resumo" style="display: flex; flex-direction: column; gap: 14px; flex: 1; width: 100%; overflow-y: auto; padding: 4px;">
+                    <div id="ecoponto-view-resumo" style="display: flex; flex-direction: column; gap: 16px; width: 100%; padding: 4px;">
                         <!-- Inserido dinamicamente via JS -->
                     </div>
 
                     <!-- 2. Visão Gráfico Categorias (Doughnut) -->
-                    <div id="ecoponto-view-chart-box" style="display: none; width: 100%; height: 340px; position: relative;">
-                        <div style="position: relative; width: 100%; max-width: 480px; height: 320px; margin: 0 auto;">
+                    <div id="ecoponto-view-chart-box" style="display: none; width: 100%; position: relative;">
+                        <div style="position: relative; width: 100%; max-width: 480px; height: clamp(260px, 44vh, 360px); margin: 0 auto;">
                             <canvas id="ecopontoCategoryChart"></canvas>
                         </div>
                     </div>
+
+                    <!-- 3. Visão Gráfico Destinos (Doughnut) -->
+                    <div id="ecoponto-view-destinos-box" style="display: none; width: 100%; position: relative;">
+                        <div style="position: relative; width: 100%; max-width: 480px; height: clamp(260px, 44vh, 360px); margin: 0 auto;">
+                            <canvas id="ecopontoDestinosChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 4. Visão Gráfico Composição Mensal (Barras Empilhadas) -->
+                    <div id="ecoponto-view-composicao-box" style="display: none; position: relative; width: 100%; height: clamp(280px, 46vh, 380px);">
+                        <canvas id="ecopontoComposicaoChart"></canvas>
+                    </div>
                     
-                    <!-- 3. Visão Gráfico Evolução Mensal (Barras) -->
-                    <div id="ecoponto-view-evolucao-box" style="display: none; position: relative; width: 100%; height: 320px; max-height: 340px;">
+                    <!-- 5. Visão Gráfico Evolução Mensal (Barras Totais) -->
+                    <div id="ecoponto-view-evolucao-box" style="display: none; position: relative; width: 100%; height: clamp(280px, 46vh, 380px);">
                         <canvas id="ecopontoMonthlyChart"></canvas>
                     </div>
                 </div>

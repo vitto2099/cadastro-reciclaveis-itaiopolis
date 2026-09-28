@@ -6,7 +6,7 @@
 // URL do Google Apps Script Unificado (atende Sacos Recicláveis e Ecoponto - Versão 10)
 const GOOGLE_APPS_SCRIPT_ECOPONTO_URL = "https://script.google.com/macros/s/AKfycby99-spfhSHDEu9lDo6mQ8IUlz-2k83RHSkDsRk-zh4n4MrGsyJFcJVi5demkNn_Om4/exec"; 
 
-const STORAGE_KEY = "ecoponto_coletas_itaiopolis_v3";
+const STORAGE_KEY = "ecoponto_coletas_itaiopolis_v4";
 
 // Ícones SVG minimalistas com contornos modernos e cores vivas
 const ICONS_SVG = {
@@ -29,547 +29,447 @@ const WASTE_METADATA = {
     "Lâmpadas": { svg: ICONS_SVG.lamp, colorClass: "badge-gold", color: "#eab308", label: "Lâmpadas" } // Amarelo: Metais/Lâmpadas
 };
 
-// Dados históricos oficiais consolidados (181 registros até Setembro de 2026)
+// Dados históricos oficiais consolidados (171 registros até Setembro de 2026)
 const DADOS_HISTORICOS_PLANILHA = [
   {
-    "id": "hist-0181",
+    "id": "hist-0171",
     "dataColeta": "2026-09-28",
     "tipoResiduo": "Recicláveis",
     "peso": 65,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Setembro",
-    "timestamp": 1790589600181
+    "timestamp": 1790564400171
   },
   {
-    "id": "hist-0180",
+    "id": "hist-0170",
     "dataColeta": "2026-09-28",
     "tipoResiduo": "Vidros",
     "peso": 80,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Setembro",
-    "timestamp": 1790589600180
+    "timestamp": 1790564400170
   },
   {
-    "id": "hist-0179",
+    "id": "hist-0169",
     "dataColeta": "2026-09-25",
     "tipoResiduo": "Recicláveis",
     "peso": 65,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Setembro",
-    "timestamp": 1790330400179
+    "timestamp": 1790305200169
   },
   {
-    "id": "hist-0178",
+    "id": "hist-0168",
     "dataColeta": "2026-09-25",
     "tipoResiduo": "Vidros",
     "peso": 85,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Setembro",
-    "timestamp": 1790330400178
+    "timestamp": 1790305200168
   },
   {
-    "id": "hist-0177",
+    "id": "hist-0167",
     "dataColeta": "2026-09-25",
     "tipoResiduo": "Lâmpadas",
     "peso": 40,
     "destino": "IMA",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Setembro - Destinação IMA",
-    "timestamp": 1790330400177
+    "timestamp": 1790305200167
   },
   {
-    "id": "hist-0176",
+    "id": "hist-0166",
     "dataColeta": "2026-09-25",
     "tipoResiduo": "Baterias e Pilhas",
     "peso": 60,
     "destino": "IMA",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Setembro - Destinação IMA",
-    "timestamp": 1790330400176
+    "timestamp": 1790305200166
   },
   {
-    "id": "hist-0175",
+    "id": "hist-0165",
+    "dataColeta": "2026-09-23",
+    "tipoResiduo": "Recicláveis",
+    "peso": 65,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Setembro",
+    "timestamp": 1790132400165
+  },
+  {
+    "id": "hist-0164",
     "dataColeta": "2026-09-23",
     "tipoResiduo": "Vidros",
     "peso": 70,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Setembro",
-    "timestamp": 1790157600175
+    "timestamp": 1790132400164
   },
   {
-    "id": "hist-0174",
-    "dataColeta": "2026-09-23",
-    "tipoResiduo": "Recicláveis",
-    "peso": 70,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Setembro",
-    "timestamp": 1790157600174
-  },
-  {
-    "id": "hist-0173",
+    "id": "hist-0163",
     "dataColeta": "2026-09-22",
     "tipoResiduo": "Eletrônicos",
     "peso": 65,
     "destino": "APAE",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Setembro - Campanha APAE",
-    "timestamp": 1790071200173
-  },
-  {
-    "id": "hist-0172",
-    "dataColeta": "2026-09-21",
-    "tipoResiduo": "Recicláveis",
-    "peso": 65,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Setembro",
-    "timestamp": 1789984800172
-  },
-  {
-    "id": "hist-0171",
-    "dataColeta": "2026-09-21",
-    "tipoResiduo": "Vidros",
-    "peso": 80,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Setembro",
-    "timestamp": 1789984800171
-  },
-  {
-    "id": "hist-0170",
-    "dataColeta": "2026-09-18",
-    "tipoResiduo": "Recicláveis",
-    "peso": 70,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Setembro",
-    "timestamp": 1789725600170
-  },
-  {
-    "id": "hist-0169",
-    "dataColeta": "2026-09-18",
-    "tipoResiduo": "Vidros",
-    "peso": 85,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Setembro",
-    "timestamp": 1789725600169
-  },
-  {
-    "id": "hist-0168",
-    "dataColeta": "2026-09-16",
-    "tipoResiduo": "Vidros",
-    "peso": 75,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Setembro",
-    "timestamp": 1789552800168
-  },
-  {
-    "id": "hist-0167",
-    "dataColeta": "2026-09-16",
-    "tipoResiduo": "Recicláveis",
-    "peso": 70,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Setembro",
-    "timestamp": 1789552800167
-  },
-  {
-    "id": "hist-0166",
-    "dataColeta": "2026-09-14",
-    "tipoResiduo": "Recicláveis",
-    "peso": 60,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Setembro",
-    "timestamp": 1789380000166
-  },
-  {
-    "id": "hist-0165",
-    "dataColeta": "2026-09-14",
-    "tipoResiduo": "Vidros",
-    "peso": 80,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Setembro",
-    "timestamp": 1789380000165
-  },
-  {
-    "id": "hist-0164",
-    "dataColeta": "2026-09-11",
-    "tipoResiduo": "Recicláveis",
-    "peso": 65,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Setembro",
-    "timestamp": 1789120800164
-  },
-  {
-    "id": "hist-0163",
-    "dataColeta": "2026-09-11",
-    "tipoResiduo": "Vidros",
-    "peso": 90,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Setembro",
-    "timestamp": 1789120800163
+    "timestamp": 1790046000163
   },
   {
     "id": "hist-0162",
-    "dataColeta": "2026-09-09",
-    "tipoResiduo": "Vidros",
-    "peso": 80,
+    "dataColeta": "2026-09-18",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Setembro",
-    "timestamp": 1788948000162
+    "timestamp": 1789700400162
   },
   {
     "id": "hist-0161",
-    "dataColeta": "2026-09-09",
-    "tipoResiduo": "Recicláveis",
-    "peso": 75,
+    "dataColeta": "2026-09-18",
+    "tipoResiduo": "Vidros",
+    "peso": 85,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Setembro",
-    "timestamp": 1788948000161
+    "timestamp": 1789700400161
   },
   {
     "id": "hist-0160",
-    "dataColeta": "2026-09-08",
-    "tipoResiduo": "Eletrônicos",
-    "peso": 50,
-    "destino": "APAE",
+    "dataColeta": "2026-09-14",
+    "tipoResiduo": "Recicláveis",
+    "peso": 60,
+    "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Setembro - Campanha APAE",
-    "timestamp": 1788861600160
+    "obs": "Mês: Setembro",
+    "timestamp": 1789354800160
   },
   {
     "id": "hist-0159",
-    "dataColeta": "2026-09-04",
-    "tipoResiduo": "Recicláveis",
-    "peso": 70,
+    "dataColeta": "2026-09-14",
+    "tipoResiduo": "Vidros",
+    "peso": 75,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Setembro",
-    "timestamp": 1788516000159
+    "timestamp": 1789354800159
   },
   {
     "id": "hist-0158",
+    "dataColeta": "2026-09-11",
+    "tipoResiduo": "Recicláveis",
+    "peso": 75,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Setembro",
+    "timestamp": 1789095600158
+  },
+  {
+    "id": "hist-0157",
+    "dataColeta": "2026-09-11",
+    "tipoResiduo": "Vidros",
+    "peso": 85,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Setembro",
+    "timestamp": 1789095600157
+  },
+  {
+    "id": "hist-0156",
+    "dataColeta": "2026-09-10",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 58,
+    "destino": "APAE",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Setembro - Campanha APAE",
+    "timestamp": 1789009200156
+  },
+  {
+    "id": "hist-0155",
+    "dataColeta": "2026-09-08",
+    "tipoResiduo": "Recicláveis",
+    "peso": 65,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Setembro",
+    "timestamp": 1788836400155
+  },
+  {
+    "id": "hist-0154",
+    "dataColeta": "2026-09-08",
+    "tipoResiduo": "Vidros",
+    "peso": 80,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Setembro",
+    "timestamp": 1788836400154
+  },
+  {
+    "id": "hist-0153",
+    "dataColeta": "2026-09-04",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Setembro",
+    "timestamp": 1788490800153
+  },
+  {
+    "id": "hist-0152",
     "dataColeta": "2026-09-04",
     "tipoResiduo": "Vidros",
     "peso": 85,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Setembro",
-    "timestamp": 1788516000158
-  },
-  {
-    "id": "hist-0157",
-    "dataColeta": "2026-09-02",
-    "tipoResiduo": "Vidros",
-    "peso": 75,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Setembro",
-    "timestamp": 1788343200157
-  },
-  {
-    "id": "hist-0156",
-    "dataColeta": "2026-09-02",
-    "tipoResiduo": "Recicláveis",
-    "peso": 65,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Setembro",
-    "timestamp": 1788343200156
-  },
-  {
-    "id": "hist-0155",
-    "dataColeta": "2026-08-31",
-    "tipoResiduo": "Recicláveis",
-    "peso": 65,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Agosto",
-    "timestamp": 1788170400155
-  },
-  {
-    "id": "hist-0154",
-    "dataColeta": "2026-08-31",
-    "tipoResiduo": "Vidros",
-    "peso": 80,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Agosto",
-    "timestamp": 1788170400154
-  },
-  {
-    "id": "hist-0153",
-    "dataColeta": "2026-08-28",
-    "tipoResiduo": "Recicláveis",
-    "peso": 70,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Agosto",
-    "timestamp": 1787911200153
-  },
-  {
-    "id": "hist-0152",
-    "dataColeta": "2026-08-28",
-    "tipoResiduo": "Vidros",
-    "peso": 90,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Agosto",
-    "timestamp": 1787911200152
+    "timestamp": 1788490800152
   },
   {
     "id": "hist-0151",
-    "dataColeta": "2026-08-26",
+    "dataColeta": "2026-09-02",
+    "tipoResiduo": "Recicláveis",
+    "peso": 65,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Setembro",
+    "timestamp": 1788318000151
+  },
+  {
+    "id": "hist-0150",
+    "dataColeta": "2026-09-02",
     "tipoResiduo": "Vidros",
     "peso": 75,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Agosto",
-    "timestamp": 1787738400151
-  },
-  {
-    "id": "hist-0150",
-    "dataColeta": "2026-08-26",
-    "tipoResiduo": "Recicláveis",
-    "peso": 70,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Agosto",
-    "timestamp": 1787738400150
+    "obs": "Mês: Setembro",
+    "timestamp": 1788318000150
   },
   {
     "id": "hist-0149",
-    "dataColeta": "2026-08-24",
+    "dataColeta": "2026-08-31",
     "tipoResiduo": "Recicláveis",
     "peso": 65,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Agosto",
-    "timestamp": 1787565600149
+    "timestamp": 1788145200149
   },
   {
     "id": "hist-0148",
-    "dataColeta": "2026-08-24",
+    "dataColeta": "2026-08-31",
     "tipoResiduo": "Vidros",
     "peso": 80,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Agosto",
-    "timestamp": 1787565600148
+    "timestamp": 1788145200148
   },
   {
     "id": "hist-0147",
+    "dataColeta": "2026-08-28",
+    "tipoResiduo": "Recicláveis",
+    "peso": 65,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Agosto",
+    "timestamp": 1787886000147
+  },
+  {
+    "id": "hist-0146",
+    "dataColeta": "2026-08-28",
+    "tipoResiduo": "Vidros",
+    "peso": 90,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Agosto",
+    "timestamp": 1787886000146
+  },
+  {
+    "id": "hist-0145",
+    "dataColeta": "2026-08-25",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Agosto",
+    "timestamp": 1787626800145
+  },
+  {
+    "id": "hist-0144",
+    "dataColeta": "2026-08-25",
+    "tipoResiduo": "Vidros",
+    "peso": 80,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Agosto",
+    "timestamp": 1787626800144
+  },
+  {
+    "id": "hist-0143",
     "dataColeta": "2026-08-21",
     "tipoResiduo": "Recicláveis",
     "peso": 70,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Agosto",
-    "timestamp": 1787306400147
+    "timestamp": 1787281200143
   },
   {
-    "id": "hist-0146",
+    "id": "hist-0142",
     "dataColeta": "2026-08-21",
     "tipoResiduo": "Vidros",
     "peso": 85,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Agosto",
-    "timestamp": 1787306400146
+    "timestamp": 1787281200142
   },
   {
-    "id": "hist-0145",
+    "id": "hist-0141",
     "dataColeta": "2026-08-20",
     "tipoResiduo": "Eletrônicos",
-    "peso": 65,
+    "peso": 68,
     "destino": "APAE",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Agosto - Campanha APAE",
-    "timestamp": 1787220000145
+    "timestamp": 1787194800141
   },
   {
-    "id": "hist-0144",
+    "id": "hist-0140",
+    "dataColeta": "2026-08-19",
+    "tipoResiduo": "Recicláveis",
+    "peso": 65,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Agosto",
+    "timestamp": 1787108400140
+  },
+  {
+    "id": "hist-0139",
     "dataColeta": "2026-08-19",
     "tipoResiduo": "Vidros",
     "peso": 70,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Agosto",
-    "timestamp": 1787133600144
+    "timestamp": 1787108400139
   },
   {
-    "id": "hist-0143",
-    "dataColeta": "2026-08-19",
-    "tipoResiduo": "Recicláveis",
-    "peso": 65,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Agosto",
-    "timestamp": 1787133600143
-  },
-  {
-    "id": "hist-0142",
+    "id": "hist-0138",
     "dataColeta": "2026-08-17",
     "tipoResiduo": "Recicláveis",
     "peso": 60,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Agosto",
-    "timestamp": 1786960800142
+    "timestamp": 1786935600138
   },
   {
-    "id": "hist-0141",
+    "id": "hist-0137",
     "dataColeta": "2026-08-17",
     "tipoResiduo": "Vidros",
     "peso": 80,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Agosto",
-    "timestamp": 1786960800141
+    "timestamp": 1786935600137
   },
   {
-    "id": "hist-0140",
+    "id": "hist-0136",
     "dataColeta": "2026-08-14",
     "tipoResiduo": "Recicláveis",
-    "peso": 75,
+    "peso": 70,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Agosto",
-    "timestamp": 1786701600140
+    "timestamp": 1786676400136
   },
   {
-    "id": "hist-0139",
+    "id": "hist-0135",
     "dataColeta": "2026-08-14",
     "tipoResiduo": "Vidros",
     "peso": 90,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Agosto",
-    "timestamp": 1786701600139
+    "timestamp": 1786676400135
   },
   {
-    "id": "hist-0138",
-    "dataColeta": "2026-08-12",
-    "tipoResiduo": "Vidros",
-    "peso": 70,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Agosto",
-    "timestamp": 1786528800138
-  },
-  {
-    "id": "hist-0137",
-    "dataColeta": "2026-08-12",
-    "tipoResiduo": "Recicláveis",
-    "peso": 70,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Agosto",
-    "timestamp": 1786528800137
-  },
-  {
-    "id": "hist-0136",
+    "id": "hist-0134",
     "dataColeta": "2026-08-10",
     "tipoResiduo": "Recicláveis",
     "peso": 65,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Agosto",
-    "timestamp": 1786356000136
+    "timestamp": 1786330800134
   },
   {
-    "id": "hist-0135",
+    "id": "hist-0133",
     "dataColeta": "2026-08-10",
     "tipoResiduo": "Vidros",
     "peso": 75,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Agosto",
-    "timestamp": 1786356000135
+    "timestamp": 1786330800133
   },
   {
-    "id": "hist-0134",
+    "id": "hist-0132",
     "dataColeta": "2026-08-07",
     "tipoResiduo": "Recicláveis",
-    "peso": 60,
+    "peso": 65,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Agosto",
-    "timestamp": 1786096800134
+    "timestamp": 1786071600132
   },
   {
-    "id": "hist-0133",
+    "id": "hist-0131",
     "dataColeta": "2026-08-07",
     "tipoResiduo": "Vidros",
     "peso": 85,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Agosto",
-    "timestamp": 1786096800133
+    "timestamp": 1786071600131
   },
   {
-    "id": "hist-0132",
+    "id": "hist-0130",
     "dataColeta": "2026-08-06",
     "tipoResiduo": "Eletrônicos",
     "peso": 55,
     "destino": "APAE",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Agosto - Campanha APAE",
-    "timestamp": 1786010400132
+    "timestamp": 1785985200130
   },
   {
-    "id": "hist-0131",
-    "dataColeta": "2026-08-05",
+    "id": "hist-0129",
+    "dataColeta": "2026-08-04",
+    "tipoResiduo": "Recicláveis",
+    "peso": 60,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Agosto",
+    "timestamp": 1785812400129
+  },
+  {
+    "id": "hist-0128",
+    "dataColeta": "2026-08-04",
     "tipoResiduo": "Vidros",
     "peso": 75,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Agosto",
-    "timestamp": 1785924000131
-  },
-  {
-    "id": "hist-0130",
-    "dataColeta": "2026-08-05",
-    "tipoResiduo": "Recicláveis",
-    "peso": 70,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Agosto",
-    "timestamp": 1785924000130
-  },
-  {
-    "id": "hist-0129",
-    "dataColeta": "2026-08-03",
-    "tipoResiduo": "Recicláveis",
-    "peso": 65,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Agosto",
-    "timestamp": 1785751200129
-  },
-  {
-    "id": "hist-0128",
-    "dataColeta": "2026-08-03",
-    "tipoResiduo": "Vidros",
-    "peso": 80,
-    "destino": "Camarita",
-    "responsavel": "Equipe Ecoponto",
-    "obs": "Mês: Agosto",
-    "timestamp": 1785751200128
+    "timestamp": 1785812400128
   },
   {
     "id": "hist-0127",
@@ -2012,7 +1912,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!raw) {
                 // Migração transparente de versões anteriores preservando saídas manuais do usuário
                 let manualEntries = [];
-                const prevKeys = ["ecoponto_coletas_itaiopolis_v2", "ecoponto_coletas_itaiopolis_v1", "ecoponto_coletas_itaiopolis"];
+                const prevKeys = ["ecoponto_coletas_itaiopolis_v3", "ecoponto_coletas_itaiopolis_v2", "ecoponto_coletas_itaiopolis_v1", "ecoponto_coletas_itaiopolis"];
                 for (const pk of prevKeys) {
                     const prevRaw = localStorage.getItem(pk);
                     if (prevRaw) {
@@ -2464,6 +2364,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // 9. BALANÇO MENSAL, MÉTRICAS E GRÁFICOS DO ECOPONTO
     // -------------------------------------------------------------
     let ecopontoCatChartInstance = null;
+    let ecopontoDestinosChartInstance = null;
+    let ecopontoComposicaoChartInstance = null;
     let ecopontoMonthChartInstance = null;
 
     function setupEcopontoDashboard() {
@@ -2475,10 +2377,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const btnResumo = document.getElementById("btn-ecoponto-view-resumo");
         const btnChart = document.getElementById("btn-ecoponto-view-chart");
+        const btnDestinos = document.getElementById("btn-ecoponto-view-destinos");
+        const btnComposicao = document.getElementById("btn-ecoponto-view-composicao");
         const btnEvolucao = document.getElementById("btn-ecoponto-view-evolucao");
 
         const viewResumo = document.getElementById("ecoponto-view-resumo");
         const viewChartBox = document.getElementById("ecoponto-view-chart-box");
+        const viewDestinosBox = document.getElementById("ecoponto-view-destinos-box");
+        const viewComposicaoBox = document.getElementById("ecoponto-view-composicao-box");
         const viewEvolucaoBox = document.getElementById("ecoponto-view-evolucao-box");
 
         const kpiPeso = document.getElementById("dash-month-peso");
@@ -2487,6 +2393,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const kpiTopDest = document.getElementById("dash-month-top-dest");
 
         const btnExportMonthCsv = document.getElementById("btn-export-ecoponto-month-csv");
+        const btnExportPng = document.getElementById("btn-export-ecoponto-png");
+        const btnExportAllPng = document.getElementById("btn-export-all-ecoponto-png");
 
         if (!modal) return;
 
@@ -2516,14 +2424,18 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // Alternador de abas (Resumo, Categorias, Evolução)
+        // Alternador de abas (Resumo, Categorias, Destinos, Composição, Evolução)
         function setActiveTab(tab) {
             if (btnResumo) btnResumo.classList.toggle("active", tab === "resumo");
             if (btnChart) btnChart.classList.toggle("active", tab === "chart");
+            if (btnDestinos) btnDestinos.classList.toggle("active", tab === "destinos");
+            if (btnComposicao) btnComposicao.classList.toggle("active", tab === "composicao");
             if (btnEvolucao) btnEvolucao.classList.toggle("active", tab === "evolucao");
 
             if (viewResumo) viewResumo.style.display = tab === "resumo" ? "flex" : "none";
             if (viewChartBox) viewChartBox.style.display = tab === "chart" ? "block" : "none";
+            if (viewDestinosBox) viewDestinosBox.style.display = tab === "destinos" ? "block" : "none";
+            if (viewComposicaoBox) viewComposicaoBox.style.display = tab === "composicao" ? "block" : "none";
             if (viewEvolucaoBox) viewEvolucaoBox.style.display = tab === "evolucao" ? "block" : "none";
 
             updateDashboardView();
@@ -2531,6 +2443,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (btnResumo) btnResumo.addEventListener("click", () => setActiveTab("resumo"));
         if (btnChart) btnChart.addEventListener("click", () => setActiveTab("chart"));
+        if (btnDestinos) btnDestinos.addEventListener("click", () => setActiveTab("destinos"));
+        if (btnComposicao) btnComposicao.addEventListener("click", () => setActiveTab("composicao"));
         if (btnEvolucao) btnEvolucao.addEventListener("click", () => setActiveTab("evolucao"));
 
         if (selectMonth) {
@@ -2660,6 +2574,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 renderResumoView(filteredColetas, categoryMap, totalPeso);
             } else if (btnChart && btnChart.classList.contains("active")) {
                 renderCategoryChart(categoryMap, totalPeso);
+            } else if (btnDestinos && btnDestinos.classList.contains("active")) {
+                renderDestinosChart(destinoMap, totalPeso);
+            } else if (btnComposicao && btnComposicao.classList.contains("active")) {
+                renderComposicaoChart(coletas);
             } else if (btnEvolucao && btnEvolucao.classList.contains("active")) {
                 renderEvolutionChart(coletas);
             }
@@ -2929,6 +2847,611 @@ document.addEventListener("DOMContentLoaded", () => {
                         }
                     }
                 }
+            });
+        }
+
+        // 4. VISÃO GRÁFICO DE DESTINOS RECEPTORES (Camarita, APAE, IMA, etc.)
+        function renderDestinosChart(destinoMap, totalPeso) {
+            if (typeof Chart === "undefined") return;
+
+            const canvas = document.getElementById("ecopontoDestinosChart");
+            if (!canvas) return;
+
+            if (ecopontoDestinosChartInstance) {
+                ecopontoDestinosChartInstance.destroy();
+                ecopontoDestinosChartInstance = null;
+            }
+
+            const activeDestinos = Object.entries(destinoMap).filter(([_, p]) => p > 0);
+            if (activeDestinos.length === 0) {
+                const ctx = canvas.getContext("2d");
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                return;
+            }
+
+            const colorsByDestino = {
+                "Camarita": "#2563eb",  // Azul Royal
+                "APAE": "#f59e0b",      // Âmbar
+                "IMA": "#059669",       // Verde Esmeralda
+                "Outro": "#8b5cf6",     // Roxo
+                "Não especificado": "#94a3b8"
+            };
+
+            const labels = activeDestinos.map(([dest]) => dest);
+            const dataValues = activeDestinos.map(([_, p]) => p);
+            const bgColors = activeDestinos.map(([dest]) => colorsByDestino[dest] || "#64748b");
+
+            const ctx = canvas.getContext("2d");
+            ecopontoDestinosChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: dataValues,
+                        backgroundColor: bgColors,
+                        borderWidth: 2,
+                        borderColor: '#ffffff',
+                        hoverOffset: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    family: "'Plus Jakarta Sans', sans-serif",
+                                    size: 12,
+                                    weight: '600'
+                                },
+                                padding: 15,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const val = context.raw || 0;
+                                    const pct = totalPeso > 0 ? ((val / totalPeso) * 100).toFixed(1) : 0;
+                                    return ` ${context.label}: ${val.toLocaleString('pt-BR', { minimumFractionDigits: 1 })} kg (${pct}%)`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '62%'
+                }
+            });
+        }
+
+        // 5. VISÃO GRÁFICO DE COMPOSIÇÃO MENSAL (Barras Empilhadas por Categoria)
+        function renderComposicaoChart(coletas) {
+            if (typeof Chart === "undefined") return;
+
+            const canvas = document.getElementById("ecopontoComposicaoChart");
+            if (!canvas) return;
+
+            if (ecopontoComposicaoChartInstance) {
+                ecopontoComposicaoChartInstance.destroy();
+                ecopontoComposicaoChartInstance = null;
+            }
+
+            const monthlyCats = {};
+            coletas.forEach(c => {
+                if (c.dataColeta && c.dataColeta.length >= 7) {
+                    const mKey = c.dataColeta.substring(0, 7);
+                    if (!monthlyCats[mKey]) {
+                        monthlyCats[mKey] = {
+                            "Recicláveis": 0,
+                            "Vidros": 0,
+                            "Eletrônicos": 0,
+                            "Lâmpadas": 0,
+                            "Baterias e Pilhas": 0
+                        };
+                    }
+                    const tipo = c.tipoResiduo || "Recicláveis";
+                    const peso = parseFloat(c.peso) || 0;
+                    if (monthlyCats[mKey][tipo] !== undefined) {
+                        monthlyCats[mKey][tipo] += peso;
+                    } else {
+                        monthlyCats[mKey][tipo] = (monthlyCats[mKey][tipo] || 0) + peso;
+                    }
+                }
+            });
+
+            const sortedMonths = Object.keys(monthlyCats).sort();
+            const labels = sortedMonths.map(mKey => {
+                const [ano, mes] = mKey.split("-");
+                const mIdx = parseInt(mes, 10) - 1;
+                const mName = monthNames[mIdx] ? monthNames[mIdx].substring(0, 3) : mes;
+                return `${mName}/${ano.substring(2)}`;
+            });
+
+            const catConfig = [
+                { key: "Recicláveis", label: "Recicláveis", color: "#2563eb" },
+                { key: "Vidros", label: "Vidros", color: "#10b981" },
+                { key: "Eletrônicos", label: "Eletrônicos", color: "#ef4444" },
+                { key: "Lâmpadas", label: "Lâmpadas", color: "#eab308" },
+                { key: "Baterias e Pilhas", label: "Pilhas/Baterias", color: "#f97316" }
+            ];
+
+            const datasets = catConfig.map(cfg => {
+                return {
+                    label: cfg.label,
+                    data: sortedMonths.map(mKey => Math.round(monthlyCats[mKey][cfg.key] || 0)),
+                    backgroundColor: cfg.color,
+                    borderRadius: 4
+                };
+            });
+
+            const ctx = canvas.getContext("2d");
+            ecopontoComposicaoChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            stacked: true,
+                            grid: { display: false },
+                            ticks: {
+                                font: { family: "'Plus Jakarta Sans', sans-serif", weight: '600' },
+                                color: '#475569'
+                            }
+                        },
+                        y: {
+                            stacked: true,
+                            grid: { color: '#f1f5f9' },
+                            ticks: {
+                                callback: val => `${val} kg`,
+                                font: { family: "'Plus Jakarta Sans', sans-serif" },
+                                color: '#64748b'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { family: "'Plus Jakarta Sans', sans-serif", size: 11, weight: '600' },
+                                usePointStyle: true,
+                                pointStyle: 'rectRounded'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => ` ${ctx.dataset.label}: ${ctx.raw.toLocaleString('pt-BR')} kg`
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 6. EXPORTAÇÃO DO GRÁFICO ATIVO EM IMAGEM PNG COM IDENTIDADE OFICIAL
+        function exportChartToPng(chartInstance, filename, title, subtitle) {
+            if (!chartInstance || !chartInstance.canvas) {
+                showToast("Selecione uma visualização gráfica para baixar a imagem.", "warning");
+                return;
+            }
+
+            try {
+                const srcCanvas = chartInstance.canvas;
+                const targetWidth = Math.max(srcCanvas.width, 920);
+                const scale = targetWidth / srcCanvas.width;
+                const targetHeight = Math.round(srcCanvas.height * scale);
+
+                const padX = 36;
+                const padTop = 90;
+                const padBottom = 48;
+
+                const outCanvas = document.createElement('canvas');
+                outCanvas.width = targetWidth + (padX * 2);
+                outCanvas.height = targetHeight + padTop + padBottom;
+                const ctx = outCanvas.getContext('2d');
+
+                // Fundo Branco
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, outCanvas.width, outCanvas.height);
+
+                // Faixa verde esmeralda no topo
+                ctx.fillStyle = '#059669';
+                ctx.fillRect(0, 0, outCanvas.width, 6);
+
+                // Título
+                ctx.fillStyle = '#0f172a';
+                ctx.font = 'bold 22px "Plus Jakarta Sans", system-ui, sans-serif';
+                ctx.fillText(title, padX, 42);
+
+                // Subtítulo
+                ctx.fillStyle = '#64748b';
+                ctx.font = '500 13px "Plus Jakarta Sans", system-ui, sans-serif';
+                ctx.fillText(subtitle, padX, 66);
+
+                // Divisória sutil
+                ctx.strokeStyle = '#e2e8f0';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(padX, 78);
+                ctx.lineTo(outCanvas.width - padX, 78);
+                ctx.stroke();
+
+                // Gráfico
+                ctx.drawImage(srcCanvas, padX, padTop, targetWidth, targetHeight);
+
+                // Linha e Rodapé
+                const footerY = outCanvas.height - 18;
+                ctx.strokeStyle = '#f1f5f9';
+                ctx.beginPath();
+                ctx.moveTo(padX, outCanvas.height - padBottom + 12);
+                ctx.lineTo(outCanvas.width - padX, outCanvas.height - padBottom + 12);
+                ctx.stroke();
+
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '11px "Plus Jakarta Sans", system-ui, sans-serif';
+                ctx.fillText("Ecoponto Municipal de Itaiópolis — Secretaria de Meio Ambiente", padX, footerY);
+
+                const nowStr = new Date().toLocaleDateString('pt-BR');
+                const rightText = `Exportado em ${nowStr}`;
+                const rightW = ctx.measureText(rightText).width;
+                ctx.fillText(rightText, outCanvas.width - padX - rightW, footerY);
+
+                // Disparo do download
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = outCanvas.toDataURL('image/png');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                showToast("Gráfico baixado como imagem PNG com sucesso!", "success");
+            } catch (e) {
+                console.error("Erro ao exportar imagem do ecoponto:", e);
+                showToast("Erro ao gerar imagem do gráfico.", "error");
+            }
+        }
+
+        // Botão Baixar Imagem (PNG) do Gráfico Ativo
+        if (btnExportPng) {
+            btnExportPng.addEventListener("click", () => {
+                const monthText = selectMonth && selectMonth.options[selectMonth.selectedIndex] 
+                    ? selectMonth.options[selectMonth.selectedIndex].text 
+                    : "";
+
+                if (btnDestinos && btnDestinos.classList.contains("active")) {
+                    exportChartToPng(
+                        ecopontoDestinosChartInstance,
+                        `grafico_ecoponto_destinos_${selectMonth ? selectMonth.value : 'geral'}.png`,
+                        "Ecoponto Municipal — Distribuição por Destino Receptor",
+                        `Período: ${monthText} • Município de Itaiópolis / SC`
+                    );
+                } else if (btnComposicao && btnComposicao.classList.contains("active")) {
+                    exportChartToPng(
+                        ecopontoComposicaoChartInstance,
+                        `grafico_ecoponto_composicao_mensal_2026.png`,
+                        "Ecoponto Municipal — Composição Mensal por Material",
+                        "Evolução por Categoria ao Longo de 2026 • Município de Itaiópolis / SC"
+                    );
+                } else if (btnEvolucao && btnEvolucao.classList.contains("active")) {
+                    exportChartToPng(
+                        ecopontoMonthChartInstance,
+                        `grafico_ecoponto_evolucao_historica.png`,
+                        "Ecoponto Municipal — Evolução Histórica de Saídas (kg)",
+                        "Histórico Mensal Consolidado • Município de Itaiópolis / SC"
+                    );
+                } else if (btnChart && btnChart.classList.contains("active")) {
+                    exportChartToPng(
+                        ecopontoCatChartInstance,
+                        `grafico_ecoponto_categorias_${selectMonth ? selectMonth.value : 'geral'}.png`,
+                        "Ecoponto Municipal — Distribuição por Categoria de Resíduo",
+                        `Período: ${monthText} • Município de Itaiópolis / SC`
+                    );
+                } else {
+                    setActiveTab("chart");
+                    setTimeout(() => {
+                        exportChartToPng(
+                            ecopontoCatChartInstance,
+                            `grafico_ecoponto_categorias_${selectMonth ? selectMonth.value : 'geral'}.png`,
+                            "Ecoponto Municipal — Distribuição por Categoria de Resíduo",
+                            `Período: ${monthText} • Município de Itaiópolis / SC`
+                        );
+                    }, 200);
+                }
+            });
+        }
+
+        // Helper para renderizar cartão institucional a partir de configuração Chart.js em canvas offscreen
+        function generateInstitutionalCardFromConfig(config, title, subtitle, accentColor) {
+            const targetWidth = 1000;
+            const targetHeight = 520;
+            const padX = 36;
+            const padTop = 90;
+            const padBottom = 48;
+
+            const chartCanvas = document.createElement('canvas');
+            chartCanvas.width = targetWidth;
+            chartCanvas.height = targetHeight;
+            const chartCtx = chartCanvas.getContext('2d');
+
+            config.options = config.options || {};
+            config.options.animation = false;
+            config.options.responsive = false;
+            config.options.maintainAspectRatio = false;
+
+            const tempChart = new Chart(chartCtx, config);
+
+            const outCanvas = document.createElement('canvas');
+            outCanvas.width = targetWidth + (padX * 2);
+            outCanvas.height = targetHeight + padTop + padBottom;
+            const ctx = outCanvas.getContext('2d');
+
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, outCanvas.width, outCanvas.height);
+
+            ctx.fillStyle = accentColor || '#059669';
+            ctx.fillRect(0, 0, outCanvas.width, 6);
+
+            ctx.fillStyle = '#0f172a';
+            ctx.font = 'bold 22px "Plus Jakarta Sans", system-ui, sans-serif';
+            ctx.fillText(title, padX, 42);
+
+            ctx.fillStyle = '#64748b';
+            ctx.font = '500 13px "Plus Jakarta Sans", system-ui, sans-serif';
+            ctx.fillText(subtitle, padX, 66);
+
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(padX, 78);
+            ctx.lineTo(outCanvas.width - padX, 78);
+            ctx.stroke();
+
+            ctx.drawImage(chartCanvas, padX, padTop, targetWidth, targetHeight);
+
+            const footerY = outCanvas.height - 18;
+            ctx.strokeStyle = '#f1f5f9';
+            ctx.beginPath();
+            ctx.moveTo(padX, outCanvas.height - padBottom + 12);
+            ctx.lineTo(outCanvas.width - padX, outCanvas.height - padBottom + 12);
+            ctx.stroke();
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '11px "Plus Jakarta Sans", system-ui, sans-serif';
+            ctx.fillText("Ecoponto Municipal de Itaiópolis — Secretaria de Meio Ambiente", padX, footerY);
+
+            const nowStr = new Date().toLocaleDateString('pt-BR');
+            const rightText = `Exportado em ${nowStr}`;
+            const rightW = ctx.measureText(rightText).width;
+            ctx.fillText(rightText, outCanvas.width - padX - rightW, footerY);
+
+            const dataUrl = outCanvas.toDataURL('image/png');
+            tempChart.destroy();
+            return dataUrl;
+        }
+
+        // Botão Baixar Todos os Gráficos do Ecoponto (Pacote Completo)
+        if (btnExportAllPng) {
+            btnExportAllPng.addEventListener("click", () => {
+                const coletas = loadColetas();
+                const selectedMonth = selectMonth ? selectMonth.value : "all";
+                const monthText = selectMonth && selectMonth.options[selectMonth.selectedIndex] 
+                    ? selectMonth.options[selectMonth.selectedIndex].text 
+                    : "Histórico Geral";
+
+                const filteredColetas = selectedMonth === "all" 
+                    ? coletas 
+                    : coletas.filter(c => c.dataColeta && c.dataColeta.startsWith(selectedMonth));
+
+                if (filteredColetas.length === 0) {
+                    showToast("Nenhum dado encontrado para exportar gráficos neste mês.", "warning");
+                    return;
+                }
+
+                showToast("Gerando pacote com todos os 4 gráficos...", "info");
+
+                // Dados de Categorias e Destinos
+                let totalPeso = 0;
+                const categoryMap = {
+                    "Vidros": { peso: 0, count: 0, color: "#10b981" },
+                    "Recicláveis": { peso: 0, count: 0, color: "#2563eb" },
+                    "Baterias e Pilhas": { peso: 0, count: 0, color: "#f97316" },
+                    "Eletrônicos": { peso: 0, count: 0, color: "#ef4444" },
+                    "Lâmpadas": { peso: 0, count: 0, color: "#eab308" }
+                };
+                const destinoMap = { "Camarita": 0, "APAE": 0, "IMA": 0, "Outro": 0 };
+
+                filteredColetas.forEach(c => {
+                    const p = parseFloat(c.peso) || 0;
+                    totalPeso += p;
+                    if (categoryMap[c.tipoResiduo]) {
+                        categoryMap[c.tipoResiduo].peso += p;
+                        categoryMap[c.tipoResiduo].count += 1;
+                    }
+                    const dest = c.destino || "Outro";
+                    destinoMap[dest] = (destinoMap[dest] || 0) + p;
+                });
+
+                const activeCats = Object.entries(categoryMap).filter(([_, d]) => d.peso > 0);
+                const activeDestinos = Object.entries(destinoMap).filter(([_, p]) => p > 0);
+
+                // Config 1: Categorias (Doughnut)
+                const configCat = {
+                    type: 'doughnut',
+                    data: {
+                        labels: activeCats.map(([c]) => c),
+                        datasets: [{
+                            data: activeCats.map(([_, d]) => d.peso),
+                            backgroundColor: activeCats.map(([_, d]) => d.color),
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { font: { family: "'Plus Jakarta Sans', sans-serif", size: 13, weight: '600' }, padding: 16 }
+                            }
+                        },
+                        cutout: '60%'
+                    }
+                };
+
+                // Config 2: Destinos (Doughnut)
+                const colorsByDestino = { "Camarita": "#2563eb", "APAE": "#f59e0b", "IMA": "#059669", "Outro": "#8b5cf6" };
+                const configDest = {
+                    type: 'doughnut',
+                    data: {
+                        labels: activeDestinos.map(([d]) => d),
+                        datasets: [{
+                            data: activeDestinos.map(([_, p]) => p),
+                            backgroundColor: activeDestinos.map(([d]) => colorsByDestino[d] || "#64748b"),
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { font: { family: "'Plus Jakarta Sans', sans-serif", size: 13, weight: '600' }, padding: 16 }
+                            }
+                        },
+                        cutout: '60%'
+                    }
+                };
+
+                // Config 3: Composição Mensal 2026 (Stacked Bar)
+                const monthlyCats = {};
+                coletas.forEach(c => {
+                    if (c.dataColeta && c.dataColeta.length >= 7) {
+                        const mKey = c.dataColeta.substring(0, 7);
+                        if (!monthlyCats[mKey]) {
+                            monthlyCats[mKey] = { "Recicláveis": 0, "Vidros": 0, "Eletrônicos": 0, "Lâmpadas": 0, "Baterias e Pilhas": 0 };
+                        }
+                        const p = parseFloat(c.peso) || 0;
+                        if (monthlyCats[mKey][c.tipoResiduo] !== undefined) {
+                            monthlyCats[mKey][c.tipoResiduo] += p;
+                        }
+                    }
+                });
+                const sortedMonths2026 = ["2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06", "2026-07", "2026-08", "2026-09", "2026-10", "2026-11", "2026-12"];
+                const compLabels = sortedMonths2026.map(mKey => {
+                    const mIdx = parseInt(mKey.split("-")[1], 10) - 1;
+                    return monthNames[mIdx] ? monthNames[mIdx].substring(0, 3) : mKey;
+                });
+                const catOrder = ["Vidros", "Recicláveis", "Eletrônicos", "Baterias e Pilhas", "Lâmpadas"];
+                const compDatasets = catOrder.map(cat => ({
+                    label: cat,
+                    data: sortedMonths2026.map(mKey => monthlyCats[mKey] ? monthlyCats[mKey][cat] : 0),
+                    backgroundColor: WASTE_METADATA[cat]?.color || "#64748b",
+                    borderRadius: 4
+                }));
+                const configComp = {
+                    type: 'bar',
+                    data: { labels: compLabels, datasets: compDatasets },
+                    options: {
+                        scales: {
+                            x: { stacked: true },
+                            y: { stacked: true, beginAtZero: true }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: { font: { family: "'Plus Jakarta Sans', sans-serif", size: 12, weight: '600' } }
+                            }
+                        }
+                    }
+                };
+
+                // Config 4: Evolução Mensal Histórica (Bar)
+                const monthlyWeights = {};
+                coletas.forEach(c => {
+                    if (c.dataColeta && c.dataColeta.length >= 7) {
+                        const mKey = c.dataColeta.substring(0, 7);
+                        const p = parseFloat(c.peso) || 0;
+                        monthlyWeights[mKey] = (monthlyWeights[mKey] || 0) + p;
+                    }
+                });
+                const sortedMonths = Object.keys(monthlyWeights).sort();
+                const evolLabels = sortedMonths.map(mKey => {
+                    const [y, m] = mKey.split("-");
+                    const mIdx = parseInt(m, 10) - 1;
+                    const mName = monthNames[mIdx] ? monthNames[mIdx].substring(0, 3) : m;
+                    return `${mName}/${y.substring(2)}`;
+                });
+                const evolValues = sortedMonths.map(mKey => monthlyWeights[mKey]);
+                const binColors = ['#10b981', '#2563eb', '#f97316', '#ef4444', '#eab308', '#06b6d4'];
+                const configEvol = {
+                    type: 'bar',
+                    data: {
+                        labels: evolLabels,
+                        datasets: [{
+                            label: 'Total Saído (kg)',
+                            data: evolValues,
+                            backgroundColor: evolValues.map((_, i) => binColors[i % binColors.length]),
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true } }
+                    }
+                };
+
+                // Renderiza os 4 cartões em PNG de alta resolução
+                const img1 = generateInstitutionalCardFromConfig(
+                    configCat,
+                    "Ecoponto Municipal — Distribuição por Categoria de Resíduo",
+                    `Período: ${monthText} • Município de Itaiópolis / SC`,
+                    "#059669"
+                );
+                const img2 = generateInstitutionalCardFromConfig(
+                    configDest,
+                    "Ecoponto Municipal — Distribuição por Destino Receptor",
+                    `Período: ${monthText} • Município de Itaiópolis / SC`,
+                    "#059669"
+                );
+                const img3 = generateInstitutionalCardFromConfig(
+                    configComp,
+                    "Ecoponto Municipal — Composição Mensal por Material (2026)",
+                    "Histórico Mensal por Categoria • Município de Itaiópolis / SC",
+                    "#059669"
+                );
+                const img4 = generateInstitutionalCardFromConfig(
+                    configEvol,
+                    "Ecoponto Municipal — Evolução Histórica de Saídas (kg)",
+                    "Histórico Consolidado de Viagens • Município de Itaiópolis / SC",
+                    "#059669"
+                );
+
+                const downloads = [
+                    { dataUrl: img1, filename: `1_ecoponto_categorias_${selectedMonth}.png` },
+                    { dataUrl: img2, filename: `2_ecoponto_destinos_${selectedMonth}.png` },
+                    { dataUrl: img3, filename: `3_ecoponto_composicao_mensal_2026.png` },
+                    { dataUrl: img4, filename: `4_ecoponto_evolucao_historica.png` }
+                ];
+
+                downloads.forEach((dl, idx) => {
+                    setTimeout(() => {
+                        const link = document.createElement("a");
+                        link.download = dl.filename;
+                        link.href = dl.dataUrl;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }, idx * 350);
+                });
+
+                setTimeout(() => {
+                    showToast("📦 Todos os 4 gráficos foram baixados com sucesso!", "success");
+                }, 1400);
             });
         }
 
