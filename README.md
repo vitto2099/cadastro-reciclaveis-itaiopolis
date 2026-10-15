@@ -23,7 +23,7 @@ Aplicação web desenvolvida para a **Secretaria Municipal de Meio Ambiente de I
   - 🍾 **Vidros** (Garrafas, frascos, potes e cacos)
   - 💡 **Lâmpadas** (Fluorescentes e LED)
 - **⚖️ Peso Aproximado:** Entrada em kg com botões de acréscimo rápido (+5 kg, +10 kg, +25 kg, +50 kg, +100 kg, Zerar).
-- **📊 Histórico Integrado:** Contém **171 registros históricos oficiais** consolidados da inauguração até Setembro de 2026 (~10,35 toneladas), com filtros rápidos por material e exportação direta em CSV para o Excel.
+- **📊 Histórico Integrado:** Contém **186 registros históricos oficiais** consolidados da inauguração até 16 de Outubro de 2026 (~11,49 toneladas), com filtros rápidos por material e exportação direta em CSV para o Excel.
 - **Integração:** Backend Google Sheets preparado em `apps_script_ecoponto.js`.
 
 ---
@@ -38,13 +38,13 @@ Site Cadastro Reciclaveis/
 │
 ├── js/
 │   ├── app.js                      # Lógica do Cadastro de Sacolas, Calendário e Dashboard
-│   └── ecoponto.js                 # Lógica do Ecoponto, indicadores e 171 registros históricos
+│   └── ecoponto.js                 # Lógica do Ecoponto, indicadores e 186 registros históricos
 │
 ├── img/
 │   └── Brasao_itaiopolis.jpg       # Brasão oficial do Município de Itaiópolis
 │
 ├── data/
-│   ├── dados_ecoponto.json         # Base de dados estruturada das 171 saídas históricas
+│   ├── dados_ecoponto.json         # Base de dados estruturada das 186 saídas históricas
 │   ├── Reciclaveis Meio Ambiente.xlsx # Planilha com dados históricos oficiais do Ecoponto
 │   └── SacolasAmarelas .xlsx       # Planilha de referência de sacolas distribuídas
 │

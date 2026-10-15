@@ -26,25 +26,191 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Dados históricos consolidados municipais (base inicial garantida)
     const DADOS_HISTORICOS_SACOLAS = {
-        total: 280,
-        totalSacolas: 288,
-        totalPessoas: 1361,
-        bairrosDist: {
-            "Centro": { "registros": 133, "pessoas": 881, "sacolas": 135 },
-            "Vila Nova": { "registros": 46, "pessoas": 144, "sacolas": 50 },
-            "Bom Jesus": { "registros": 46, "pessoas": 148, "sacolas": 46 },
-            "Interior": { "registros": 29, "pessoas": 112, "sacolas": 31 },
-            "Lucena": { "registros": 12, "pessoas": 37, "sacolas": 12 },
-            "Paraguaçu": { "registros": 4, "pessoas": 14, "sacolas": 4 },
-            "Vila Gaúcha": { "registros": 3, "pessoas": 8, "sacolas": 3 },
-            "São Pedro": { "registros": 1, "pessoas": 4, "sacolas": 1 },
-            "Vila José Dresseno": { "registros": 1, "pessoas": 4, "sacolas": 1 },
-            "São Lourenço": { "registros": 1, "pessoas": 3, "sacolas": 1 },
-            "Bom Sucesso": { "registros": 1, "pessoas": 2, "sacolas": 1 },
-            "Poço Claro": { "registros": 1, "pessoas": 2, "sacolas": 1 },
-            "Distrito": { "registros": 1, "pessoas": 1, "sacolas": 1 },
-            "Mafra": { "registros": 1, "pessoas": 1, "sacolas": 1 }
-        }
+            "total": 572,
+            "totalSacolas": 643,
+            "totalPessoas": 2471,
+            "bairrosDist": {
+                    "Centro": {
+                            "registros": 261,
+                            "pessoas": 1383,
+                            "sacolas": 289
+                    },
+                    "Vila Nova": {
+                            "registros": 81,
+                            "pessoas": 251,
+                            "sacolas": 99
+                    },
+                    "Vila Gaucha": {
+                            "registros": 1,
+                            "pessoas": 3,
+                            "sacolas": 2
+                    },
+                    "Interior": {
+                            "registros": 37,
+                            "pessoas": 132,
+                            "sacolas": 42
+                    },
+                    "Bom Sucesso": {
+                            "registros": 1,
+                            "pessoas": 2,
+                            "sacolas": 1
+                    },
+                    "Paraguaçu": {
+                            "registros": 11,
+                            "pessoas": 31,
+                            "sacolas": 12
+                    },
+                    "São Lourenço": {
+                            "registros": 1,
+                            "pessoas": 3,
+                            "sacolas": 2
+                    },
+                    "Lucena": {
+                            "registros": 28,
+                            "pessoas": 96,
+                            "sacolas": 33
+                    },
+                    "Bom Jesus": {
+                            "registros": 88,
+                            "pessoas": 309,
+                            "sacolas": 96
+                    },
+                    "Mafra": {
+                            "registros": 1,
+                            "pessoas": 1,
+                            "sacolas": 1
+                    },
+                    "São Pedro": {
+                            "registros": 3,
+                            "pessoas": 12,
+                            "sacolas": 3
+                    },
+                    "Vila Gaúcha": {
+                            "registros": 5,
+                            "pessoas": 13,
+                            "sacolas": 5
+                    },
+                    "Destrito": {
+                            "registros": 2,
+                            "pessoas": 6,
+                            "sacolas": 2
+                    },
+                    "Poço claro": {
+                            "registros": 2,
+                            "pessoas": 5,
+                            "sacolas": 2
+                    },
+                    "vila José dresseno": {
+                            "registros": 1,
+                            "pessoas": 4,
+                            "sacolas": 1
+                    },
+                    "São Roque": {
+                            "registros": 1,
+                            "pessoas": 4,
+                            "sacolas": 1
+                    },
+                    "são lourenço": {
+                            "registros": 1,
+                            "pessoas": 3,
+                            "sacolas": 1
+                    },
+                    "Não informado": {
+                            "registros": 15,
+                            "pessoas": 106,
+                            "sacolas": 15
+                    },
+                    "José Dresseno": {
+                            "registros": 1,
+                            "pessoas": 4,
+                            "sacolas": 1
+                    },
+                    "Poço Claro": {
+                            "registros": 8,
+                            "pessoas": 17,
+                            "sacolas": 8
+                    },
+                    "Volta Triste": {
+                            "registros": 1,
+                            "pessoas": 20,
+                            "sacolas": 2
+                    },
+                    "nova brasilia": {
+                            "registros": 1,
+                            "pessoas": 4,
+                            "sacolas": 1
+                    },
+                    "São pedro": {
+                            "registros": 1,
+                            "pessoas": 4,
+                            "sacolas": 1
+                    },
+                    "Iracema": {
+                            "registros": 1,
+                            "pessoas": 3,
+                            "sacolas": 1
+                    },
+                    "interios": {
+                            "registros": 1,
+                            "pessoas": 4,
+                            "sacolas": 1
+                    },
+                    "Moema": {
+                            "registros": 4,
+                            "pessoas": 8,
+                            "sacolas": 5
+                    },
+                    "Rio da Estiva": {
+                            "registros": 2,
+                            "pessoas": 5,
+                            "sacolas": 4
+                    },
+                    "distrito": {
+                            "registros": 1,
+                            "pessoas": 2,
+                            "sacolas": 1
+                    },
+                    "Contagem  Chadeck": {
+                            "registros": 1,
+                            "pessoas": 4,
+                            "sacolas": 1
+                    },
+                    "Distrito": {
+                            "registros": 2,
+                            "pessoas": 5,
+                            "sacolas": 2
+                    },
+                    "Nova Brasília": {
+                            "registros": 1,
+                            "pessoas": 3,
+                            "sacolas": 1
+                    },
+                    "Sao lourenço": {
+                            "registros": 1,
+                            "pessoas": 4,
+                            "sacolas": 1
+                    },
+                    "rio da Estiva": {
+                            "registros": 1,
+                            "pessoas": 3,
+                            "sacolas": 1
+                    },
+                    "Rio Vermelho": {
+                            "registros": 2,
+                            "pessoas": 5,
+                            "sacolas": 2
+                    },
+                    "Xavier da Silva": {
+                            "registros": 1,
+                            "pessoas": 3,
+                            "sacolas": 1
+                    },
+                    "São João": {
+                            "registros": 2,
+                            "pessoas": 9,
+                            "sacolas": 2
+                    }
+            }
     };
 
     let bairrosData = DADOS_HISTORICOS_SACOLAS.bairrosDist; // Carrega dados históricos imediatamente

@@ -6,7 +6,7 @@
 // URL do Google Apps Script Unificado (atende Sacos Recicláveis e Ecoponto - Versão 10)
 const GOOGLE_APPS_SCRIPT_ECOPONTO_URL = "https://script.google.com/macros/s/AKfycby99-spfhSHDEu9lDo6mQ8IUlz-2k83RHSkDsRk-zh4n4MrGsyJFcJVi5demkNn_Om4/exec"; 
 
-const STORAGE_KEY = "ecoponto_coletas_itaiopolis_v4";
+const STORAGE_KEY = "ecoponto_coletas_itaiopolis_v5";
 
 // Ícones SVG minimalistas com contornos modernos e cores vivas
 const ICONS_SVG = {
@@ -29,8 +29,158 @@ const WASTE_METADATA = {
     "Lâmpadas": { svg: ICONS_SVG.lamp, colorClass: "badge-gold", color: "#eab308", label: "Lâmpadas" } // Amarelo: Metais/Lâmpadas
 };
 
-// Dados históricos oficiais consolidados (171 registros até Setembro de 2026)
+// Dados históricos oficiais consolidados (186 registros até 16 de Outubro de 2026)
 const DADOS_HISTORICOS_PLANILHA = [
+  {
+    "id": "hist-0186",
+    "dataColeta": "2026-10-16",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1792119600186
+  },
+  {
+    "id": "hist-0185",
+    "dataColeta": "2026-10-16",
+    "tipoResiduo": "Vidros",
+    "peso": 85,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1792119600185
+  },
+  {
+    "id": "hist-0184",
+    "dataColeta": "2026-10-15",
+    "tipoResiduo": "Lâmpadas",
+    "peso": 45,
+    "destino": "IMA",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro - Destinação IMA",
+    "timestamp": 1792033200184
+  },
+  {
+    "id": "hist-0183",
+    "dataColeta": "2026-10-15",
+    "tipoResiduo": "Baterias e Pilhas",
+    "peso": 65,
+    "destino": "IMA",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro - Destinação IMA",
+    "timestamp": 1792033200183
+  },
+  {
+    "id": "hist-0182",
+    "dataColeta": "2026-10-13",
+    "tipoResiduo": "Recicláveis",
+    "peso": 75,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1791860400182
+  },
+  {
+    "id": "hist-0181",
+    "dataColeta": "2026-10-13",
+    "tipoResiduo": "Vidros",
+    "peso": 90,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1791860400181
+  },
+  {
+    "id": "hist-0180",
+    "dataColeta": "2026-10-09",
+    "tipoResiduo": "Recicláveis",
+    "peso": 80,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1791514800180
+  },
+  {
+    "id": "hist-0179",
+    "dataColeta": "2026-10-09",
+    "tipoResiduo": "Vidros",
+    "peso": 95,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1791514800179
+  },
+  {
+    "id": "hist-0178",
+    "dataColeta": "2026-10-08",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 62,
+    "destino": "APAE",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro - Campanha APAE",
+    "timestamp": 1791428400178
+  },
+  {
+    "id": "hist-0177",
+    "dataColeta": "2026-10-07",
+    "tipoResiduo": "Recicláveis",
+    "peso": 75,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1791342000177
+  },
+  {
+    "id": "hist-0176",
+    "dataColeta": "2026-10-07",
+    "tipoResiduo": "Vidros",
+    "peso": 85,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1791342000176
+  },
+  {
+    "id": "hist-0175",
+    "dataColeta": "2026-10-05",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1791169200175
+  },
+  {
+    "id": "hist-0174",
+    "dataColeta": "2026-10-05",
+    "tipoResiduo": "Vidros",
+    "peso": 90,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1791169200174
+  },
+  {
+    "id": "hist-0173",
+    "dataColeta": "2026-10-02",
+    "tipoResiduo": "Recicláveis",
+    "peso": 75,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1790910000173
+  },
+  {
+    "id": "hist-0172",
+    "dataColeta": "2026-10-02",
+    "tipoResiduo": "Vidros",
+    "peso": 85,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1790910000172
+  },
   {
     "id": "hist-0171",
     "dataColeta": "2026-09-28",
@@ -1912,7 +2062,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!raw) {
                 // Migração transparente de versões anteriores preservando saídas manuais do usuário
                 let manualEntries = [];
-                const prevKeys = ["ecoponto_coletas_itaiopolis_v3", "ecoponto_coletas_itaiopolis_v2", "ecoponto_coletas_itaiopolis_v1", "ecoponto_coletas_itaiopolis"];
+                const prevKeys = ["ecoponto_coletas_itaiopolis_v4", "ecoponto_coletas_itaiopolis_v3", "ecoponto_coletas_itaiopolis_v2", "ecoponto_coletas_itaiopolis_v1", "ecoponto_coletas_itaiopolis"];
                 for (const pk of prevKeys) {
                     const prevRaw = localStorage.getItem(pk);
                     if (prevRaw) {
