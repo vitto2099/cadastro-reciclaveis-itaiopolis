@@ -24,6 +24,7 @@ Aplicação web desenvolvida para a **Secretaria Municipal de Meio Ambiente de I
   - 💡 **Lâmpadas** (Fluorescentes e LED)
 - **⚖️ Peso Aproximado:** Entrada em kg com botões de acréscimo rápido (+5 kg, +10 kg, +25 kg, +50 kg, +100 kg, Zerar).
 - **📊 Histórico Integrado:** Contém **186 registros históricos oficiais** consolidados da inauguração até 16 de Outubro de 2026 (~11,49 toneladas), com filtros rápidos por material e exportação direta em CSV para o Excel.
+- **📅 Análise por Dias da Semana & Projeção Especial:** Aba interativa no dashboard do Ecoponto com médias diárias por dia da semana, alternador de cenários (*Histórico Oficial* vs *Projeção dos Vereadores Mirins* de +1.200 kg), gráfico comparativo e destaque no calendário nos dias 21/10, 04/11 e 18/11.
 - **Integração:** Backend Google Sheets preparado em `apps_script_ecoponto.js`.
 
 ---

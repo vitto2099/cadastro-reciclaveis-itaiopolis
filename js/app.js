@@ -620,6 +620,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 dayDiv.classList.add('has-collection');
             }
 
+            // Destacar dias de evento dos Vereadores Mirins (21/10, 04/11 e 18/11 de 2026)
+            const isMirimEvent = (year === 2026 && (
+                (month === 9 && day === 21) ||
+                (month === 10 && (day === 4 || day === 18))
+            ));
+            if (isMirimEvent) {
+                dayDiv.classList.add('special-event');
+                dayDiv.title = '🌟 Evento Especial: Vereadores Mirins (~400 kg de recicláveis)';
+            }
+
             if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
                 dayDiv.classList.add('today');
                 selectedDayDiv = dayDiv;
@@ -651,6 +661,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         selectedDateDisplay.textContent = `${day} de ${monthNames[month]} de ${year}`;
 
+        // Verifica se é dia de evento dos Vereadores Mirins
+        const isMirimEvent = (year === 2026 && (
+            (month === 9 && day === 21) ||
+            (month === 10 && (day === 4 || day === 18))
+        ));
+
+        let mirimBannerHtml = '';
+        if (isMirimEvent) {
+            mirimBannerHtml = `
+                <div class="calendar-event-alert" style="margin-top: 12px; padding: 12px 14px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; color: #92400e; font-size: 0.85rem; line-height: 1.45;">
+                    <div style="font-weight: 700; display: flex; align-items: center; gap: 6px; margin-bottom: 4px; color: #b45309;">
+                        <span style="font-size: 1.1rem;">🌟</span> Evento Especial: Vereadores Mirins
+                    </div>
+                    <div>Previsão de arrecadação de <strong>~400 kg de materiais recicláveis</strong> para triagem e destinação no Ecoponto / Camarita.</div>
+                </div>
+            `;
+        }
+
         if (collection) {
             const bairros = collection.split(',').map(b => b.trim());
             let htmlList = '<ul style="padding-left: 20px; margin-top: 8px;">';
@@ -658,9 +686,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 htmlList += `<li style="margin-bottom: 4px;">${b}</li>`;
             });
             htmlList += '</ul>';
-            collectionInfo.innerHTML = `<strong>Coleta nos locais:</strong>${htmlList}`;
+            collectionInfo.innerHTML = `<strong>Coleta nos locais:</strong>${htmlList}${mirimBannerHtml}`;
         } else {
-            collectionInfo.innerHTML = "Não há coleta seletiva programada para este dia.";
+            collectionInfo.innerHTML = `Não há coleta seletiva programada para este dia.${mirimBannerHtml}`;
         }
     }
 

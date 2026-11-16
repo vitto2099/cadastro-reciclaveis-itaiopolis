@@ -1229,3 +1229,284 @@
     }
 }
 
+/* ============================================================
+   ESTILOS DA VISÃO DIAS DA SEMANA & EVENTOS DOS VEREADORES MIRINS
+   ============================================================ */
+.semana-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Banner Institucional do Evento */
+.semana-banner {
+    background: linear-gradient(135deg, #fefce8 0%, #fffbeb 50%, #fef3c7 100%);
+    border: 1px solid #fde68a;
+    border-left: 5px solid #f59e0b;
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    box-shadow: 0 1px 3px rgba(245, 158, 11, 0.08);
+}
+
+.semana-banner-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.semana-banner-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #b45309;
+    background: #fef3c7;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    width: fit-content;
+}
+
+.semana-banner-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #92400e;
+    margin: 2px 0 0 0;
+}
+
+.semana-banner-desc {
+    font-size: 0.86rem;
+    color: #78350f;
+    line-height: 1.45;
+    margin: 0;
+}
+
+/* Barra de Alternância de Cenário (Segmented Pills) */
+.semana-toggle-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 8px 12px;
+}
+
+.semana-toggle-pills {
+    display: inline-flex;
+    background: #e2e8f0;
+    border-radius: 8px;
+    padding: 3px;
+    gap: 3px;
+}
+
+.semana-toggle-pill {
+    border: none;
+    background: transparent;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.semana-toggle-pill.active {
+    background: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.semana-toggle-pill:hover:not(.active) {
+    color: #1e293b;
+}
+
+/* Grid de KPIs dos Dias em Destaque */
+.semana-kpis-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 12px;
+}
+
+.semana-kpi-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.semana-kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.semana-kpi-card.highlight-quarta {
+    border-color: #fde68a;
+    background: linear-gradient(to bottom, #ffffff, #fffdf5);
+}
+
+.semana-kpi-card.highlight-sexta {
+    border-color: #cbd5e1;
+    background: linear-gradient(to bottom, #ffffff, #f8fafc);
+}
+
+.semana-kpi-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.semana-kpi-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 6px;
+}
+
+.semana-kpi-val {
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.1;
+    margin-bottom: 2px;
+}
+
+.semana-kpi-sub {
+    font-size: 0.78rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.semana-kpi-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #059669;
+    margin-top: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Gráfico Comparativo de Dias da Semana */
+.semana-chart-wrap {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.semana-chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.semana-chart-title {
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.semana-chart-canvas-box {
+    position: relative;
+    width: 100%;
+    height: clamp(280px, 44vh, 360px);
+}
+
+/* Tabela Comparativa de Médias */
+.semana-table-wrap {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    overflow-x: auto;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.semana-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    text-align: left;
+}
+
+.semana-table th {
+    background: #f8fafc;
+    padding: 10px 14px;
+    font-weight: 700;
+    color: #475569;
+    border-bottom: 2px solid #e2e8f0;
+    white-space: nowrap;
+}
+
+.semana-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #f1f5f9;
+    color: #1e293b;
+    white-space: nowrap;
+}
+
+.semana-table tr:hover td {
+    background: #fbfcfe;
+}
+
+.semana-table tr.row-highlight td {
+    background: #fffdf5;
+}
+
+.semana-table tr.total-row td {
+    background: #f8fafc;
+    font-weight: 800;
+    border-top: 2px solid #cbd5e1;
+    border-bottom: none;
+    color: #0f172a;
+}
+
+/* Box de Dicas Logísticas */
+.semana-logistics-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    font-size: 0.85rem;
+    color: #475569;
+    line-height: 1.5;
+}
+
+.semana-logistics-title {
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+

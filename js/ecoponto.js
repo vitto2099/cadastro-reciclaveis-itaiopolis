@@ -2530,12 +2530,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const btnDestinos = document.getElementById("btn-ecoponto-view-destinos");
         const btnComposicao = document.getElementById("btn-ecoponto-view-composicao");
         const btnEvolucao = document.getElementById("btn-ecoponto-view-evolucao");
+        const btnSemana = document.getElementById("btn-ecoponto-view-semana");
 
         const viewResumo = document.getElementById("ecoponto-view-resumo");
         const viewChartBox = document.getElementById("ecoponto-view-chart-box");
         const viewDestinosBox = document.getElementById("ecoponto-view-destinos-box");
         const viewComposicaoBox = document.getElementById("ecoponto-view-composicao-box");
         const viewEvolucaoBox = document.getElementById("ecoponto-view-evolucao-box");
+        const viewSemanaBox = document.getElementById("ecoponto-view-semana-box");
+
+        let ecopontoSemanaChartInstance = null;
+        let semanaModoEventos = true;
 
         const kpiPeso = document.getElementById("dash-month-peso");
         const kpiSaidas = document.getElementById("dash-month-saidas");
@@ -2574,19 +2579,21 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // Alternador de abas (Resumo, Categorias, Destinos, Composição, Evolução)
+        // Alternador de abas (Resumo, Categorias, Destinos, Composição, Evolução, Dias da Semana)
         function setActiveTab(tab) {
             if (btnResumo) btnResumo.classList.toggle("active", tab === "resumo");
             if (btnChart) btnChart.classList.toggle("active", tab === "chart");
             if (btnDestinos) btnDestinos.classList.toggle("active", tab === "destinos");
             if (btnComposicao) btnComposicao.classList.toggle("active", tab === "composicao");
             if (btnEvolucao) btnEvolucao.classList.toggle("active", tab === "evolucao");
+            if (btnSemana) btnSemana.classList.toggle("active", tab === "semana");
 
             if (viewResumo) viewResumo.style.display = tab === "resumo" ? "flex" : "none";
             if (viewChartBox) viewChartBox.style.display = tab === "chart" ? "block" : "none";
             if (viewDestinosBox) viewDestinosBox.style.display = tab === "destinos" ? "block" : "none";
             if (viewComposicaoBox) viewComposicaoBox.style.display = tab === "composicao" ? "block" : "none";
             if (viewEvolucaoBox) viewEvolucaoBox.style.display = tab === "evolucao" ? "block" : "none";
+            if (viewSemanaBox) viewSemanaBox.style.display = tab === "semana" ? "block" : "none";
 
             updateDashboardView();
         }
@@ -2596,6 +2603,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (btnDestinos) btnDestinos.addEventListener("click", () => setActiveTab("destinos"));
         if (btnComposicao) btnComposicao.addEventListener("click", () => setActiveTab("composicao"));
         if (btnEvolucao) btnEvolucao.addEventListener("click", () => setActiveTab("evolucao"));
+        if (btnSemana) btnSemana.addEventListener("click", () => setActiveTab("semana"));
 
         if (selectMonth) {
             selectMonth.addEventListener("change", () => {
@@ -2722,7 +2730,16 @@ document.addEventListener("DOMContentLoaded", () => {
             // Renderizar a visão ativa
             if (btnResumo && btnResumo.classList.contains("active")) {
                 renderResumoView(filteredColetas, categoryMap, totalPeso);
-            } else if (btnChart && btnChart.classList.contains("active")) {
+            } else if (btnSemana && btnSemana.classList.contains("active")) {
+                    exportChartToPng(
+                        ecopontoSemanaChartInstance,
+                        `grafico_ecoponto_medias_semanais_${semanaModoEventos ? 'com_mirins' : 'oficial'}.png`,
+                        "Ecoponto Municipal — Médias por Dia da Semana & Projeção",
+                        semanaModoEventos 
+                            ? "Com Projeção Especial dos Vereadores Mirins (+1.200 kg) • Município de Itaiópolis / SC"
+                            : "Histórico Oficial Consolidado • Município de Itaiópolis / SC"
+                    );
+                } else if (btnChart && btnChart.classList.contains("active")) {
                 renderCategoryChart(categoryMap, totalPeso);
             } else if (btnDestinos && btnDestinos.classList.contains("active")) {
                 renderDestinosChart(destinoMap, totalPeso);
@@ -2730,6 +2747,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 renderComposicaoChart(coletas);
             } else if (btnEvolucao && btnEvolucao.classList.contains("active")) {
                 renderEvolutionChart(coletas);
+            } else if (btnSemana && btnSemana.classList.contains("active")) {
+                renderSemanaView(coletas);
             }
         }
 
@@ -3264,6 +3283,463 @@ document.addEventListener("DOMContentLoaded", () => {
             } catch (e) {
                 console.error("Erro ao exportar imagem do ecoponto:", e);
                 showToast("Erro ao gerar imagem do gráfico.", "error");
+            }
+        }
+
+        
+        // 6. VISÃO MÉDIAS POR DIAS DA SEMANA & PROJEÇÃO VEREADORES MIRINS
+        function renderSemanaView(coletas) {
+            if (!viewSemanaBox) return;
+            viewSemanaBox.innerHTML = "";
+
+            const dayNames = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+            const dayShort = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+
+            // Agrupamento por dia de calendário
+            const dailyMap = new Map();
+            coletas.forEach(item => {
+                const d = item.dataColeta;
+                if (!d) return;
+                if (!dailyMap.has(d)) {
+                    const [y, m, dia] = d.split('-').map(Number);
+                    const dt = new Date(y, m - 1, dia);
+                    dailyMap.set(d, {
+                        date: d,
+                        dow: dt.getDay(),
+                        reciclaveis: 0,
+                        vidros: 0,
+                        eletronicos: 0,
+                        lampadas: 0,
+                        pilhas: 0,
+                        total: 0,
+                        count: 0
+                    });
+                }
+                const entry = dailyMap.get(d);
+                const p = parseFloat(item.peso) || 0;
+                entry.total += p;
+                entry.count++;
+                if (item.tipoResiduo === 'Recicláveis') entry.reciclaveis += p;
+                else if (item.tipoResiduo === 'Vidros') entry.vidros += p;
+                else if (item.tipoResiduo === 'Eletrônicos') entry.eletronicos += p;
+                else if (item.tipoResiduo === 'Lâmpadas') entry.lampadas += p;
+                else if (item.tipoResiduo === 'Baterias e Pilhas') entry.pilhas += p;
+            });
+
+            // Adiciona projeção dos 3 eventos dos Vereadores Mirins (se modo ativado)
+            if (semanaModoEventos) {
+                const mirimEvents = [
+                    { date: '2026-10-21', peso: 400, desc: 'Vereadores Mirins - 21/10' },
+                    { date: '2026-11-04', peso: 400, desc: 'Vereadores Mirins - 04/11' },
+                    { date: '2026-11-18', peso: 400, desc: 'Vereadores Mirins - 18/11' }
+                ];
+                mirimEvents.forEach(ev => {
+                    if (dailyMap.has(ev.date)) {
+                        const entry = dailyMap.get(ev.date);
+                        entry.total += ev.peso;
+                        entry.reciclaveis += ev.peso;
+                        entry.count++;
+                    } else {
+                        const [y, m, dia] = ev.date.split('-').map(Number);
+                        const dt = new Date(y, m - 1, dia);
+                        dailyMap.set(ev.date, {
+                            date: ev.date,
+                            dow: dt.getDay(),
+                            reciclaveis: ev.peso,
+                            vidros: 0,
+                            eletronicos: 0,
+                            lampadas: 0,
+                            pilhas: 0,
+                            total: ev.peso,
+                            count: 1
+                        });
+                    }
+                });
+            }
+
+            // Estatísticas por dia da semana
+            const dowStats = [];
+            for (let i = 0; i < 7; i++) {
+                dowStats.push({
+                    dow: i,
+                    dayName: dayNames[i],
+                    shortName: dayShort[i],
+                    activeDays: 0,
+                    totalReciclaveis: 0,
+                    totalGeral: 0,
+                    totalVidros: 0,
+                    totalEletronicos: 0,
+                    totalLampadas: 0,
+                    totalPilhas: 0,
+                    recordsCount: 0
+                });
+            }
+
+            for (const entry of dailyMap.values()) {
+                const s = dowStats[entry.dow];
+                s.activeDays++;
+                s.totalReciclaveis += entry.reciclaveis;
+                s.totalGeral += entry.total;
+                s.totalVidros += entry.vidros;
+                s.totalEletronicos += entry.eletronicos;
+                s.totalLampadas += entry.lampadas;
+                s.totalPilhas += entry.pilhas;
+                s.recordsCount += entry.count;
+            }
+
+            const sumReciclaveis = dowStats.reduce((acc, c) => acc + c.totalReciclaveis, 0);
+            const sumGeral = dowStats.reduce((acc, c) => acc + c.totalGeral, 0);
+            const totalActiveDays = dowStats.reduce((acc, c) => acc + c.activeDays, 0);
+
+            dowStats.forEach(s => {
+                s.avgReciclaveis = s.activeDays > 0 ? (s.totalReciclaveis / s.activeDays) : 0;
+                s.avgTotal = s.activeDays > 0 ? (s.totalGeral / s.activeDays) : 0;
+                s.pctReciclaveis = sumReciclaveis > 0 ? ((s.totalReciclaveis / sumReciclaveis) * 100) : 0;
+                s.pctTotal = sumGeral > 0 ? ((s.totalGeral / sumGeral) * 100) : 0;
+            });
+
+            // Dados de Destaque
+            const seg = dowStats[1];
+            const qua = dowStats[3];
+            const sex = dowStats[5];
+            const triadRecPct = sumReciclaveis > 0 ? (((seg.totalReciclaveis + qua.totalReciclaveis + sex.totalReciclaveis) / sumReciclaveis) * 100).toFixed(1) : "0.0";
+
+            // Monta o Container Principal
+            const container = document.createElement("div");
+            container.className = "semana-container";
+
+            // 1. Banner dos Vereadores Mirins
+            const banner = document.createElement("div");
+            banner.className = "semana-banner";
+            banner.innerHTML = `
+                <div class="semana-banner-content">
+                    <span class="semana-banner-tag">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        ${semanaModoEventos ? 'Projeção Especial Ativa' : 'Histórico Base'}
+                    </span>
+                    <h3 class="semana-banner-title">
+                        ${semanaModoEventos 
+                            ? 'Impacto do Evento dos Vereadores Mirins (Quartas-feiras: 21/10, 04/11 e 18/11)' 
+                            : 'Média Semanal — Histórico Consolidado Oficial (Sem Projeções)'}
+                    </h3>
+                    <p class="semana-banner-desc">
+                        ${semanaModoEventos 
+                            ? 'Previsão de <strong>~400 kg de recicláveis por quarta-feira</strong> (+1.200 kg acumulados), transformando a Quarta-feira no maior pico médio diário do município (143,7 kg/dia).' 
+                            : 'Exibindo exclusivamente as coletas já consolidadas até 16/10/2026. Sexta-feira lidera com 68,5 kg/dia, seguida pela Segunda-feira com 59,6 kg/dia.'}
+                    </p>
+                </div>
+            `;
+            container.appendChild(banner);
+
+            // 2. Barra de Alternância de Cenário & Ações
+            const toggleBar = document.createElement("div");
+            toggleBar.className = "semana-toggle-bar";
+            toggleBar.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 0.84rem; font-weight: 700; color: #475569;">Cenário:</span>
+                    <div class="semana-toggle-pills">
+                        <button type="button" class="semana-toggle-pill ${semanaModoEventos ? 'active' : ''}" id="btn-semana-modo-eventos">
+                            <span>🌟 Com Projeção Mirim (+1.200 kg)</span>
+                        </button>
+                        <button type="button" class="semana-toggle-pill ${!semanaModoEventos ? 'active' : ''}" id="btn-semana-modo-base">
+                            <span>🏛️ Histórico Real Oficial</span>
+                        </button>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <button type="button" class="export-btn" id="btn-export-semana-csv" style="font-size: 0.8rem; padding: 6px 12px; display: inline-flex; align-items: center; gap: 5px;">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                        <span>Exportar Médias (CSV)</span>
+                    </button>
+                </div>
+            `;
+            container.appendChild(toggleBar);
+
+            // 3. Grid de 4 KPIs
+            const kpisGrid = document.createElement("div");
+            kpisGrid.className = "semana-kpis-grid";
+            kpisGrid.innerHTML = `
+                <div class="semana-kpi-card highlight-quarta">
+                    <div class="semana-kpi-header">
+                        <span style="font-size: 0.85rem; font-weight: 700; color: #b45309;">⚡ Quarta-feira</span>
+                        <span class="semana-kpi-badge badge-orange">${semanaModoEventos ? 'Maior Pico' : '8 saídas'}</span>
+                    </div>
+                    <div class="semana-kpi-val" style="color: #b45309;">
+                        ${qua.avgReciclaveis.toFixed(1)} <span style="font-size: 0.85rem; font-weight: 600;">kg/dia</span>
+                    </div>
+                    <div class="semana-kpi-sub">Total: ${qua.totalReciclaveis.toLocaleString('pt-BR')} kg (${qua.pctReciclaveis.toFixed(1)}% do reciclável)</div>
+                    <div class="semana-kpi-tag" style="color: ${semanaModoEventos ? '#b45309' : '#64748b'};">
+                        ${semanaModoEventos ? '▲ +202% com eventos mirins' : 'Média padrão do histórico'}
+                    </div>
+                </div>
+
+                <div class="semana-kpi-card highlight-sexta">
+                    <div class="semana-kpi-header">
+                        <span style="font-size: 0.85rem; font-weight: 700; color: #1e293b;">🥇 Sexta-feira</span>
+                        <span class="semana-kpi-badge badge-emerald">Líder Regular</span>
+                    </div>
+                    <div class="semana-kpi-val" style="color: #059669;">
+                        ${sex.avgReciclaveis.toFixed(1)} <span style="font-size: 0.85rem; font-weight: 600;">kg/dia</span>
+                    </div>
+                    <div class="semana-kpi-sub">Total: ${sex.totalReciclaveis.toLocaleString('pt-BR')} kg (${sex.activeDays} dias ativos)</div>
+                    <div class="semana-kpi-tag" style="color: #059669;">
+                        ${sex.avgTotal.toFixed(1)} kg/dia média geral
+                    </div>
+                </div>
+
+                <div class="semana-kpi-card">
+                    <div class="semana-kpi-header">
+                        <span style="font-size: 0.85rem; font-weight: 700; color: #1e293b;">🥈 Segunda-feira</span>
+                        <span class="semana-kpi-badge badge-blue">Início Forte</span>
+                    </div>
+                    <div class="semana-kpi-val" style="color: #2563eb;">
+                        ${seg.avgReciclaveis.toFixed(1)} <span style="font-size: 0.85rem; font-weight: 600;">kg/dia</span>
+                    </div>
+                    <div class="semana-kpi-sub">Total: ${seg.totalReciclaveis.toLocaleString('pt-BR')} kg (${seg.activeDays} dias ativos)</div>
+                    <div class="semana-kpi-tag" style="color: #2563eb;">
+                        ${seg.avgTotal.toFixed(1)} kg/dia média geral
+                    </div>
+                </div>
+
+                <div class="semana-kpi-card">
+                    <div class="semana-kpi-header">
+                        <span style="font-size: 0.85rem; font-weight: 700; color: #1e293b;">📦 Concentração</span>
+                        <span class="semana-kpi-badge badge-gold">Seg + Qua + Sex</span>
+                    </div>
+                    <div class="semana-kpi-val" style="color: #0f172a;">
+                        ${triadRecPct}%
+                    </div>
+                    <div class="semana-kpi-sub">de todo o reciclável da cidade</div>
+                    <div class="semana-kpi-tag" style="color: #475569;">
+                        ${(seg.totalReciclaveis + qua.totalReciclaveis + sex.totalReciclaveis).toLocaleString('pt-BR')} kg acumulados
+                    </div>
+                </div>
+            `;
+            container.appendChild(kpisGrid);
+
+            // 4. Gráfico Comparativo Chart.js
+            const chartWrap = document.createElement("div");
+            chartWrap.className = "semana-chart-wrap";
+            chartWrap.innerHTML = `
+                <div class="semana-chart-header">
+                    <div class="semana-chart-title">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 16v-4"/><path d="M12 16V8"/><path d="M17 16v-6"/></svg>
+                        <span>Média Diária por Dia da Semana (kg/dia com saída registrada)</span>
+                    </div>
+                    <small style="color: #64748b; font-weight: 500;">
+                        ${semanaModoEventos ? 'Inclui picos de 400 kg nas quartas-feiras de evento' : 'Apenas histórico oficial consolidado'}
+                    </small>
+                </div>
+                <div class="semana-chart-canvas-box">
+                    <canvas id="ecopontoSemanaChart"></canvas>
+                </div>
+            `;
+            container.appendChild(chartWrap);
+
+            // 5. Tabela Detalhada por Dia da Semana
+            const tableWrap = document.createElement("div");
+            tableWrap.className = "semana-table-wrap";
+            
+            const rowsHtml = [1, 2, 3, 4, 5, 6].map(i => {
+                const s = dowStats[i];
+                let medal = "";
+                let rowClass = "";
+                if (i === 5) { medal = "🥇 "; }
+                else if (i === 1) { medal = "🥈 "; }
+                else if (i === 3) {
+                    medal = semanaModoEventos ? "⚡ " : "";
+                    if (semanaModoEventos) rowClass = "row-highlight";
+                }
+
+                return `
+                    <tr class="${rowClass}">
+                        <td style="font-weight: 700;">${medal}${s.dayName}</td>
+                        <td style="text-align: center;"><span class="badge ${s.activeDays > 0 ? 'badge-blue' : ''}">${s.activeDays}</span></td>
+                        <td style="font-weight: 700; color: #2563eb;">${s.totalReciclaveis.toLocaleString('pt-BR')} kg</td>
+                        <td style="font-weight: 800; color: ${i === 3 && semanaModoEventos ? '#b45309' : '#047857'}; font-size: 0.95rem;">
+                            ${s.avgReciclaveis.toFixed(1)} kg/dia
+                        </td>
+                        <td style="font-weight: 600; color: #475569;">${s.avgTotal.toFixed(1)} kg/dia</td>
+                        <td style="font-weight: 700;">${s.pctReciclaveis.toFixed(1)}%</td>
+                    </tr>
+                `;
+            }).join("");
+
+            const avgRecGeral = totalActiveDays > 0 ? (sumReciclaveis / totalActiveDays).toFixed(1) : "0.0";
+            const avgTotGeral = totalActiveDays > 0 ? (sumGeral / totalActiveDays).toFixed(1) : "0.0";
+
+            tableWrap.innerHTML = `
+                <table class="semana-table">
+                    <thead>
+                        <tr>
+                            <th>Dia da Semana</th>
+                            <th style="text-align: center;">Dias Ativos</th>
+                            <th>Total Recicláveis</th>
+                            <th>Média Recicláveis / Dia</th>
+                            <th>Média Geral / Dia (Todos Resíduos)</th>
+                            <th>% Recicláveis</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rowsHtml}
+                        <tr class="total-row">
+                            <td>TOTAL GERAL</td>
+                            <td style="text-align: center;">${totalActiveDays} dias</td>
+                            <td style="color: #2563eb;">${sumReciclaveis.toLocaleString('pt-BR')} kg</td>
+                            <td style="color: #047857;">${avgRecGeral} kg/dia</td>
+                            <td>${avgTotGeral} kg/dia</td>
+                            <td>100.0%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+            container.appendChild(tableWrap);
+
+            // 6. Orientações Operacionais & Logísticas
+            const noticeBox = document.createElement("div");
+            noticeBox.className = "semana-logistics-box";
+            noticeBox.innerHTML = `
+                <div class="semana-logistics-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    <span>Planejamento Operacional para os Eventos dos Vereadores Mirins</span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin-top: 8px;">
+                    <div style="background: #ffffff; padding: 10px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                        <strong>📅 Datas Oficiais do Evento:</strong>
+                        <div style="color: #b45309; font-weight: 600; margin-top: 2px;">21 de Outubro • 04 de Novembro • 18 de Novembro</div>
+                        <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">Todas ocorrem em Quartas-feiras (ciclo quinzenal).</div>
+                    </div>
+                    <div style="background: #ffffff; padding: 10px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                        <strong>🚛 Destinação & Triagem (Camarita):</strong>
+                        <div style="margin-top: 2px;">Agendar recolhimento de reforço nos dias de evento para escoar os ~400 kg extras e evitar sobrecarga do espaço físico do Ecoponto.</div>
+                    </div>
+                    <div style="background: #ffffff; padding: 10px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                        <strong>📦 Suprimentos Necessários:</strong>
+                        <div style="margin-top: 2px;">Disponibilizar lote extra de big bags e sacos amarelos para a equipe dos vereadores mirins e pontos de entrega voluntária.</div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(noticeBox);
+
+            viewSemanaBox.appendChild(container);
+
+            // Listeners para os botões de alternância de modo
+            const btnModoEventos = document.getElementById("btn-semana-modo-eventos");
+            const btnModoBase = document.getElementById("btn-semana-modo-base");
+            if (btnModoEventos) {
+                btnModoEventos.addEventListener("click", () => {
+                    if (!semanaModoEventos) {
+                        semanaModoEventos = true;
+                        renderSemanaView(coletas);
+                    }
+                });
+            }
+            if (btnModoBase) {
+                btnModoBase.addEventListener("click", () => {
+                    if (semanaModoEventos) {
+                        semanaModoEventos = false;
+                        renderSemanaView(coletas);
+                    }
+                });
+            }
+
+            // Exportação CSV do comparativo
+            const btnCsv = document.getElementById("btn-export-semana-csv");
+            if (btnCsv) {
+                btnCsv.addEventListener("click", () => {
+                    let csv = "\uFEFFDia da Semana;Dias Ativos;Total Recicláveis (kg);Média Recicláveis/Dia (kg);Média Geral/Dia (kg);% Recicláveis\n";
+                    [1, 2, 3, 4, 5, 6].forEach(i => {
+                        const s = dowStats[i];
+                        csv += `"${s.dayName}";${s.activeDays};"${s.totalReciclaveis}";"${s.avgReciclaveis.toFixed(2).replace('.', ',')}";"${s.avgTotal.toFixed(2).replace('.', ',')}";"${s.pctReciclaveis.toFixed(2).replace('.', ',')}%"\n`;
+                    });
+                    csv += `"TOTAL GERAL";${totalActiveDays};"${sumReciclaveis}";"${avgRecGeral.replace('.', ',')}";"${avgTotGeral.replace('.', ',')}";"100%"\n`;
+                    
+                    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = `medias_semanais_${semanaModoEventos ? 'com_mirins' : 'oficial'}.csv`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    showToast("Relatório de médias por dia da semana exportado com sucesso!", "success");
+                });
+            }
+
+            // Renderizar Gráfico Chart.js
+            if (typeof Chart !== "undefined") {
+                const canvas = document.getElementById("ecopontoSemanaChart");
+                if (canvas) {
+                    if (ecopontoSemanaChartInstance) {
+                        ecopontoSemanaChartInstance.destroy();
+                        ecopontoSemanaChartInstance = null;
+                    }
+
+                    const labels = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+                    const dataRec = [1, 2, 3, 4, 5, 6].map(i => Math.round(dowStats[i].avgReciclaveis));
+                    const dataGeral = [1, 2, 3, 4, 5, 6].map(i => Math.round(dowStats[i].avgTotal));
+
+                    const ctx = canvas.getContext("2d");
+                    ecopontoSemanaChartInstance = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: 'Média Recicláveis (kg/dia)',
+                                    data: dataRec,
+                                    backgroundColor: labels.map((_, idx) => idx === 2 && semanaModoEventos ? '#f59e0b' : '#2563eb'),
+                                    borderRadius: 6
+                                },
+                                {
+                                    label: 'Média Geral Ecoponto (kg/dia)',
+                                    data: dataGeral,
+                                    backgroundColor: '#10b981',
+                                    borderRadius: 6
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    labels: {
+                                        font: { family: "'Plus Jakarta Sans', sans-serif", size: 12, weight: '600' },
+                                        usePointStyle: true,
+                                        pointStyle: 'circle'
+                                    }
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const dayIdx = context.dataIndex + 1;
+                                            const st = dowStats[dayIdx];
+                                            const val = context.raw || 0;
+                                            return ` ${context.dataset.label}: ${val} kg/dia (Total: ${context.datasetIndex === 0 ? st.totalReciclaveis : st.totalGeral} kg em ${st.activeDays} dias)`;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        callback: function(v) { return v + " kg"; },
+                                        font: { family: "'Plus Jakarta Sans', sans-serif" }
+                                    },
+                                    grid: { color: '#f1f5f9' }
+                                },
+                                x: {
+                                    grid: { display: false },
+                                    ticks: { font: { family: "'Plus Jakarta Sans', sans-serif", weight: '600' } }
+                                }
+                            }
+                        }
+                    });
+                }
             }
         }
 

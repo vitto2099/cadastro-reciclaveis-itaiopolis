@@ -1116,6 +1116,38 @@ body {
     border: 2px solid var(--primary-color);
 }
 
+.calendar-day.special-event {
+    background: #fef3c7;
+    color: #92400e;
+    font-weight: 700;
+    position: relative;
+    border: 1px dashed #f59e0b;
+}
+
+.calendar-day.special-event::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    width: 7px;
+    height: 7px;
+    background-color: #d97706 !important;
+    border-radius: 50%;
+}
+
+.calendar-day.special-event.selected {
+    background: #d97706;
+    color: #ffffff;
+    border-color: #b45309;
+}
+
+.calendar-day.special-event.selected::after {
+    background-color: #ffffff !important;
+}
+
+.calendar-event-alert {
+    animation: fadeIn 0.3s ease;
+}
+
 .calendar-details {
     margin-top: 1.5rem;
     padding-top: 1rem;
