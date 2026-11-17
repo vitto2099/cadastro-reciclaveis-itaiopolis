@@ -581,7 +581,7 @@ function addContentCard(slide, x, y, w, h, title, bullets, headerColor = C.navy)
 }
 
 // Salvar arquivo PPTX
-const outPath = path.join(__dirname, 'Apresentacao_Ecoponto_e_Reciclaveis_Itaiopolis_v2.pptx');
+const outPath = path.join(__dirname, 'Apresentacao_Ecoponto_e_Reciclaveis_Itaiopolis.pptx');
 pres.writeFile({ fileName: outPath }).then(() => {
   console.log('Apresentação com identidade do site gerada em:', outPath);
 }).catch(err => {
