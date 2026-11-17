@@ -6,7 +6,7 @@
 // URL do Google Apps Script Unificado (atende Sacos Recicláveis e Ecoponto - Versão 10)
 const GOOGLE_APPS_SCRIPT_ECOPONTO_URL = "https://script.google.com/macros/s/AKfycby99-spfhSHDEu9lDo6mQ8IUlz-2k83RHSkDsRk-zh4n4MrGsyJFcJVi5demkNn_Om4/exec"; 
 
-const STORAGE_KEY = "ecoponto_coletas_itaiopolis_v6";
+const STORAGE_KEY = "ecoponto_coletas_itaiopolis_v7";
 
 // Ícones SVG minimalistas com contornos modernos e cores vivas
 const ICONS_SVG = {
@@ -29,7 +29,7 @@ const WASTE_METADATA = {
     "Lâmpadas": { svg: ICONS_SVG.lamp, colorClass: "badge-gold", color: "#eab308", label: "Lâmpadas" } // Amarelo: Metais/Lâmpadas
 };
 
-// Dados históricos oficiais consolidados (214 registros até 16 de Novembro de 2026)
+// Dados históricos oficiais consolidados (214 registros até 16 de Novembro de 2026 — somente dias úteis)
 const DADOS_HISTORICOS_PLANILHA = [
   {
     "id": "hist-0214",
@@ -1583,13 +1583,13 @@ const DADOS_HISTORICOS_PLANILHA = [
   },
   {
     "id": "hist-0059",
-    "dataColeta": "2026-05-01",
+    "dataColeta": "2026-05-04",
     "tipoResiduo": "Recicláveis",
     "peso": 80,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Maio",
-    "timestamp": 1777604400059
+    "timestamp": 1777863600059
   },
   {
     "id": "hist-0058",
@@ -1693,23 +1693,23 @@ const DADOS_HISTORICOS_PLANILHA = [
   },
   {
     "id": "hist-0048",
-    "dataColeta": "2026-04-11",
+    "dataColeta": "2026-04-10",
     "tipoResiduo": "Vidros",
     "peso": 60,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Março e Abril",
-    "timestamp": 1775876400048
+    "timestamp": 1775790000048
   },
   {
     "id": "hist-0047",
-    "dataColeta": "2026-04-11",
+    "dataColeta": "2026-04-10",
     "tipoResiduo": "Recicláveis",
     "peso": 50,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Março e Abril",
-    "timestamp": 1775876400047
+    "timestamp": 1775790000047
   },
   {
     "id": "hist-0046",
@@ -2342,7 +2342,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!raw) {
                 // Migração transparente de versões anteriores preservando saídas manuais do usuário
                 let manualEntries = [];
-                const prevKeys = ["ecoponto_coletas_itaiopolis_v5", "ecoponto_coletas_itaiopolis_v4", "ecoponto_coletas_itaiopolis_v3", "ecoponto_coletas_itaiopolis_v2", "ecoponto_coletas_itaiopolis_v1", "ecoponto_coletas_itaiopolis"];
+                const prevKeys = ["ecoponto_coletas_itaiopolis_v6", "ecoponto_coletas_itaiopolis_v5", "ecoponto_coletas_itaiopolis_v4", "ecoponto_coletas_itaiopolis_v3", "ecoponto_coletas_itaiopolis_v2", "ecoponto_coletas_itaiopolis_v1", "ecoponto_coletas_itaiopolis"];
                 for (const pk of prevKeys) {
                     const prevRaw = localStorage.getItem(pk);
                     if (prevRaw) {
@@ -3841,7 +3841,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const tableWrap = document.createElement("div");
             tableWrap.className = "semana-table-wrap";
             
-            const rowsHtml = [1, 2, 3, 4, 5, 6].map(i => {
+            const rowsHtml = [1, 2, 3, 4, 5].map(i => {
                 const s = dowStats[i];
                 let medal = "";
                 let rowClass = "";
@@ -3938,7 +3938,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (btnCsv) {
                 btnCsv.addEventListener("click", () => {
                     let csv = "\uFEFFDia da Semana;Dias Ativos;Total Recicláveis (kg);Média Recicláveis/Dia (kg);Média Geral/Dia (kg);% Recicláveis\n";
-                    [1, 2, 3, 4, 5, 6].forEach(i => {
+                    [1, 2, 3, 4, 5].forEach(i => {
                         const s = dowStats[i];
                         csv += `"${s.dayName}";${s.activeDays};"${s.totalReciclaveis}";"${s.avgReciclaveis.toFixed(2).replace('.', ',')}";"${s.avgTotal.toFixed(2).replace('.', ',')}";"${s.pctReciclaveis.toFixed(2).replace('.', ',')}%"\n`;
                     });
@@ -3966,9 +3966,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         ecopontoSemanaChartInstance = null;
                     }
 
-                    const labels = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-                    const dataRec = [1, 2, 3, 4, 5, 6].map(i => Math.round(dowStats[i].avgReciclaveis));
-                    const dataGeral = [1, 2, 3, 4, 5, 6].map(i => Math.round(dowStats[i].avgTotal));
+                    const labels = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'];
+                    const dataRec = [1, 2, 3, 4, 5].map(i => Math.round(dowStats[i].avgReciclaveis));
+                    const dataGeral = [1, 2, 3, 4, 5].map(i => Math.round(dowStats[i].avgTotal));
 
                     const ctx = canvas.getContext("2d");
                     ecopontoSemanaChartInstance = new Chart(ctx, {
@@ -4362,17 +4362,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 const configSemanaExport = {
                     type: 'bar',
                     data: {
-                        labels: ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                        labels: ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'],
                         datasets: [
                             {
                                 label: 'Média Recicláveis (kg/dia)',
-                                data: [1, 2, 3, 4, 5, 6].map(i => Math.round(semanaDataExport[i].avgReciclaveis)),
-                                backgroundColor: ['#2563eb', '#2563eb', '#f59e0b', '#2563eb', '#2563eb', '#2563eb'],
+                                data: [1, 2, 3, 4, 5].map(i => Math.round(semanaDataExport[i].avgReciclaveis)),
+                                backgroundColor: ['#2563eb', '#2563eb', '#f59e0b', '#2563eb', '#2563eb'],
                                 borderRadius: 6
                             },
                             {
                                 label: 'Média Geral Ecoponto (kg/dia)',
-                                data: [1, 2, 3, 4, 5, 6].map(i => Math.round(semanaDataExport[i].avgTotal)),
+                                data: [1, 2, 3, 4, 5].map(i => Math.round(semanaDataExport[i].avgTotal)),
                                 backgroundColor: '#10b981',
                                 borderRadius: 6
                             }

@@ -1551,13 +1551,13 @@
   },
   {
     "id": "hist-0059",
-    "dataColeta": "2026-05-01",
+    "dataColeta": "2026-05-04",
     "tipoResiduo": "Recicláveis",
     "peso": 80,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Maio",
-    "timestamp": 1777604400059
+    "timestamp": 1777863600059
   },
   {
     "id": "hist-0058",
@@ -1661,23 +1661,23 @@
   },
   {
     "id": "hist-0048",
-    "dataColeta": "2026-04-11",
+    "dataColeta": "2026-04-10",
     "tipoResiduo": "Vidros",
     "peso": 60,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Março e Abril",
-    "timestamp": 1775876400048
+    "timestamp": 1775790000048
   },
   {
     "id": "hist-0047",
-    "dataColeta": "2026-04-11",
+    "dataColeta": "2026-04-10",
     "tipoResiduo": "Recicláveis",
     "peso": 50,
     "destino": "Camarita",
     "responsavel": "Equipe Ecoponto",
     "obs": "Mês: Março e Abril",
-    "timestamp": 1775876400047
+    "timestamp": 1775790000047
   },
   {
     "id": "hist-0046",
