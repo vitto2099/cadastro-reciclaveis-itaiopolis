@@ -1,5 +1,285 @@
 [
   {
+    "id": "hist-0214",
+    "dataColeta": "2026-11-16",
+    "tipoResiduo": "Recicláveis",
+    "peso": 75,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1794798000214
+  },
+  {
+    "id": "hist-0213",
+    "dataColeta": "2026-11-16",
+    "tipoResiduo": "Vidros",
+    "peso": 90,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1794798000213
+  },
+  {
+    "id": "hist-0212",
+    "dataColeta": "2026-11-13",
+    "tipoResiduo": "Recicláveis",
+    "peso": 80,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1794538800212
+  },
+  {
+    "id": "hist-0211",
+    "dataColeta": "2026-11-13",
+    "tipoResiduo": "Vidros",
+    "peso": 95,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1794538800211
+  },
+  {
+    "id": "hist-0210",
+    "dataColeta": "2026-11-12",
+    "tipoResiduo": "Lâmpadas",
+    "peso": 40,
+    "destino": "IMA",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro - Destinação IMA",
+    "timestamp": 1794452400210
+  },
+  {
+    "id": "hist-0209",
+    "dataColeta": "2026-11-12",
+    "tipoResiduo": "Baterias e Pilhas",
+    "peso": 60,
+    "destino": "IMA",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro - Destinação IMA",
+    "timestamp": 1794452400209
+  },
+  {
+    "id": "hist-0208",
+    "dataColeta": "2026-11-11",
+    "tipoResiduo": "Recicláveis",
+    "peso": 65,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1794366000208
+  },
+  {
+    "id": "hist-0207",
+    "dataColeta": "2026-11-11",
+    "tipoResiduo": "Vidros",
+    "peso": 80,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1794366000207
+  },
+  {
+    "id": "hist-0206",
+    "dataColeta": "2026-11-10",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 65,
+    "destino": "APAE",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro - Campanha APAE",
+    "timestamp": 1794279600206
+  },
+  {
+    "id": "hist-0205",
+    "dataColeta": "2026-11-09",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1794193200205
+  },
+  {
+    "id": "hist-0204",
+    "dataColeta": "2026-11-09",
+    "tipoResiduo": "Vidros",
+    "peso": 85,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1794193200204
+  },
+  {
+    "id": "hist-0203",
+    "dataColeta": "2026-11-06",
+    "tipoResiduo": "Recicláveis",
+    "peso": 75,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1793934000203
+  },
+  {
+    "id": "hist-0202",
+    "dataColeta": "2026-11-06",
+    "tipoResiduo": "Vidros",
+    "peso": 90,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1793934000202
+  },
+  {
+    "id": "hist-0201",
+    "dataColeta": "2026-11-04",
+    "tipoResiduo": "Recicláveis",
+    "peso": 395,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro - Evento Vereadores Mirins",
+    "timestamp": 1793761200201
+  },
+  {
+    "id": "hist-0200",
+    "dataColeta": "2026-11-04",
+    "tipoResiduo": "Vidros",
+    "peso": 85,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1793761200200
+  },
+  {
+    "id": "hist-0199",
+    "dataColeta": "2026-11-03",
+    "tipoResiduo": "Recicláveis",
+    "peso": 75,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1793674800199
+  },
+  {
+    "id": "hist-0198",
+    "dataColeta": "2026-11-03",
+    "tipoResiduo": "Vidros",
+    "peso": 90,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1793674800198
+  },
+  {
+    "id": "hist-0197",
+    "dataColeta": "2026-10-30",
+    "tipoResiduo": "Recicláveis",
+    "peso": 80,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1793329200197
+  },
+  {
+    "id": "hist-0196",
+    "dataColeta": "2026-10-30",
+    "tipoResiduo": "Vidros",
+    "peso": 95,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1793329200196
+  },
+  {
+    "id": "hist-0195",
+    "dataColeta": "2026-10-26",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1792983600195
+  },
+  {
+    "id": "hist-0194",
+    "dataColeta": "2026-10-26",
+    "tipoResiduo": "Vidros",
+    "peso": 85,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1792983600194
+  },
+  {
+    "id": "hist-0193",
+    "dataColeta": "2026-10-23",
+    "tipoResiduo": "Recicláveis",
+    "peso": 75,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1792724400193
+  },
+  {
+    "id": "hist-0192",
+    "dataColeta": "2026-10-23",
+    "tipoResiduo": "Vidros",
+    "peso": 90,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1792724400192
+  },
+  {
+    "id": "hist-0191",
+    "dataColeta": "2026-10-22",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 64,
+    "destino": "APAE",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro - Campanha APAE",
+    "timestamp": 1792638000191
+  },
+  {
+    "id": "hist-0190",
+    "dataColeta": "2026-10-21",
+    "tipoResiduo": "Recicláveis",
+    "peso": 410,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro - Evento Vereadores Mirins",
+    "timestamp": 1792551600190
+  },
+  {
+    "id": "hist-0189",
+    "dataColeta": "2026-10-21",
+    "tipoResiduo": "Vidros",
+    "peso": 85,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1792551600189
+  },
+  {
+    "id": "hist-0188",
+    "dataColeta": "2026-10-19",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1792378800188
+  },
+  {
+    "id": "hist-0187",
+    "dataColeta": "2026-10-19",
+    "tipoResiduo": "Vidros",
+    "peso": 85,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1792378800187
+  },
+  {
     "id": "hist-0186",
     "dataColeta": "2026-10-16",
     "tipoResiduo": "Recicláveis",

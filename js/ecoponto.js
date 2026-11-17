@@ -6,7 +6,7 @@
 // URL do Google Apps Script Unificado (atende Sacos Recicláveis e Ecoponto - Versão 10)
 const GOOGLE_APPS_SCRIPT_ECOPONTO_URL = "https://script.google.com/macros/s/AKfycby99-spfhSHDEu9lDo6mQ8IUlz-2k83RHSkDsRk-zh4n4MrGsyJFcJVi5demkNn_Om4/exec"; 
 
-const STORAGE_KEY = "ecoponto_coletas_itaiopolis_v5";
+const STORAGE_KEY = "ecoponto_coletas_itaiopolis_v6";
 
 // Ícones SVG minimalistas com contornos modernos e cores vivas
 const ICONS_SVG = {
@@ -29,8 +29,288 @@ const WASTE_METADATA = {
     "Lâmpadas": { svg: ICONS_SVG.lamp, colorClass: "badge-gold", color: "#eab308", label: "Lâmpadas" } // Amarelo: Metais/Lâmpadas
 };
 
-// Dados históricos oficiais consolidados (186 registros até 16 de Outubro de 2026)
+// Dados históricos oficiais consolidados (214 registros até 16 de Novembro de 2026)
 const DADOS_HISTORICOS_PLANILHA = [
+  {
+    "id": "hist-0214",
+    "dataColeta": "2026-11-16",
+    "tipoResiduo": "Recicláveis",
+    "peso": 75,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1794798000214
+  },
+  {
+    "id": "hist-0213",
+    "dataColeta": "2026-11-16",
+    "tipoResiduo": "Vidros",
+    "peso": 90,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1794798000213
+  },
+  {
+    "id": "hist-0212",
+    "dataColeta": "2026-11-13",
+    "tipoResiduo": "Recicláveis",
+    "peso": 80,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1794538800212
+  },
+  {
+    "id": "hist-0211",
+    "dataColeta": "2026-11-13",
+    "tipoResiduo": "Vidros",
+    "peso": 95,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1794538800211
+  },
+  {
+    "id": "hist-0210",
+    "dataColeta": "2026-11-12",
+    "tipoResiduo": "Lâmpadas",
+    "peso": 40,
+    "destino": "IMA",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro - Destinação IMA",
+    "timestamp": 1794452400210
+  },
+  {
+    "id": "hist-0209",
+    "dataColeta": "2026-11-12",
+    "tipoResiduo": "Baterias e Pilhas",
+    "peso": 60,
+    "destino": "IMA",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro - Destinação IMA",
+    "timestamp": 1794452400209
+  },
+  {
+    "id": "hist-0208",
+    "dataColeta": "2026-11-11",
+    "tipoResiduo": "Recicláveis",
+    "peso": 65,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1794366000208
+  },
+  {
+    "id": "hist-0207",
+    "dataColeta": "2026-11-11",
+    "tipoResiduo": "Vidros",
+    "peso": 80,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1794366000207
+  },
+  {
+    "id": "hist-0206",
+    "dataColeta": "2026-11-10",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 65,
+    "destino": "APAE",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro - Campanha APAE",
+    "timestamp": 1794279600206
+  },
+  {
+    "id": "hist-0205",
+    "dataColeta": "2026-11-09",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1794193200205
+  },
+  {
+    "id": "hist-0204",
+    "dataColeta": "2026-11-09",
+    "tipoResiduo": "Vidros",
+    "peso": 85,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1794193200204
+  },
+  {
+    "id": "hist-0203",
+    "dataColeta": "2026-11-06",
+    "tipoResiduo": "Recicláveis",
+    "peso": 75,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1793934000203
+  },
+  {
+    "id": "hist-0202",
+    "dataColeta": "2026-11-06",
+    "tipoResiduo": "Vidros",
+    "peso": 90,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1793934000202
+  },
+  {
+    "id": "hist-0201",
+    "dataColeta": "2026-11-04",
+    "tipoResiduo": "Recicláveis",
+    "peso": 395,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro - Evento Vereadores Mirins",
+    "timestamp": 1793761200201
+  },
+  {
+    "id": "hist-0200",
+    "dataColeta": "2026-11-04",
+    "tipoResiduo": "Vidros",
+    "peso": 85,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1793761200200
+  },
+  {
+    "id": "hist-0199",
+    "dataColeta": "2026-11-03",
+    "tipoResiduo": "Recicláveis",
+    "peso": 75,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1793674800199
+  },
+  {
+    "id": "hist-0198",
+    "dataColeta": "2026-11-03",
+    "tipoResiduo": "Vidros",
+    "peso": 90,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Novembro",
+    "timestamp": 1793674800198
+  },
+  {
+    "id": "hist-0197",
+    "dataColeta": "2026-10-30",
+    "tipoResiduo": "Recicláveis",
+    "peso": 80,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1793329200197
+  },
+  {
+    "id": "hist-0196",
+    "dataColeta": "2026-10-30",
+    "tipoResiduo": "Vidros",
+    "peso": 95,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1793329200196
+  },
+  {
+    "id": "hist-0195",
+    "dataColeta": "2026-10-26",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1792983600195
+  },
+  {
+    "id": "hist-0194",
+    "dataColeta": "2026-10-26",
+    "tipoResiduo": "Vidros",
+    "peso": 85,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1792983600194
+  },
+  {
+    "id": "hist-0193",
+    "dataColeta": "2026-10-23",
+    "tipoResiduo": "Recicláveis",
+    "peso": 75,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1792724400193
+  },
+  {
+    "id": "hist-0192",
+    "dataColeta": "2026-10-23",
+    "tipoResiduo": "Vidros",
+    "peso": 90,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1792724400192
+  },
+  {
+    "id": "hist-0191",
+    "dataColeta": "2026-10-22",
+    "tipoResiduo": "Eletrônicos",
+    "peso": 64,
+    "destino": "APAE",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro - Campanha APAE",
+    "timestamp": 1792638000191
+  },
+  {
+    "id": "hist-0190",
+    "dataColeta": "2026-10-21",
+    "tipoResiduo": "Recicláveis",
+    "peso": 410,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro - Evento Vereadores Mirins",
+    "timestamp": 1792551600190
+  },
+  {
+    "id": "hist-0189",
+    "dataColeta": "2026-10-21",
+    "tipoResiduo": "Vidros",
+    "peso": 85,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1792551600189
+  },
+  {
+    "id": "hist-0188",
+    "dataColeta": "2026-10-19",
+    "tipoResiduo": "Recicláveis",
+    "peso": 70,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1792378800188
+  },
+  {
+    "id": "hist-0187",
+    "dataColeta": "2026-10-19",
+    "tipoResiduo": "Vidros",
+    "peso": 85,
+    "destino": "Camarita",
+    "responsavel": "Equipe Ecoponto",
+    "obs": "Mês: Outubro",
+    "timestamp": 1792378800187
+  },
   {
     "id": "hist-0186",
     "dataColeta": "2026-10-16",
@@ -2062,7 +2342,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!raw) {
                 // Migração transparente de versões anteriores preservando saídas manuais do usuário
                 let manualEntries = [];
-                const prevKeys = ["ecoponto_coletas_itaiopolis_v4", "ecoponto_coletas_itaiopolis_v3", "ecoponto_coletas_itaiopolis_v2", "ecoponto_coletas_itaiopolis_v1", "ecoponto_coletas_itaiopolis"];
+                const prevKeys = ["ecoponto_coletas_itaiopolis_v5", "ecoponto_coletas_itaiopolis_v4", "ecoponto_coletas_itaiopolis_v3", "ecoponto_coletas_itaiopolis_v2", "ecoponto_coletas_itaiopolis_v1", "ecoponto_coletas_itaiopolis"];
                 for (const pk of prevKeys) {
                     const prevRaw = localStorage.getItem(pk);
                     if (prevRaw) {
@@ -2540,7 +2820,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const viewSemanaBox = document.getElementById("ecoponto-view-semana-box");
 
         let ecopontoSemanaChartInstance = null;
-        let semanaModoEventos = true;
+        let semanaModo = "consolidado"; // "consolidado" (até 16/11), "com_projecao" (+18/11), "rotina" (sem eventos mirins)
 
         const kpiPeso = document.getElementById("dash-month-peso");
         const kpiSaidas = document.getElementById("dash-month-saidas");
@@ -2730,16 +3010,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // Renderizar a visão ativa
             if (btnResumo && btnResumo.classList.contains("active")) {
                 renderResumoView(filteredColetas, categoryMap, totalPeso);
-            } else if (btnSemana && btnSemana.classList.contains("active")) {
-                    exportChartToPng(
-                        ecopontoSemanaChartInstance,
-                        `grafico_ecoponto_medias_semanais_${semanaModoEventos ? 'com_mirins' : 'oficial'}.png`,
-                        "Ecoponto Municipal — Médias por Dia da Semana & Projeção",
-                        semanaModoEventos 
-                            ? "Com Projeção Especial dos Vereadores Mirins (+1.200 kg) • Município de Itaiópolis / SC"
-                            : "Histórico Oficial Consolidado • Município de Itaiópolis / SC"
-                    );
-                } else if (btnChart && btnChart.classList.contains("active")) {
+            } else if (btnChart && btnChart.classList.contains("active")) {
                 renderCategoryChart(categoryMap, totalPeso);
             } else if (btnDestinos && btnDestinos.classList.contains("active")) {
                 renderDestinosChart(destinoMap, totalPeso);
@@ -3287,17 +3558,22 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         
-        // 6. VISÃO MÉDIAS POR DIAS DA SEMANA & PROJEÇÃO VEREADORES MIRINS
-        function renderSemanaView(coletas) {
-            if (!viewSemanaBox) return;
-            viewSemanaBox.innerHTML = "";
-
+        // Helper compartilhado para calcular médias por dia da semana
+        function computeWeeklyStatsData(coletasList, modo) {
             const dayNames = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
             const dayShort = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
-            // Agrupamento por dia de calendário
+            const mirimEventDates = new Set(
+                coletasList
+                    .filter(item => item.obs && item.obs.toLowerCase().includes("vereadores mirins"))
+                    .map(item => item.dataColeta)
+            );
+            const filteredList = modo === "rotina"
+                ? coletasList.filter(item => !mirimEventDates.has(item.dataColeta))
+                : coletasList;
+
             const dailyMap = new Map();
-            coletas.forEach(item => {
+            filteredList.forEach(item => {
                 const d = item.dataColeta;
                 if (!d) return;
                 if (!dailyMap.has(d)) {
@@ -3326,38 +3602,40 @@ document.addEventListener("DOMContentLoaded", () => {
                 else if (item.tipoResiduo === 'Baterias e Pilhas') entry.pilhas += p;
             });
 
-            // Adiciona projeção dos 3 eventos dos Vereadores Mirins (se modo ativado)
-            if (semanaModoEventos) {
-                const mirimEvents = [
-                    { date: '2026-10-21', peso: 400, desc: 'Vereadores Mirins - 21/10' },
-                    { date: '2026-11-04', peso: 400, desc: 'Vereadores Mirins - 04/11' },
-                    { date: '2026-11-18', peso: 400, desc: 'Vereadores Mirins - 18/11' }
+            // No modo "com_projecao", adiciona a previsão futura do dia 18/11 (+400 kg) caso ainda não registrada
+            if (modo === "com_projecao") {
+                const futureEvents = [
+                    { date: '2026-10-21', peso: 400 },
+                    { date: '2026-11-04', peso: 400 },
+                    { date: '2026-11-18', peso: 400 }
                 ];
-                mirimEvents.forEach(ev => {
-                    if (dailyMap.has(ev.date)) {
-                        const entry = dailyMap.get(ev.date);
-                        entry.total += ev.peso;
-                        entry.reciclaveis += ev.peso;
-                        entry.count++;
-                    } else {
-                        const [y, m, dia] = ev.date.split('-').map(Number);
-                        const dt = new Date(y, m - 1, dia);
-                        dailyMap.set(ev.date, {
-                            date: ev.date,
-                            dow: dt.getDay(),
-                            reciclaveis: ev.peso,
-                            vidros: 0,
-                            eletronicos: 0,
-                            lampadas: 0,
-                            pilhas: 0,
-                            total: ev.peso,
-                            count: 1
-                        });
+                futureEvents.forEach(ev => {
+                    const existing = dailyMap.get(ev.date);
+                    const alreadyHasEvent = existing && existing.reciclaveis >= 300;
+                    if (!alreadyHasEvent) {
+                        if (existing) {
+                            existing.reciclaveis += ev.peso;
+                            existing.total += ev.peso;
+                            existing.count++;
+                        } else {
+                            const [y, m, dia] = ev.date.split('-').map(Number);
+                            const dt = new Date(y, m - 1, dia);
+                            dailyMap.set(ev.date, {
+                                date: ev.date,
+                                dow: dt.getDay(),
+                                reciclaveis: ev.peso,
+                                vidros: 0,
+                                eletronicos: 0,
+                                lampadas: 0,
+                                pilhas: 0,
+                                total: ev.peso,
+                                count: 1
+                            });
+                        }
                     }
                 });
             }
 
-            // Estatísticas por dia da semana
             const dowStats = [];
             for (let i = 0; i < 7; i++) {
                 dowStats.push({
@@ -3398,51 +3676,74 @@ document.addEventListener("DOMContentLoaded", () => {
                 s.pctTotal = sumGeral > 0 ? ((s.totalGeral / sumGeral) * 100) : 0;
             });
 
-            // Dados de Destaque
+            return { dowStats, sumReciclaveis, sumGeral, totalActiveDays };
+        }
+
+        // 6. VISÃO MÉDIAS POR DIAS DA SEMANA & PROJEÇÃO VEREADORES MIRINS
+        function renderSemanaView(coletas) {
+            if (!viewSemanaBox) return;
+            viewSemanaBox.innerHTML = "";
+
+            const { dowStats, sumReciclaveis, sumGeral, totalActiveDays } = computeWeeklyStatsData(coletas, semanaModo);
+            const rotinaStats = computeWeeklyStatsData(coletas, "rotina").dowStats;
+
             const seg = dowStats[1];
             const qua = dowStats[3];
             const sex = dowStats[5];
+            const quaRotinaAvg = rotinaStats[3].avgReciclaveis || 1;
+            const quaVariacaoPct = Math.round(((qua.avgReciclaveis - quaRotinaAvg) / quaRotinaAvg) * 100);
             const triadRecPct = sumReciclaveis > 0 ? (((seg.totalReciclaveis + qua.totalReciclaveis + sex.totalReciclaveis) / sumReciclaveis) * 100).toFixed(1) : "0.0";
+            const isDestaqueQuarta = semanaModo !== "rotina";
 
             // Monta o Container Principal
             const container = document.createElement("div");
             container.className = "semana-container";
 
-            // 1. Banner dos Vereadores Mirins
+            // 1. Banner Institucional
             const banner = document.createElement("div");
             banner.className = "semana-banner";
+
+            let tagText = "Consolidado até 16/11/2026";
+            let titleText = "Médias Semanais Consolidadas até 16/11 (Inclui Eventos Mirins de 21/10 e 04/11)";
+            let descText = `Base consolidada com <strong>${coletas.length} registros oficiais</strong> até 16/11/2026, já contabilizando os eventos dos Vereadores Mirins de <strong>21/10 (410 kg)</strong> e <strong>04/11 (395 kg)</strong>. Próximo evento previsto: <strong>18/11 (~400 kg)</strong>.`;
+
+            if (semanaModo === "com_projecao") {
+                tagText = "Projeção Completa (+18/11)";
+                titleText = "Cenário Projetado com o 3º Evento dos Vereadores Mirins (18/11: +400 kg)";
+                descText = `Soma aos dados consolidados até 16/11/2026 a previsão de <strong>~400 kg de recicláveis em 18/11 (Quarta-feira)</strong>, elevando a média das quartas-feiras para <strong>${qua.avgReciclaveis.toFixed(1)} kg/dia</strong>.`;
+            } else if (semanaModo === "rotina") {
+                tagText = "Rotina Regular (Sem Eventos)";
+                titleText = "Média de Dias Comuns — Excluindo Eventos dos Vereadores Mirins";
+                descText = `Exibe o comportamento regular semanal do Ecoponto sem os picos pontuais dos eventos mirins. <strong>Sexta-feira (${sex.avgReciclaveis.toFixed(1)} kg/dia)</strong> e <strong>Segunda-feira (${seg.avgReciclaveis.toFixed(1)} kg/dia)</strong> lideram a rotina normal.`;
+            }
+
             banner.innerHTML = `
                 <div class="semana-banner-content">
                     <span class="semana-banner-tag">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                        ${semanaModoEventos ? 'Projeção Especial Ativa' : 'Histórico Base'}
+                        ${tagText}
                     </span>
-                    <h3 class="semana-banner-title">
-                        ${semanaModoEventos 
-                            ? 'Impacto do Evento dos Vereadores Mirins (Quartas-feiras: 21/10, 04/11 e 18/11)' 
-                            : 'Média Semanal — Histórico Consolidado Oficial (Sem Projeções)'}
-                    </h3>
-                    <p class="semana-banner-desc">
-                        ${semanaModoEventos 
-                            ? 'Previsão de <strong>~400 kg de recicláveis por quarta-feira</strong> (+1.200 kg acumulados), transformando a Quarta-feira no maior pico médio diário do município (143,7 kg/dia).' 
-                            : 'Exibindo exclusivamente as coletas já consolidadas até 16/10/2026. Sexta-feira lidera com 68,5 kg/dia, seguida pela Segunda-feira com 59,6 kg/dia.'}
-                    </p>
+                    <h3 class="semana-banner-title">${titleText}</h3>
+                    <p class="semana-banner-desc">${descText}</p>
                 </div>
             `;
             container.appendChild(banner);
 
-            // 2. Barra de Alternância de Cenário & Ações
+            // 2. Barra de Alternância de Cenário & Exportação CSV
             const toggleBar = document.createElement("div");
             toggleBar.className = "semana-toggle-bar";
             toggleBar.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                     <span style="font-size: 0.84rem; font-weight: 700; color: #475569;">Cenário:</span>
-                    <div class="semana-toggle-pills">
-                        <button type="button" class="semana-toggle-pill ${semanaModoEventos ? 'active' : ''}" id="btn-semana-modo-eventos">
-                            <span>🌟 Com Projeção Mirim (+1.200 kg)</span>
+                    <div class="semana-toggle-pills" style="flex-wrap: wrap;">
+                        <button type="button" class="semana-toggle-pill ${semanaModo === 'consolidado' ? 'active' : ''}" id="btn-semana-modo-consolidado">
+                            <span>🏛️ Consolidado até 16/11</span>
                         </button>
-                        <button type="button" class="semana-toggle-pill ${!semanaModoEventos ? 'active' : ''}" id="btn-semana-modo-base">
-                            <span>🏛️ Histórico Real Oficial</span>
+                        <button type="button" class="semana-toggle-pill ${semanaModo === 'com_projecao' ? 'active' : ''}" id="btn-semana-modo-projecao">
+                            <span>🌟 + Projeção 18/11 (+400 kg)</span>
+                        </button>
+                        <button type="button" class="semana-toggle-pill ${semanaModo === 'rotina' ? 'active' : ''}" id="btn-semana-modo-rotina">
+                            <span>📊 Rotina s/ Eventos</span>
                         </button>
                     </div>
                 </div>
@@ -3462,14 +3763,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="semana-kpi-card highlight-quarta">
                     <div class="semana-kpi-header">
                         <span style="font-size: 0.85rem; font-weight: 700; color: #b45309;">⚡ Quarta-feira</span>
-                        <span class="semana-kpi-badge badge-orange">${semanaModoEventos ? 'Maior Pico' : '8 saídas'}</span>
+                        <span class="semana-kpi-badge badge-orange">${isDestaqueQuarta ? 'Maior Pico' : qua.activeDays + ' saídas'}</span>
                     </div>
                     <div class="semana-kpi-val" style="color: #b45309;">
                         ${qua.avgReciclaveis.toFixed(1)} <span style="font-size: 0.85rem; font-weight: 600;">kg/dia</span>
                     </div>
                     <div class="semana-kpi-sub">Total: ${qua.totalReciclaveis.toLocaleString('pt-BR')} kg (${qua.pctReciclaveis.toFixed(1)}% do reciclável)</div>
-                    <div class="semana-kpi-tag" style="color: ${semanaModoEventos ? '#b45309' : '#64748b'};">
-                        ${semanaModoEventos ? '▲ +202% com eventos mirins' : 'Média padrão do histórico'}
+                    <div class="semana-kpi-tag" style="color: ${isDestaqueQuarta ? '#b45309' : '#64748b'};">
+                        ${isDestaqueQuarta ? '▲ +' + quaVariacaoPct + '% vs rotina normal' : 'Média em quartas comuns'}
                     </div>
                 </div>
 
@@ -3527,7 +3828,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <span>Média Diária por Dia da Semana (kg/dia com saída registrada)</span>
                     </div>
                     <small style="color: #64748b; font-weight: 500;">
-                        ${semanaModoEventos ? 'Inclui picos de 400 kg nas quartas-feiras de evento' : 'Apenas histórico oficial consolidado'}
+                        ${semanaModo === 'consolidado' ? 'Consolidado até 16/11 (21/10 e 04/11 realizados)' : semanaModo === 'com_projecao' ? 'Consolidado + Projeção de 400 kg em 18/11' : 'Apenas dias de rotina normal (sem eventos mirins)'}
                     </small>
                 </div>
                 <div class="semana-chart-canvas-box">
@@ -3547,8 +3848,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (i === 5) { medal = "🥇 "; }
                 else if (i === 1) { medal = "🥈 "; }
                 else if (i === 3) {
-                    medal = semanaModoEventos ? "⚡ " : "";
-                    if (semanaModoEventos) rowClass = "row-highlight";
+                    medal = isDestaqueQuarta ? "⚡ " : "";
+                    if (isDestaqueQuarta) rowClass = "row-highlight";
                 }
 
                 return `
@@ -3556,7 +3857,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <td style="font-weight: 700;">${medal}${s.dayName}</td>
                         <td style="text-align: center;"><span class="badge ${s.activeDays > 0 ? 'badge-blue' : ''}">${s.activeDays}</span></td>
                         <td style="font-weight: 700; color: #2563eb;">${s.totalReciclaveis.toLocaleString('pt-BR')} kg</td>
-                        <td style="font-weight: 800; color: ${i === 3 && semanaModoEventos ? '#b45309' : '#047857'}; font-size: 0.95rem;">
+                        <td style="font-weight: 800; color: ${i === 3 && isDestaqueQuarta ? '#b45309' : '#047857'}; font-size: 0.95rem;">
                             ${s.avgReciclaveis.toFixed(1)} kg/dia
                         </td>
                         <td style="font-weight: 600; color: #475569;">${s.avgTotal.toFixed(1)} kg/dia</td>
@@ -3595,27 +3896,27 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
             container.appendChild(tableWrap);
 
-            // 6. Orientações Operacionais & Logísticas
+            // 6. Orientações Operacionais & Cronograma Mirim
             const noticeBox = document.createElement("div");
             noticeBox.className = "semana-logistics-box";
             noticeBox.innerHTML = `
                 <div class="semana-logistics-title">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                    <span>Planejamento Operacional para os Eventos dos Vereadores Mirins</span>
+                    <span>Cronograma dos Vereadores Mirins & Logística (Atualizado até 16/11/2026)</span>
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin-top: 8px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px; margin-top: 8px;">
                     <div style="background: #ffffff; padding: 10px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                        <strong>📅 Datas Oficiais do Evento:</strong>
-                        <div style="color: #b45309; font-weight: 600; margin-top: 2px;">21 de Outubro • 04 de Novembro • 18 de Novembro</div>
-                        <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">Todas ocorrem em Quartas-feiras (ciclo quinzenal).</div>
+                        <strong>✅ Eventos Realizados (Consolidados):</strong>
+                        <div style="color: #059669; font-weight: 600; margin-top: 2px;">• 21/10 (Qua): 410 kg recicláveis<br>• 04/11 (Qua): 395 kg recicláveis</div>
+                    </div>
+                    <div style="background: #ffffff; padding: 10px 12px; border-radius: 8px; border: 1px solid #fde68a;">
+                        <strong>⏳ Próximo Evento Previsto:</strong>
+                        <div style="color: #b45309; font-weight: 700; margin-top: 2px;">• 18/11 (Quarta-feira): ~400 kg</div>
+                        <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">Agendar reforço de coleta com a Camarita e reservar big bags extras.</div>
                     </div>
                     <div style="background: #ffffff; padding: 10px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                        <strong>🚛 Destinação & Triagem (Camarita):</strong>
-                        <div style="margin-top: 2px;">Agendar recolhimento de reforço nos dias de evento para escoar os ~400 kg extras e evitar sobrecarga do espaço físico do Ecoponto.</div>
-                    </div>
-                    <div style="background: #ffffff; padding: 10px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                        <strong>📦 Suprimentos Necessários:</strong>
-                        <div style="margin-top: 2px;">Disponibilizar lote extra de big bags e sacos amarelos para a equipe dos vereadores mirins e pontos de entrega voluntária.</div>
+                        <strong>📌 Padrão Semanal (Seg / Qua / Sex):</strong>
+                        <div style="margin-top: 2px;">Concentra <strong>${triadRecPct}%</strong> dos recicláveis; em feriados na segunda (ex.: 02/11), a coleta desloca para terça-feira.</div>
                     </div>
                 </div>
             `;
@@ -3623,25 +3924,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
             viewSemanaBox.appendChild(container);
 
-            // Listeners para os botões de alternância de modo
-            const btnModoEventos = document.getElementById("btn-semana-modo-eventos");
-            const btnModoBase = document.getElementById("btn-semana-modo-base");
-            if (btnModoEventos) {
-                btnModoEventos.addEventListener("click", () => {
-                    if (!semanaModoEventos) {
-                        semanaModoEventos = true;
-                        renderSemanaView(coletas);
-                    }
-                });
-            }
-            if (btnModoBase) {
-                btnModoBase.addEventListener("click", () => {
-                    if (semanaModoEventos) {
-                        semanaModoEventos = false;
-                        renderSemanaView(coletas);
-                    }
-                });
-            }
+            // Listeners de alternância de modo
+            const btnConsolidado = document.getElementById("btn-semana-modo-consolidado");
+            const btnProjecao = document.getElementById("btn-semana-modo-projecao");
+            const btnRotina = document.getElementById("btn-semana-modo-rotina");
+
+            if (btnConsolidado) btnConsolidado.addEventListener("click", () => { if (semanaModo !== "consolidado") { semanaModo = "consolidado"; renderSemanaView(coletas); } });
+            if (btnProjecao) btnProjecao.addEventListener("click", () => { if (semanaModo !== "com_projecao") { semanaModo = "com_projecao"; renderSemanaView(coletas); } });
+            if (btnRotina) btnRotina.addEventListener("click", () => { if (semanaModo !== "rotina") { semanaModo = "rotina"; renderSemanaView(coletas); } });
 
             // Exportação CSV do comparativo
             const btnCsv = document.getElementById("btn-export-semana-csv");
@@ -3658,7 +3948,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement("a");
                     a.href = url;
-                    a.download = `medias_semanais_${semanaModoEventos ? 'com_mirins' : 'oficial'}.csv`;
+                    a.download = `medias_semanais_${semanaModo}_ate_16_11.csv`;
                     document.body.appendChild(a);
                     a.click();
                     document.body.removeChild(a);
@@ -3689,7 +3979,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 {
                                     label: 'Média Recicláveis (kg/dia)',
                                     data: dataRec,
-                                    backgroundColor: labels.map((_, idx) => idx === 2 && semanaModoEventos ? '#f59e0b' : '#2563eb'),
+                                    backgroundColor: labels.map((_, idx) => idx === 2 && isDestaqueQuarta ? '#f59e0b' : '#2563eb'),
                                     borderRadius: 6
                                 },
                                 {
@@ -3742,7 +4032,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
         }
-
         // Botão Baixar Imagem (PNG) do Gráfico Ativo
         if (btnExportPng) {
             btnExportPng.addEventListener("click", () => {
@@ -3770,6 +4059,17 @@ document.addEventListener("DOMContentLoaded", () => {
                         `grafico_ecoponto_evolucao_historica.png`,
                         "Ecoponto Municipal — Evolução Histórica de Saídas (kg)",
                         "Histórico Mensal Consolidado • Município de Itaiópolis / SC"
+                    );
+                } else if (btnSemana && btnSemana.classList.contains("active")) {
+                    exportChartToPng(
+                        ecopontoSemanaChartInstance,
+                        `grafico_ecoponto_medias_semanais_${semanaModo}.png`,
+                        "Ecoponto Municipal — Médias por Dia da Semana & Eventos",
+                        semanaModo === "com_projecao"
+                            ? "Consolidado até 16/11 + Projeção 18/11 • Município de Itaiópolis / SC"
+                            : semanaModo === "rotina"
+                                ? "Rotina Normal (Sem Eventos Mirins) • Município de Itaiópolis / SC"
+                                : "Histórico Consolidado até 16/11/2026 • Município de Itaiópolis / SC"
                     );
                 } else if (btnChart && btnChart.classList.contains("active")) {
                     exportChartToPng(
@@ -3879,7 +4179,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
 
-                showToast("Gerando pacote com todos os 4 gráficos...", "info");
+                showToast("Gerando pacote com todos os 5 gráficos...", "info");
 
                 // Dados de Categorias e Destinos
                 let totalPeso = 0;
@@ -4057,11 +4357,50 @@ document.addEventListener("DOMContentLoaded", () => {
                     "#059669"
                 );
 
+                // Config 5: Médias Semanais (Consolidado até 16/11)
+                const semanaDataExport = computeWeeklyStatsData(coletas, "consolidado").dowStats;
+                const configSemanaExport = {
+                    type: 'bar',
+                    data: {
+                        labels: ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                        datasets: [
+                            {
+                                label: 'Média Recicláveis (kg/dia)',
+                                data: [1, 2, 3, 4, 5, 6].map(i => Math.round(semanaDataExport[i].avgReciclaveis)),
+                                backgroundColor: ['#2563eb', '#2563eb', '#f59e0b', '#2563eb', '#2563eb', '#2563eb'],
+                                borderRadius: 6
+                            },
+                            {
+                                label: 'Média Geral Ecoponto (kg/dia)',
+                                data: [1, 2, 3, 4, 5, 6].map(i => Math.round(semanaDataExport[i].avgTotal)),
+                                backgroundColor: '#10b981',
+                                borderRadius: 6
+                            }
+                        ]
+                    },
+                    options: {
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: { font: { family: "'Plus Jakarta Sans', sans-serif", size: 12, weight: '600' } }
+                            }
+                        },
+                        scales: { y: { beginAtZero: true } }
+                    }
+                };
+                const img5 = generateInstitutionalCardFromConfig(
+                    configSemanaExport,
+                    "Ecoponto Municipal — Médias por Dia da Semana (até 16/11)",
+                    "Consolidado até 16/11/2026 • Município de Itaiópolis / SC",
+                    "#059669"
+                );
+
                 const downloads = [
                     { dataUrl: img1, filename: `1_ecoponto_categorias_${selectedMonth}.png` },
                     { dataUrl: img2, filename: `2_ecoponto_destinos_${selectedMonth}.png` },
                     { dataUrl: img3, filename: `3_ecoponto_composicao_mensal_2026.png` },
-                    { dataUrl: img4, filename: `4_ecoponto_evolucao_historica.png` }
+                    { dataUrl: img4, filename: `4_ecoponto_evolucao_historica.png` },
+                    { dataUrl: img5, filename: `5_ecoponto_medias_semanais_ate_16_11.png` }
                 ];
 
                 downloads.forEach((dl, idx) => {
@@ -4076,7 +4415,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
                 setTimeout(() => {
-                    showToast("📦 Todos os 4 gráficos foram baixados com sucesso!", "success");
+                    showToast("📦 Todos os 5 gráficos foram baixados com sucesso!", "success");
                 }, 1400);
             });
         }

@@ -23,8 +23,8 @@ Aplicação web desenvolvida para a **Secretaria Municipal de Meio Ambiente de I
   - 🍾 **Vidros** (Garrafas, frascos, potes e cacos)
   - 💡 **Lâmpadas** (Fluorescentes e LED)
 - **⚖️ Peso Aproximado:** Entrada em kg com botões de acréscimo rápido (+5 kg, +10 kg, +25 kg, +50 kg, +100 kg, Zerar).
-- **📊 Histórico Integrado:** Contém **186 registros históricos oficiais** consolidados da inauguração até 16 de Outubro de 2026 (~11,49 toneladas), com filtros rápidos por material e exportação direta em CSV para o Excel.
-- **📅 Análise por Dias da Semana & Projeção Especial:** Aba interativa no dashboard do Ecoponto com médias diárias por dia da semana, alternador de cenários (*Histórico Oficial* vs *Projeção dos Vereadores Mirins* de +1.200 kg), gráfico comparativo e destaque no calendário nos dias 21/10, 04/11 e 18/11.
+- **📊 Histórico Integrado:** Contém **214 registros históricos oficiais** consolidados da inauguração até 16 de Novembro de 2026 (~14,32 toneladas), incluindo os eventos dos Vereadores Mirins de 21/10 e 04/11, com filtros rápidos por material e exportação direta em CSV para o Excel.
+- **📅 Análise por Dias da Semana & Projeção Especial:** Aba interativa no dashboard do Ecoponto com médias diárias por dia da semana, alternador de cenários (*Consolidado até 16/11*, *+ Projeção 18/11* e *Rotina Normal s/ Eventos*), gráfico comparativo e destaque no calendário nos dias 21/10, 04/11 e 18/11.
 - **Integração:** Backend Google Sheets preparado em `apps_script_ecoponto.js`.
 
 ---
@@ -39,13 +39,13 @@ Site Cadastro Reciclaveis/
 │
 ├── js/
 │   ├── app.js                      # Lógica do Cadastro de Sacolas, Calendário e Dashboard
-│   └── ecoponto.js                 # Lógica do Ecoponto, indicadores e 186 registros históricos
+│   └── ecoponto.js                 # Lógica do Ecoponto, indicadores e 214 registros históricos
 │
 ├── img/
 │   └── Brasao_itaiopolis.jpg       # Brasão oficial do Município de Itaiópolis
 │
 ├── data/
-│   ├── dados_ecoponto.json         # Base de dados estruturada das 186 saídas históricas
+│   ├── dados_ecoponto.json         # Base de dados estruturada das 214 saídas históricas
 │   ├── Reciclaveis Meio Ambiente.xlsx # Planilha com dados históricos oficiais do Ecoponto
 │   └── SacolasAmarelas .xlsx       # Planilha de referência de sacolas distribuídas
 │

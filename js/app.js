@@ -669,12 +669,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let mirimBannerHtml = '';
         if (isMirimEvent) {
+            const isPastMirim = (month === 9 && day === 21) || (month === 10 && day === 4);
+            const mirimPesoLabel = (month === 9 && day === 21) ? '410 kg' : '395 kg';
             mirimBannerHtml = `
                 <div class="calendar-event-alert" style="margin-top: 12px; padding: 12px 14px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; color: #92400e; font-size: 0.85rem; line-height: 1.45;">
                     <div style="font-weight: 700; display: flex; align-items: center; gap: 6px; margin-bottom: 4px; color: #b45309;">
                         <span style="font-size: 1.1rem;">🌟</span> Evento Especial: Vereadores Mirins
                     </div>
-                    <div>Previsão de arrecadação de <strong>~400 kg de materiais recicláveis</strong> para triagem e destinação no Ecoponto / Camarita.</div>
+                    <div>${isPastMirim
+                        ? `Coleta especial realizada com <strong>${mirimPesoLabel} de materiais recicláveis</strong> consolidados no Ecoponto / Camarita.`
+                        : `Previsão de arrecadação de <strong>~400 kg de materiais recicláveis</strong> para triagem e destinação no Ecoponto / Camarita.`
+                    }</div>
                 </div>
             `;
         }
