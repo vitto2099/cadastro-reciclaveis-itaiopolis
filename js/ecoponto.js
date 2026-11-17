@@ -3907,11 +3907,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px; margin-top: 8px;">
                     <div style="background: #ffffff; padding: 10px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
                         <strong>✅ Eventos Realizados (Consolidados):</strong>
-                        <div style="color: #059669; font-weight: 600; margin-top: 2px;">• 21/10 (Qua): 410 kg recicláveis<br>• 04/11 (Qua): 395 kg recicláveis</div>
+                        <div style="color: #059669; font-weight: 600; margin-top: 2px;">• 21/10 (Qua): 410 kg recicláveis • 38 sacolas<br>• 04/11 (Qua): 395 kg recicláveis • 45 sacolas</div>
                     </div>
                     <div style="background: #ffffff; padding: 10px 12px; border-radius: 8px; border: 1px solid #fde68a;">
                         <strong>⏳ Próximo Evento Previsto:</strong>
-                        <div style="color: #b45309; font-weight: 700; margin-top: 2px;">• 18/11 (Quarta-feira): ~400 kg</div>
+                        <div style="color: #b45309; font-weight: 700; margin-top: 2px;">• 18/11 (Quarta-feira): ~400 kg • ~40 sacolas</div>
                         <div style="font-size: 0.78rem; color: #64748b; margin-top: 2px;">Agendar reforço de coleta com a Camarita e reservar big bags extras.</div>
                     </div>
                     <div style="background: #ffffff; padding: 10px 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
