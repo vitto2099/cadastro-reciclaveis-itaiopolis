@@ -1,18 +1,18 @@
 {
   "status": "success",
-  "total": 572,
-  "totalSacolas": 643,
-  "totalPessoas": 2471,
+  "total": 655,
+  "totalSacolas": 726,
+  "totalPessoas": 2762,
   "bairrosDist": {
     "Centro": {
-      "registros": 261,
-      "pessoas": 1383,
-      "sacolas": 289
+      "registros": 304,
+      "pessoas": 1534,
+      "sacolas": 332
     },
     "Vila Nova": {
-      "registros": 81,
-      "pessoas": 251,
-      "sacolas": 99
+      "registros": 96,
+      "pessoas": 304,
+      "sacolas": 114
     },
     "Vila Gaucha": {
       "registros": 1,
@@ -40,14 +40,14 @@
       "sacolas": 2
     },
     "Lucena": {
-      "registros": 28,
-      "pessoas": 96,
-      "sacolas": 33
+      "registros": 38,
+      "pessoas": 131,
+      "sacolas": 43
     },
     "Bom Jesus": {
-      "registros": 88,
-      "pessoas": 309,
-      "sacolas": 96
+      "registros": 103,
+      "pessoas": 361,
+      "sacolas": 111
     },
     "Mafra": {
       "registros": 1,

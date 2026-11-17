@@ -26,19 +26,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Dados históricos consolidados municipais (base inicial garantida)
     const DADOS_HISTORICOS_SACOLAS = {
-            "total": 572,
-            "totalSacolas": 643,
-            "totalPessoas": 2471,
+            "status": "success",
+            "total": 655,
+            "totalSacolas": 726,
+            "totalPessoas": 2762,
             "bairrosDist": {
                     "Centro": {
-                            "registros": 261,
-                            "pessoas": 1383,
-                            "sacolas": 289
+                            "registros": 304,
+                            "pessoas": 1534,
+                            "sacolas": 332
                     },
                     "Vila Nova": {
-                            "registros": 81,
-                            "pessoas": 251,
-                            "sacolas": 99
+                            "registros": 96,
+                            "pessoas": 304,
+                            "sacolas": 114
                     },
                     "Vila Gaucha": {
                             "registros": 1,
@@ -66,14 +67,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             "sacolas": 2
                     },
                     "Lucena": {
-                            "registros": 28,
-                            "pessoas": 96,
-                            "sacolas": 33
+                            "registros": 38,
+                            "pessoas": 131,
+                            "sacolas": 43
                     },
                     "Bom Jesus": {
-                            "registros": 88,
-                            "pessoas": 309,
-                            "sacolas": 96
+                            "registros": 103,
+                            "pessoas": 361,
+                            "sacolas": 111
                     },
                     "Mafra": {
                             "registros": 1,
@@ -441,7 +442,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Buscar total de cadastros ao carregar a página
     async function fetchTotalCadastros() {
         // Tentar carregar do cache
-        const cached = localStorage.getItem('dashboardCache');
+        const cached = localStorage.getItem('dashboardCache_v2');
         if (cached) {
             try {
                 const data = JSON.parse(cached);
@@ -461,8 +462,8 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch(`${SCRIPT_URL}?action=getTotal`);
             const data = await response.json();
-            if (data.status === 'success') {
-                localStorage.setItem('dashboardCache', JSON.stringify(data));
+            if (data.status === 'success' && Number(data.totalSacolas || 0) >= DADOS_HISTORICOS_SACOLAS.totalSacolas) {
+                localStorage.setItem('dashboardCache_v2', JSON.stringify(data));
                 updateDashboardCounters(data);
             }
         } catch (error) {
